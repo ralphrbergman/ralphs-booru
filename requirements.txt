@@ -4,4 +4,7 @@ flask-login
 Flask-SQLAlchemy
 Flask-WTF
 
+ffmpeg-python
+
 python-dotenv
+python-magic

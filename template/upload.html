@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <form enctype="multipart/form-data" method="post">
+        <label for="files">File(s) to upload:</label>
+        <input type="file" name="files" multiple required>
+
+        <label for="directory">Directory:</label>
+        <input type="text" name="directory">
+
+        <label for="op">Original Poster:</label>
+        <input type="text" name="op">
+
+        <label for="src">Source:</label>
+        <input type="text" name="src">
+
+        <label for="caption">Caption:</label>
+        <textarea name="caption"></textarea>
+
+        <label for="tags">Tags:</label>
+        <textarea name="tags"></textarea>
+
+        <input type="submit" name="submit" value="Upload">
+    </form>
+{% endblock %}

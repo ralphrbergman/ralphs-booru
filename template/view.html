@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    {% set f_type = post.mime.split('/')[0] %}
+
+    {% if f_type == 'image' %}
+        <img src="{{ post.view_uri }}">
+    {% elif f_type == 'video' %}
+        <video src="{{ post.view_uri }}" controls></video>
+    {% elif f_type == 'audio' %}
+        <audio src="{{ post.view_uri }}" controls></audio>
+    {% endif %}
+
+    <p>ID: {{ post.id }}</p>
+    <p>Posted: {{ post.created }}</p>
+    <p>Uploader: <a href="{{ post.author.profile_url }}">{{ post.author.username }}</a></p>
+
+    {% if post.width %}
+        <p>Size: {{ post.dimensions }}</p>
+    {% endif %}
+
+    {% if post.src %}
+        <p>Source: {{ post.src }}</p>
+    {% endif %}
+
+    {% if post.op %}
+        <p>OP: {{ post.op }}</p>
+    {% endif %}
+
+    <p>Name: {{ post.name }}</p>
+    <p>Type: {{ post.mime }}</p>
+
+    {% if post.caption %}
+        <label for="caption">Caption:</label>
+        <textarea name="caption">{{ post.caption }}</textarea>
+    {% endif %}
+
+    {% if post.tags %}
+        <label for="tags">Tags:</label>
+        <textarea name="tags">{{ post.tags }}</textarea>
+    {% endif %}
+{% endblock %}

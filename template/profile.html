@@ -2,4 +2,12 @@
 
 {% block body %}
     <p>{{ user.username }}</p>
+
+    <div style="display: flex; flex-wrap: wrap;">
+        {% for post in user.posts %}
+            <div>
+                <a href="{{ url_for('Post.view_page', post_id = post.id) }}">{{ post.name }}</a>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

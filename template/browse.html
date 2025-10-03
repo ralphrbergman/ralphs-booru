@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div style="display: flex; flex-wrap: wrap;">
+        {% for post in posts %}
+            <a href="{{ url_for('Post.view_page', post_id = post.id) }}">{{ post.name }}</a>
+        {% endfor %}
+    </div>
+{% endblock %}
