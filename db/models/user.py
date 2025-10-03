@@ -8,7 +8,7 @@ from ..db import db
 
 class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
-    name: Mapped[str] = mapped_column(String(length = 20), nullable = False)
+    name: Mapped[str] = mapped_column(String(length = 20), nullable = False, unique = True)
     mail: Mapped[str] = mapped_column(nullable = True, unique = True)
     password: Mapped[str] = mapped_column(String(length = 128), nullable = False)
 

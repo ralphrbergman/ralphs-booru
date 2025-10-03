@@ -1,11 +1,12 @@
 from typing import Optional
 
 from sqlalchemy import or_, select
+from sqlalchemy.exc import IntegrityError
 
 from db import db, User
 from encryption import bcrypt
 
-def create_user(name: str, mail: str, password: str) -> User:
+def create_user(name: str, mail: str, password: str) -> Optional[User]:
     """
     Creates and returns user object.
 
@@ -24,7 +25,13 @@ def create_user(name: str, mail: str, password: str) -> User:
     user.password = set_password(password)
 
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError as exc:
+        # User's name & e-mail can raise this.
+        db.session.rollback()
+
+        return None
 
     return user
 

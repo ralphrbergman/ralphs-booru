@@ -54,6 +54,10 @@ def signup_page():
             mail = form.email.data,
             password = form.pw.data
         )
+
+        if not user:
+            return redirect(url_for('Account.signup_page'))
+
         login_user(user)
 
         flash(f'Welcome, {user.name}')
