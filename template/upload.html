@@ -2,6 +2,8 @@
 
 {% block body %}
     <form enctype="multipart/form-data" method="post">
+        {{ form.hidden_tag() }}
+
         <label for="files">File(s) to upload:</label>
         <input type="file" name="files" multiple required>
 
