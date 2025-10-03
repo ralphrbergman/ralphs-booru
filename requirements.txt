@@ -1,1 +1,7 @@
 Flask
+Flask-Bcrypt
+flask-login
+Flask-SQLAlchemy
+Flask-WTF
+
+python-dotenv

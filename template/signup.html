@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <form method="post">
+        <label for="username">Username:</label>
+        <input type="text" name="username">
+
+        <label for="email">E-mail (Not Required):</label>
+        <input type="email" name="email">
+
+        <label for="pw">Password:</label>
+        <input type="password" name="pw">
+
+        <label for="confirm-pw">Confirm Password:</label>
+        <input type="password" name="confirm-pw">
+
+        <input type="submit" name="submit" value="Sign-Up">
+    </form>
+{% endblock %}
