@@ -6,7 +6,7 @@ from sqlalchemy import select
 
 from api import create_post, get_post
 from db import db, Post
-from forms import UploadForm
+from form import UploadForm
 
 post_bp = Blueprint(
     name = 'Post',

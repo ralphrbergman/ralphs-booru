@@ -4,7 +4,7 @@ from flask import Blueprint, request, abort, flash, redirect, render_template, u
 from flask_login import current_user, login_required, login_user, logout_user
 
 from api import create_user, check_password, get_user
-from forms import LoginForm, SignupForm
+from form import LoginForm, SignupForm
 
 def anonymous_only(callback):
     """
