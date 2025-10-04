@@ -15,8 +15,28 @@ post_bp = Blueprint(
 
 @post_bp.route('/browse')
 def browse_page():
-    posts = db.paginate(select(Post).order_by(Post.id.desc()))
-    return render_template('browse.html', posts = posts)
+    return redirect(url_for('Post.browse_paged', page = 1))
+
+@post_bp.route('/browse/<int:page>')
+def browse_paged(page: int):
+    args = request.args
+
+    limit = int(args.get('limit', 20))
+
+    posts = db.paginate(
+        select(Post).order_by(
+            Post.id.desc()
+        ),
+        page = page,
+        per_page = limit
+    )
+
+    return render_template(
+        'browse.html',
+        current_page = page,
+        pages = posts.pages,
+        posts = posts
+    )
 
 @post_bp.route('/view/<int:post_id>')
 def view_page(post_id: int):

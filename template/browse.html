@@ -6,4 +6,22 @@
             <a href="{{ url_for('Post.view_page', post_id = post.id) }}">{{ post.name }}</a>
         {% endfor %}
     </div>
+
+    <ul>
+        {% if current_page > 1 %}
+            <a href="{{ url_for('Post.browse_paged', page = current_page - 1) }}">&lt;</a>
+        {% endif %}
+
+        {% for page_number in range(1, pages + 1) %}
+            {% if page_number == current_page %}
+                <p>{{ current_page }}</p>
+            {% else %}
+                <a href="{{ url_for('Post.browse_paged', page = page_number) }}">{{ page_number }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if current_page < pages %}
+            <a href="{{ url_for('Post.browse_paged', page = current_page + 1) }}">&gt;</a>
+        {% endif %}
+    </ul>
 {% endblock %}
