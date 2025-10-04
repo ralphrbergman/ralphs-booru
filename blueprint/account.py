@@ -29,7 +29,11 @@ account_bp = Blueprint(
 
 @account_bp.route('/profile/<int:user_id>')
 def profile_page(user_id: int):
-    return render_template('profile.html', user = get_user(user_id))
+    user = get_user(user_id)
+    # Return 10 posts the user has recently uploaded.
+    posts = list(reversed(user.posts))[:10]
+
+    return render_template('profile.html', posts = posts, user = user)
 
 @account_bp.route('/login', methods = ['GET', 'POST'])
 @anonymous_only

@@ -15,7 +15,7 @@ post_bp = Blueprint(
 
 @post_bp.route('/browse')
 def browse_page():
-    posts = db.paginate(select(Post))
+    posts = db.paginate(select(Post).order_by(Post.id.desc()))
     return render_template('browse.html', posts = posts)
 
 @post_bp.route('/view/<int:post_id>')
