@@ -1,5 +1,6 @@
 from hashlib import md5 as _md5
 from pathlib import Path
+from shutil import copy
 from typing import Optional
 
 import ffmpeg
@@ -45,7 +46,8 @@ def create_post(
     db.session.commit()
 
     post.path.parent.mkdir(parents = True, exist_ok = True)
-    path.rename(post.path)
+    copy(path, post.path)
+    path.unlink(missing_ok = True)
 
     return post
 
