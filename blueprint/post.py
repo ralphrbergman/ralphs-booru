@@ -36,18 +36,25 @@ def upload_page():
     if request.method == 'GET':
         return render_template('upload.html', form = form)
     else:
-        for file in form.files.data:
-            temp_path = Path('temp') / file.filename
-            file.save(temp_path)
+        if form.validate_on_submit():
+            for file in form.files.data:
+                temp_path = Path('temp') / file.filename
+                file.save(temp_path)
 
-            post = create_post(
-                author = current_user,
-                path = temp_path,
-                directory = form.directory.data,
-                caption = form.caption.data,
-                tags = form.tags.data
-            )
+                post = create_post(
+                    author = current_user,
+                    path = temp_path,
+                    directory = form.directory.data,
+                    caption = form.caption.data,
+                    tags = form.tags.data
+                )
 
-            flash(f'Successfully uploaded post #{post.id}')
+                flash(f'Successfully uploaded post #{post.id}')
 
-        return redirect(url_for('Post.browse_page'))
+            return redirect(url_for('Post.browse_page'))
+        else:
+            for field in form.errors.values():
+                for error in field:
+                    flash(error)
+
+        return redirect(url_for('Post.upload_page'))

@@ -45,14 +45,20 @@ def login_page():
             flash('Incorrect username')
             return redirect(url_for('Account.login_page'))
 
-        if check_password(user.password, form.pw.data):
-            login_user(user)
+        if form.validate_on_submit():
+            if check_password(user.password, form.pw.data):
+                login_user(user)
 
-            flash(f'Welcome back, {user.name}')
-            return redirect(url_for('Account.profile_page', user_id = user.id))
+                flash(f'Welcome back, {user.name}')
+                return redirect(url_for('Account.profile_page', user_id = user.id))
+            else:
+                flash('Incorrect password')
         else:
-            flash('Incorrect password')
-            return redirect(url_for('Account.login_page'))
+            for field in form.errors.values():
+                for error in field:
+                    flash(error)
+
+        return redirect(url_for('Account.login_page'))
 
 @account_bp.route('/logout')
 @login_required
@@ -70,16 +76,23 @@ def signup_page():
     if request.method == 'GET':
         return render_template('signup.html', form = form)
     else:
-        user = create_user(
-            name = form.username.data,
-            mail = form.email.data,
-            password = form.pw.data
-        )
+        if form.validate_on_submit():
+            user = create_user(
+                name = form.username.data,
+                mail = form.email.data,
+                password = form.pw.data
+            )
 
-        if not user:
+            if not user:
+                return redirect(url_for('Account.signup_page'))
+
+            login_user(user)
+
+            flash(f'Welcome, {user.name}')
+            return redirect(url_for('Account.profile_page', user_id = user.id))
+        else:
+            for field in form.errors.values():
+                for error in field:
+                    flash(error)
+
             return redirect(url_for('Account.signup_page'))
-
-        login_user(user)
-
-        flash(f'Welcome, {user.name}')
-        return redirect(url_for('Account.profile_page', user_id = user.id))
