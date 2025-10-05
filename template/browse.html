@@ -8,20 +8,16 @@
     </div>
 
     <ul>
-        {% if current_page > 1 %}
-            <a href="{{ url_for('Post.browse_paged', page = current_page - 1) }}">&lt;</a>
-        {% endif %}
-
-        {% for page_number in range(1, pages + 1) %}
-            {% if page_number == current_page %}
-                <p>{{ current_page }}</p>
+        {% for page in bar %}
+            {% if page['page'] != current_page %}
+                <li>
+                    <a href="{{ page['url'] }}">{{ page['page'] }}</a>
+                </li>
             {% else %}
-                <a href="{{ url_for('Post.browse_paged', page = page_number) }}">{{ page_number }}</a>
+                <li>
+                    <p>{{ current_page }}</p>
+                </li>
             {% endif %}
         {% endfor %}
-
-        {% if current_page < pages %}
-            <a href="{{ url_for('Post.browse_paged', page = current_page + 1) }}">&gt;</a>
-        {% endif %}
     </ul>
 {% endblock %}

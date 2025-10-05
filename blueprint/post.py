@@ -1,4 +1,6 @@
+from math import floor
 from pathlib import Path
+from typing import Optional
 
 from flask import Blueprint, request, flash, redirect, render_template, send_file, url_for
 from flask_login import current_user, login_required
@@ -12,6 +14,47 @@ post_bp = Blueprint(
     name = 'Post',
     import_name = __name__
 )
+
+PAGINATION_DEPTH = 5
+
+def create_pagination_bar(current_page: int, total_pages: int) -> list[dict]:
+    bar = list()
+
+    def add_item(page: int, display_value: Optional[str] = None) -> None:
+        bar.append({
+            'page': display_value or page,
+            'url': url_for('Post.browse_paged', page = page)
+        })
+
+    if current_page > 1:
+        if current_page - 1 > PAGINATION_DEPTH:
+            add_item(1, '<<')
+
+        add_item(current_page - 1, '<')
+
+        # Count pages backwards.
+        for index, page in enumerate(range(max(current_page - PAGINATION_DEPTH, 1), current_page)):
+            if index == PAGINATION_DEPTH:
+                break
+
+            add_item(page)
+
+    add_item(current_page)
+
+    if current_page < total_pages:
+        # Now forwards.
+        for index, page in enumerate(range(current_page + 1, total_pages + 1)):
+            if index == PAGINATION_DEPTH:
+                break
+
+            add_item(page)
+
+        add_item(current_page + 1, '>')
+
+        if current_page < total_pages - floor(PAGINATION_DEPTH):
+            add_item(page, '>>')
+
+    return bar
 
 @post_bp.route('/browse')
 def browse_page():
@@ -31,10 +74,12 @@ def browse_paged(page: int):
         per_page = limit
     )
 
+    bar = create_pagination_bar(page, posts.pages)
+
     return render_template(
         'browse.html',
+        bar = bar,
         current_page = page,
-        pages = posts.pages,
         posts = posts
     )
 
