@@ -35,9 +35,6 @@ def create_pagination_bar(current_page: int, limit: int, total_pages: int) -> li
 
         # Count pages backwards.
         for index, page in enumerate(range(max(current_page - PAGINATION_DEPTH, 1), current_page)):
-            if index == PAGINATION_DEPTH:
-                break
-
             add_item(page)
 
     add_item(current_page)
