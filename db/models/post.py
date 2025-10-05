@@ -7,7 +7,7 @@ from flask import url_for
 from sqlalchemy import ForeignKey, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
-from ..db import db
+from db import db
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 

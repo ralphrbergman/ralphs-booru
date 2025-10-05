@@ -5,7 +5,7 @@ from flask_login import UserMixin
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
-from ..db import db
+from db import db
 
 class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
