@@ -15,15 +15,16 @@ post_bp = Blueprint(
     import_name = __name__
 )
 
+DEFAULT_LIMIT = 20
 PAGINATION_DEPTH = 5
 
-def create_pagination_bar(current_page: int, total_pages: int) -> list[dict]:
+def create_pagination_bar(current_page: int, limit: int, total_pages: int) -> list[dict]:
     bar = list()
 
     def add_item(page: int, display_value: Optional[str] = None) -> None:
         bar.append({
             'page': display_value or page,
-            'url': url_for('Post.browse_paged', page = page)
+            'url': url_for('Post.browse_paged', page = page, limit = limit)
         })
 
     if current_page > 1:
@@ -52,7 +53,7 @@ def create_pagination_bar(current_page: int, total_pages: int) -> list[dict]:
         add_item(current_page + 1, '>')
 
         if current_page < total_pages - floor(PAGINATION_DEPTH):
-            add_item(page, '>>')
+            add_item(total_pages, '>>')
 
     return bar
 
@@ -64,7 +65,7 @@ def browse_page():
 def browse_paged(page: int):
     args = request.args
 
-    limit = int(args.get('limit', 20))
+    limit = args.get('limit', DEFAULT_LIMIT, type = int)
 
     posts = db.paginate(
         select(Post).order_by(
@@ -74,7 +75,7 @@ def browse_paged(page: int):
         per_page = limit
     )
 
-    bar = create_pagination_bar(page, posts.pages)
+    bar = create_pagination_bar(page, limit, posts.pages)
 
     return render_template(
         'browse.html',
