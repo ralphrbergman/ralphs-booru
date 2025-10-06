@@ -1,15 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    {% set f_type = post.mime.split('/')[0] %}
-
-    {% if f_type == 'image' %}
-        <img src="{{ post.view_uri }}">
-    {% elif f_type == 'video' %}
-        <video src="{{ post.view_uri }}" controls></video>
-    {% elif f_type == 'audio' %}
-        <audio src="{{ post.view_uri }}" controls></audio>
-    {% endif %}
+    {% include 'content.html' %}
 
     <p>ID: {{ post.id }}</p>
     <p>Posted: {{ post.created }}</p>
@@ -30,13 +22,11 @@
     <p>Name: {{ post.name }}</p>
     <p>Type: {{ post.mime }}</p>
 
-    {% if post.caption %}
-        <label for="caption">Caption:</label>
-        <textarea name="caption">{{ post.caption }}</textarea>
-    {% endif %}
+    <label for="caption">Caption:</label>
+    <textarea name="caption" readonly>{% if post.caption is not none %}{{ post.caption }}{% endif %}</textarea>
 
-    {% if post.tags %}
-        <label for="tags">Tags:</label>
-        <textarea name="tags">{{ post.tags }}</textarea>
-    {% endif %}
+    <label for="tags">Tags:</label>
+    <textarea name="tags" readonly>{% if post.tags is not none %}{{ post.tags }}{% endif %}</textarea>
+
+    <a href="{{ url_for('Post.edit_page', post_id = post.id) }}">Edit</a>
 {% endblock %}

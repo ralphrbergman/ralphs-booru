@@ -8,7 +8,7 @@ from sqlalchemy import select
 
 from api import create_post, get_post
 from db import db, Post
-from form import UploadForm
+from form import PostForm, UploadForm
 
 post_bp = Blueprint(
     name = 'Post',
@@ -81,6 +81,28 @@ def browse_paged(page: int):
         posts = posts
     )
 
+@post_bp.route('/edit/<int:post_id>', methods = ['GET', 'POST'])
+def edit_page(post_id: int):
+    form = PostForm()
+    post = get_post(post_id)
+
+    if request.method == 'GET':
+        return render_template('edit.html', form = form, post = post)
+    else:
+        if form.validate_on_submit():
+            post.directory = form.directory.data
+            post.op = form.op.data
+            post.src = form.src.data
+            post.caption = form.caption.data
+            post.tags = form.tags.data
+
+            db.session.commit()
+
+            return redirect(url_for('Post.view_page', post_id = post_id))
+
+        # So far there isn't anything that will invalidate the form.
+        # So I guess there's no point in displaying errors?
+
 @post_bp.route('/view/<int:post_id>')
 def view_page(post_id: int):
     return render_template('view.html', post = get_post(post_id))
@@ -107,6 +129,8 @@ def upload_page():
                 post = create_post(
                     author = current_user,
                     path = temp_path,
+                    op = form.op.data,
+                    src = form.src.data,
                     directory = form.directory.data,
                     caption = form.caption.data,
                     tags = form.tags.data

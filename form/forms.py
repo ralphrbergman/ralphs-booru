@@ -1,12 +1,15 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import EmailField, MultipleFileField, PasswordField, StringField, TextAreaField
+from wtforms import EmailField, MultipleFileField, PasswordField
 from wtforms.validators import DataRequired, EqualTo
 
-from .mixins import SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
+from .mixins import PostMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
 from .validators import validate_extension
 
 class LoginForm(FlaskForm, UsernameMixin, WeakPasswordMixin):
+    pass
+
+class PostForm(FlaskForm, PostMixin, SubmitMixin):
     pass
 
 class SignupForm(FlaskForm, SubmitMixin, StrongPasswordMixin, UsernameMixin):
@@ -16,7 +19,7 @@ class SignupForm(FlaskForm, SubmitMixin, StrongPasswordMixin, UsernameMixin):
         EqualTo('pw', message = 'Mismatch between password and confirmation password')
     ])
 
-class UploadForm(FlaskForm, SubmitMixin):
+class UploadForm(FlaskForm, PostMixin, SubmitMixin):
     files = MultipleFileField(
         'files',
         validators = [
@@ -25,8 +28,4 @@ class UploadForm(FlaskForm, SubmitMixin):
         ]
     )
 
-    directory = StringField('directory')
-    op = StringField('op')
-    src = StringField('src')
-    caption = TextAreaField('caption')
-    tags = TextAreaField('tags')
+    

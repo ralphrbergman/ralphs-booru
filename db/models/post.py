@@ -19,6 +19,9 @@ class Post(db.Model):
     author_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable = False)
     author: Mapped['User'] = relationship(back_populates = 'posts')
 
+    op: Mapped[str] = mapped_column(nullable = True)
+    src: Mapped[str] = mapped_column(nullable = True)
+
     caption: Mapped[str] = mapped_column(nullable = True)
     tags: Mapped[str] = mapped_column(nullable = True)
 

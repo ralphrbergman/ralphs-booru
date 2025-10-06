@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    {% include 'content.html' %}
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        <label for="directory">Directory:</label>
+        <input type="text" name="directory" value="{% if post.directory is not none %}{{ post.directory }}{% endif %}">
+
+        <label for="op">Original Poster:</label>
+        <input type="text" name="op" value="{% if post.op is not none %}{{ post.op }}{% endif %}">
+
+        <label for="src">Source:</label>
+        <input type="text" name="src" value="{% if post.src is not none %}{{ post.src }}{% endif %}">
+
+        <label for="caption">Caption:</label>
+        <input type="text" name="caption" value="{% if post.caption is not none %}{{ post.caption }}{% endif %}">
+
+        <label for="tags">Tags:</label>
+        <input type="text" name="tags" value="{% if post.tags is not none %}{{ post.tags }}{% endif %}">
+
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

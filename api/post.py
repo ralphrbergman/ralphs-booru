@@ -13,6 +13,8 @@ def create_post(
     author: User,
     path: Path,
     directory: Optional[str] = None,
+    op: Optional[str] = None,
+    src: Optional[str] = None,
     caption: Optional[str] = None,
     tags: Optional[str] = None
 ) -> Post:
@@ -26,6 +28,9 @@ def create_post(
     size = get_size(path)
 
     post.author_id = author.id
+    post.op = op
+    post.src = src
+
     post.caption = caption
     post.tags = tags
 
