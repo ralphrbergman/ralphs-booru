@@ -4,10 +4,14 @@ from shutil import copy
 from typing import Optional
 
 import ffmpeg
+from flask_sqlalchemy.pagination import Pagination
 from magic import from_file
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from db import db, Post, User
+
+def count_all() -> int:
+    return db.session.scalar(select(func.count(Post.id)))
 
 def create_post(
     author: User,
