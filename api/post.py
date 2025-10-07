@@ -4,11 +4,11 @@ from shutil import copy
 from typing import Optional
 
 import ffmpeg
-from flask_sqlalchemy.pagination import Pagination
 from magic import from_file
 from sqlalchemy import func, select
 
 from db import db, Post, User
+from .thumbnail import create_thumbnail
 
 def count_all() -> int:
     return db.session.scalar(select(func.count(Post.id)))
@@ -51,12 +51,21 @@ def create_post(
     except TypeError:
         pass
 
-    db.session.add(post)
-    db.session.commit()
-
     post.path.parent.mkdir(parents = True, exist_ok = True)
     copy(path, post.path)
     path.unlink(missing_ok = True)
+
+    db.session.add(post)
+    db.session.commit()
+
+    thumbnail = create_thumbnail(post)
+    try:
+        thumbnail.post_id = post.id
+
+        db.session.commit()
+    except AttributeError as exc:
+        # No thumbnail was made.
+        pass
 
     return post
 

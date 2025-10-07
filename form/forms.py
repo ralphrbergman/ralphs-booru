@@ -31,7 +31,7 @@ class UploadForm(FlaskForm, PostMixin, SubmitMixin):
         'files',
         validators = [
             FileRequired(),
-            validate_extension(['gif', 'jpg', 'jpeg', 'mp4', 'png', 'webm', 'webp'])
+            validate_extension(['gif', 'jpg', 'jpeg', 'mp3', 'mp4', 'png', 'webm', 'webp'])
         ]
     )
 

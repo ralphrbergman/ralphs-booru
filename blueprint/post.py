@@ -1,4 +1,5 @@
 from math import floor
+from os import getenv
 from pathlib import Path
 from typing import Optional
 
@@ -9,6 +10,8 @@ from sqlalchemy import select
 from api import create_post, get_post
 from db import db, Post
 from form import PostForm, UploadForm
+
+TEMP = Path(getenv('TEMP'))
 
 post_bp = Blueprint(
     name = 'Post',
@@ -123,7 +126,7 @@ def upload_page():
     else:
         if form.validate_on_submit():
             for file in form.files.data:
-                temp_path = Path('temp') / file.filename
+                temp_path = TEMP / file.filename
                 file.save(temp_path)
 
                 post = create_post(
