@@ -10,7 +10,7 @@ class WeakPasswordField(PasswordField):
             validators = list()
 
         if DataRequired() not in validators:
-            validators.insert(0, DataRequired())
+            validators.insert(0, DataRequired(message = 'Password is required'))
 
         super().__init__(label = label, validators = validators, **kwargs)
 

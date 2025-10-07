@@ -1,7 +1,10 @@
-from wtforms import SubmitField, StringField, TextAreaField
+from wtforms import EmailField, SubmitField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Length
 
 from .fields import StrongPasswordField, WeakPasswordField
+
+class EmailMixin:
+    email = EmailField('email')
 
 class PostMixin:
     directory = StringField('directory')

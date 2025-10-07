@@ -1,1 +1,1 @@
-from .forms import LoginForm, PostForm, SignupForm, UploadForm
+from .forms import LoginForm, PostForm, PasswordForm, SignupForm, UserForm, UploadForm
