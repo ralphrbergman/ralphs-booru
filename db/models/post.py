@@ -8,6 +8,7 @@ from sqlalchemy import ForeignKey, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
+from .tag_assoc import TagAssociation
 from .thumbnail import Thumbnail
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
@@ -24,7 +25,7 @@ class Post(db.Model):
     src: Mapped[str] = mapped_column(nullable = True)
 
     caption: Mapped[str] = mapped_column(nullable = True)
-    tags: Mapped[str] = mapped_column(nullable = True)
+    tags: Mapped[list['Tag']] = db.relationship('Tag', secondary = TagAssociation, backref = 'posts')
     thumbnail: Mapped[Thumbnail] = relationship('Thumbnail', back_populates = 'post')
 
     # Filesystem attributes.

@@ -7,7 +7,7 @@ from flask import Blueprint, request, flash, redirect, render_template, send_fil
 from flask_login import current_user, login_required
 from sqlalchemy import select
 
-from api import create_post, get_post
+from api import create_post, create_tag, get_post, get_tag
 from db import db, Post
 from form import PostForm, UploadForm
 
@@ -97,7 +97,18 @@ def edit_page(post_id: int):
             post.op = form.op.data
             post.src = form.src.data
             post.caption = form.caption.data
-            post.tags = form.tags.data
+
+            new_tags = list()
+
+            for tag_name in form.tags.data.split(' '):
+                tag = get_tag(tag_name)
+
+                if not tag:
+                    tag = create_tag(tag_name)
+
+                new_tags.append(tag)
+
+            post.tags = new_tags
 
             db.session.commit()
 

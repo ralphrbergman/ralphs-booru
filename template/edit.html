@@ -19,7 +19,7 @@
         <input type="text" name="caption" value="{% if post.caption is not none %}{{ post.caption }}{% endif %}">
 
         <label for="tags">Tags:</label>
-        <input type="text" name="tags" value="{% if post.tags is not none %}{{ post.tags }}{% endif %}">
+        <input type="text" name="tags" value="{% if post.tags is not none %}{{ post.tags | map(attribute = 'name') | join(' ') }}{% endif %}">
 
         <input type="submit" value="Submit">
     </form>

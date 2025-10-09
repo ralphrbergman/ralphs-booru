@@ -26,7 +26,7 @@
     <textarea name="caption" readonly>{% if post.caption is not none %}{{ post.caption }}{% endif %}</textarea>
 
     <label for="tags">Tags:</label>
-    <textarea name="tags" readonly>{% if post.tags is not none %}{{ post.tags }}{% endif %}</textarea>
+    <textarea name="tags" readonly>{{ post.tags | map(attribute = 'name') | join(' ') }}</textarea>
 
     <a href="{{ url_for('Post.edit_page', post_id = post.id) }}">Edit</a>
 {% endblock %}

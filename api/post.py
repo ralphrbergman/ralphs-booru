@@ -7,7 +7,8 @@ import ffmpeg
 from magic import from_file
 from sqlalchemy import func, select
 
-from db import db, Post, User
+from db import Post, Tag, User, db
+from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
 
 def count_all() -> int:
@@ -36,7 +37,21 @@ def create_post(
     post.src = src
 
     post.caption = caption
-    post.tags = tags
+
+    tag_objs = list()
+
+    for tag_name in tags.split(' '):
+        tag = get_tag(tag_name)
+
+        if not tag:
+            tag = create_tag(tag_name)
+
+            if not tag:
+                continue
+
+                tag_objs.append(tag)
+
+        post.tags.append(tag)
 
     post.directory = directory
     post.md5 = md5
@@ -54,6 +69,9 @@ def create_post(
     post.path.parent.mkdir(parents = True, exist_ok = True)
     copy(path, post.path)
     path.unlink(missing_ok = True)
+
+    for tag in tag_objs:
+        db.session.add(tag)
 
     db.session.add(post)
     db.session.commit()
