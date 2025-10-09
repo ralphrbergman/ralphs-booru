@@ -1,6 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+    <form method="post">
+        <input type="text" name="search">
+        <input type="submit" value="Search">
+    </form>
+
     <div>
         {% for digit in count %}
             <div style="border: solid gray; display: inline; padding: 0.5rem;">{{ digit }}</div>

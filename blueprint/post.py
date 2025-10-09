@@ -8,7 +8,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 
 from api import create_post, create_tag, get_post, get_tag
-from db import db, Post
+from db import db, Post, Tag
 from form import PostForm, UploadForm
 
 TEMP = Path(getenv('TEMP'))
@@ -66,11 +66,22 @@ def browse_paged(page: int):
     args = request.args
 
     limit = args.get('limit', DEFAULT_LIMIT, type = int)
+    tags = args.get('tags')
+
+    stmt = select(Post).order_by(
+        Post.id.desc()
+    )
+
+    try:
+        for tag_name in tags.split(' '):
+            stmt = stmt.where(
+                Post.tags.any(Tag.name == tag_name)
+            )
+    except (AttributeError, TypeError) as exc:
+        pass
 
     posts = db.paginate(
-        select(Post).order_by(
-            Post.id.desc()
-        ),
+        stmt,
         page = page,
         per_page = limit
     )

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import MultipleFileField, PasswordField
+from wtforms import MultipleFileField, PasswordField, StringField
 from wtforms.validators import DataRequired, EqualTo
 
 from .fields import StrongPasswordField
@@ -16,6 +16,9 @@ class PostForm(FlaskForm, PostMixin, SubmitMixin):
 class PasswordForm(FlaskForm, WeakPasswordMixin, SubmitMixin):
     new_pw = StrongPasswordField('new_pw')
     confirm_new_pw = StrongPasswordField('confirm_new_pw')
+
+class SearchForm(FlaskForm, SubmitMixin):
+    search = StringField('search')
 
 class SignupForm(FlaskForm, EmailMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin):
     confirm_pw = PasswordField('confirm_pw', validators = [
