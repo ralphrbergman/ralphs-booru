@@ -13,7 +13,9 @@ class Tag(db.Model):
 
     @validates('name')
     def validate_name(self, key: str, value: str) -> Optional[str]:
-        if not value.strip():
+        value = value.strip()
+
+        if not value:
             return None
 
         return value
