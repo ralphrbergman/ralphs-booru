@@ -74,9 +74,12 @@ def browse_paged(page: int):
 
     try:
         for tag_name in tags.split(' '):
-            stmt = stmt.where(
-                Post.tags.any(Tag.name == tag_name)
-            )
+            if tag_name[0] != '-':
+                stmt = stmt.where(
+                    Post.tags.any(Tag.name == tag_name)
+                )
+            else:
+                stmt = stmt.where(~Post.tags.any(Tag.name == tag_name[1:]))
     except (AttributeError, TypeError) as exc:
         pass
 
