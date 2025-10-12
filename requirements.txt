@@ -6,5 +6,6 @@ Flask-WTF
 
 ffmpeg-python
 
+Pillow
 python-dotenv
 python-magic

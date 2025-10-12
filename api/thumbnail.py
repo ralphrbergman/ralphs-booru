@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Optional
 
 import ffmpeg
+from PIL import Image
 from sqlalchemy.exc import IntegrityError
 
 from db import db, Post, Thumbnail
@@ -34,8 +35,19 @@ def create_thumbnail(post: Post) -> Thumbnail:
         Thumbnail
     """
     temp_f = generate_thumbnail(post)
+    alpha = is_alpha_used(temp_f)
+
+    if not alpha:
+        try:
+            # Create new thumbnail in MJPEG container to minimize storage cost.
+            temp_f.unlink(missing_ok = True)
+        except AttributeError as exc:
+            pass
+
+        temp_f = generate_thumbnail(post, ThumbnailType.JPEG)
 
     thumb = Thumbnail()
+    db.session.add(thumb)
 
     try:
         with temp_f.open('rb') as stream:
@@ -44,16 +56,15 @@ def create_thumbnail(post: Post) -> Thumbnail:
         # No thumbnail was made.
         return
 
-    temp_f.unlink(missing_ok = True)
+    thumb.post = post
 
-    thumb.post_id = post.id
-
-    db.session.add(thumb)
     try:
         db.session.commit()
     except IntegrityError as exc:
         # Post already has a thumbnail.
         db.session.rollback()
+
+    temp_f.unlink(missing_ok = True)
 
     return thumb
 
@@ -88,7 +99,7 @@ def generate_thumbnail(post: Post, ext: ThumbnailType = ThumbnailType.PNG) -> Op
     stream = ffmpeg.input(post_path)[str(index)]
 
     # Specify muxer.
-    stream = ffmpeg.filter(stream, 'format', pix_fmts = 'rgba' if ext == ThumbnailType.PNG else 'mjpeg')
+    stream = ffmpeg.filter(stream, 'format', pix_fmts = 'rgba' if ext == ThumbnailType.PNG else 'yuvj420p')
     # Specify dimensions.
     stream = ffmpeg.filter(stream, 'scale', h = HEIGHT_EXPR, w = WIDTH_EXPR)
 
@@ -96,7 +107,8 @@ def generate_thumbnail(post: Post, ext: ThumbnailType = ThumbnailType.PNG) -> Op
         ffmpeg.output(
             stream,
             str(out),
-            frames = '1'
+            frames = '1',
+            loglevel = 'quiet'
         ).run(
             overwrite_output = True
         )
@@ -105,3 +117,43 @@ def generate_thumbnail(post: Post, ext: ThumbnailType = ThumbnailType.PNG) -> Op
         return
 
     return out
+
+def is_alpha_used(path: Path) -> bool:
+    """
+    Return True if the thumbnail path has transparency
+    and requires a PNG container.
+
+    Args:
+        path (Path)
+
+    Returns:
+        bool
+    """
+    # TODO:
+    # Document the code and what it does for what purpose.
+    try:
+        image = Image.open(path)
+    except AttributeError:
+        # No path passed.
+        return False
+
+    if image.mode == 'P':
+        if 'transparency' in image.info:
+            image = image.convert('RGBA')
+        else:
+            image.close()
+            return False
+    
+    if image.mode not in ('LA', 'RGBA'):
+        image.close()
+        return False
+
+    alpha_channel = image.getchannel('A')
+    min_a, max_a = alpha_channel.getextrema()
+
+    if min_a == 255 and max_a == 255:
+        image.close()
+        return False
+
+    image.close()
+    return True
