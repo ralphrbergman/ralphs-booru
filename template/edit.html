@@ -21,6 +21,9 @@
         <label for="tags">Tags:</label>
         <input type="text" name="tags" value="{% if post.tags is not none %}{{ post.tags | map(attribute = 'name') | join(' ') }}{% endif %}">
 
+        <label for="deleted">Delete:</label>
+        <input type="checkbox" name="deleted">
+
         <input type="submit" value="Submit">
     </form>
 {% endblock %}

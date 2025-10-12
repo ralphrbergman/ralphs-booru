@@ -6,6 +6,7 @@ from typing import Optional
 import ffmpeg
 from magic import from_file
 from sqlalchemy import func, select
+from sqlalchemy.orm.exc import UnmappedInstanceError
 
 from db import Post, User, db
 from .tag import create_tag, get_tag
@@ -89,6 +90,22 @@ def create_post(
         pass
 
     return post
+
+def delete_post(post: Post) -> None:
+    """
+    Deletes given post.
+
+    Args:
+        post (Post)
+    """
+    try:
+        db.session.delete(post.thumbnail)
+    except UnmappedInstanceError as exc:
+        # Some posts may not have a thumbnail and it's alright.
+        pass
+
+    db.session.delete(post)
+    db.session.commit()
 
 def get_dimensions(path: Path) -> tuple[int, int]:
     try:

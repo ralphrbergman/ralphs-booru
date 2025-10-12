@@ -7,7 +7,7 @@ from flask import Blueprint, request, flash, redirect, render_template, send_fil
 from flask_login import current_user, login_required
 from sqlalchemy import select
 
-from api import create_post, create_tag, get_post, get_tag
+from api import create_post, create_tag, delete_post, get_post, get_tag
 from db import db, Post, Tag
 from form import PostForm, UploadForm
 
@@ -107,6 +107,12 @@ def edit_page(post_id: int):
         return render_template('edit.html', form = form, post = post)
     else:
         if form.validate_on_submit():
+            if form.deleted.data:
+                delete_post(post)
+
+                flash(f'Permanently deleted post #{post.id}')
+                return redirect(url_for('Post.browse_page'))
+
             post.directory = form.directory.data
             post.op = form.op.data
             post.src = form.src.data
