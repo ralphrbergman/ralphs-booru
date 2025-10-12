@@ -75,11 +75,11 @@ def browse_paged(page: int):
     try:
         for tag_name in tags.split(' '):
             if tag_name[0] != '-':
-                stmt = stmt.where(
-                    Post.tags.any(Tag.name == tag_name)
-                )
+                where = Post.tags.any(Tag.name == tag_name)
             else:
-                stmt = stmt.where(~Post.tags.any(Tag.name == tag_name[1:]))
+                where = ~Post.tags.any(Tag.name == tag_name[1:])
+
+            stmt = stmt.where(where)
     except (AttributeError, TypeError) as exc:
         pass
 
@@ -115,6 +115,9 @@ def edit_page(post_id: int):
             new_tags = list()
 
             for tag_name in form.tags.data.split(' '):
+                if len(tag_name) == 0:
+                    break
+
                 tag = get_tag(tag_name)
 
                 if not tag:

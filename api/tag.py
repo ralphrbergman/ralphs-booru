@@ -17,6 +17,7 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
         Tag
     """
     tag = Tag()
+    db.session.add(tag)
 
     tag.name = name
 
@@ -25,8 +26,6 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
             post.tags.append(tag)
     except TypeError as exc:
         pass
-
-    db.session.add(tag)
 
     try:
         db.session.commit()

@@ -7,7 +7,7 @@ import ffmpeg
 from magic import from_file
 from sqlalchemy import func, select
 
-from db import Post, Tag, User, db
+from db import Post, User, db
 from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
 
@@ -38,20 +38,23 @@ def create_post(
 
     post.caption = caption
 
-    tag_objs = list()
+    try:
+        tag_objs = list()
 
-    for tag_name in tags.split(' '):
-        tag = get_tag(tag_name)
-
-        if not tag:
-            tag = create_tag(tag_name)
+        for tag_name in tags.split(' '):
+            tag = get_tag(tag_name)
 
             if not tag:
-                continue
+                tag = create_tag(tag_name)
 
-                tag_objs.append(tag)
+                if not tag:
+                    continue
 
-        post.tags.append(tag)
+                    tag_objs.append(tag)
+
+            post.tags.append(tag)
+    except AttributeError as exc:
+        pass
 
     post.directory = directory
     post.md5 = md5
