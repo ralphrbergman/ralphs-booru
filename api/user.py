@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from db import db, User
 from encryption import bcrypt
 
-def create_user(name: str, mail: str, password: str) -> Optional[User]:
+def create_user(name: str, mail: str, password: str, avatar: Optional[str] = None) -> Optional[User]:
     """
     Creates and returns user object.
 
@@ -14,6 +14,7 @@ def create_user(name: str, mail: str, password: str) -> Optional[User]:
         name: User's username
         mail: User's e-mail
         password: Hashed user's password
+        avatar: Optional avatar filename
 
     Returns:
         User: Created user
@@ -23,6 +24,7 @@ def create_user(name: str, mail: str, password: str) -> Optional[User]:
     user.name = name
     user.mail = mail
     user.password = set_password(password)
+    user.avatar_name = avatar
 
     db.session.add(user)
     try:

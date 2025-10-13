@@ -3,6 +3,7 @@ from os import getenv
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
+from flask_migrate import Migrate
 
 from api import get_user
 from blueprint import account_bp, index_bp, post_bp
@@ -35,6 +36,9 @@ def create_app() -> Flask:
     @login_manager.user_loader
     def load_user(user_id: str) -> User:
         return get_user(int(user_id))
+
+    # Initialize database migration interface
+    migrate = Migrate(app, db)
 
     app.register_blueprint(account_bp)
     app.register_blueprint(index_bp)

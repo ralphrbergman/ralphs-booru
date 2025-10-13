@@ -1,9 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+    <img src="{{ user.avatar }}" alt="{{ user.name }}'s profile picture">
     <p>{{ user.username }}</p>
     <a href="{{ url_for('Account.edit_profile_page') }}">Edit</a>
+    <p>Join Date: {{ user.created }}</p>
 
+    <p>{{ user.name }}'s latest posts:</p>
     <div style="display: flex; flex-wrap: wrap;">
         {% for post in posts %}
             <div>

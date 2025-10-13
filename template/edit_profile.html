@@ -1,8 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <form method="post">
+    <form enctype="multipart/form-data" method="post">
         {{ form.hidden_tag() }}
+
+        <label for="avatar">Upload your own avatar:</label>
+        <input type="file" name="avatar">
 
         <label for="username">Username:</label>
         <input type="text" name="username" value="{{ user.name }}" disabled>

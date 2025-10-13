@@ -4,7 +4,7 @@ from wtforms import BooleanField, MultipleFileField, PasswordField, StringField
 from wtforms.validators import DataRequired, EqualTo
 
 from .fields import StrongPasswordField
-from .mixins import EmailMixin, PostMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
+from .mixins import AvatarMixin, EmailMixin, PostMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
 from .validators import validate_extension
 
 class LoginForm(FlaskForm, UsernameMixin, WeakPasswordMixin):
@@ -20,13 +20,13 @@ class PasswordForm(FlaskForm, WeakPasswordMixin, SubmitMixin):
 class SearchForm(FlaskForm, SubmitMixin):
     search = StringField('search')
 
-class SignupForm(FlaskForm, EmailMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin):
+class SignupForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin):
     confirm_pw = PasswordField('confirm_pw', validators = [
         DataRequired(message = 'You need to confirm your password'),
         EqualTo('pw', message = 'Mismatch between password and confirmation password')
     ])
 
-class UserForm(FlaskForm, EmailMixin, SubmitMixin, WeakPasswordMixin):
+class UserForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, WeakPasswordMixin):
     pass
 
 class UploadForm(FlaskForm, PostMixin, SubmitMixin):

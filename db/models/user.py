@@ -11,6 +11,7 @@ from db import db
 class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
     created: Mapped[datetime] = mapped_column(default = func.now())
+    avatar_name: Mapped[str] = mapped_column(default = 'avatar.png')
 
     name: Mapped[str] = mapped_column(String(length = 20), nullable = False, unique = True)
     mail: Mapped[str] = mapped_column(nullable = True, unique = True)
@@ -23,6 +24,10 @@ class User(db.Model, UserMixin):
             return None
 
         return value
+
+    @property
+    def avatar(self) -> str:
+        return url_for('Account.avatar_page', filename = self.avatar_name)
 
     @property
     def profile_url(self) -> str:
