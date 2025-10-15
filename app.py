@@ -6,7 +6,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 
 from api import get_user
-from blueprint import account_bp, index_bp, post_bp
+from blueprint import account_bp, index_bp, post_bp, thumbnail_bp
 from db import db, User
 from encryption import bcrypt
 
@@ -43,5 +43,6 @@ def create_app() -> Flask:
     app.register_blueprint(account_bp)
     app.register_blueprint(index_bp)
     app.register_blueprint(post_bp)
+    app.register_blueprint(thumbnail_bp)
 
     return app

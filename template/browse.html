@@ -5,7 +5,7 @@
         {% for post in posts %}
             <a href="{{ url_for('Post.view_page', post_id = post.id) }}">
                 {% if post.thumbnail is not none %}
-                    <img src="data:image;base64, {{ post.thumbnail.enc_data }}" alt="{{ post.id }} Thumbnail">
+                    <img src="{{ url_for('Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ post.id }} Thumbnail">
                 {% else %}
                     <p>{{ post.name }}</p>
                 {% endif %}
