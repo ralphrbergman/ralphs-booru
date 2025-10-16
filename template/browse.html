@@ -1,17 +1,11 @@
 {% extends 'layout.html' %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'post.css') }}">
+{% endblock %}
+
 {% block body %}
-    <div style="display: flex; flex-wrap: wrap;">
-        {% for post in posts %}
-            <a href="{{ url_for('Post.view_page', post_id = post.id) }}">
-                {% if post.thumbnail is not none %}
-                    <img src="{{ url_for('Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ post.id }} Thumbnail">
-                {% else %}
-                    <p>{{ post.name }}</p>
-                {% endif %}
-            </a>
-        {% endfor %}
-    </div>
+    {% include 'frag/posts.html' %}
 
     <ul>
         {% for page in bar %}

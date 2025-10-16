@@ -7,11 +7,6 @@
     <p>Join Date: {{ user.created }}</p>
 
     <p>{{ user.name }}'s latest posts:</p>
-    <div style="display: flex; flex-wrap: wrap;">
-        {% for post in posts %}
-            <div>
-                <a href="{{ url_for('Post.view_page', post_id = post.id) }}">{{ post.name }}</a>
-            </div>
-        {% endfor %}
-    </div>
+
+    {% include 'frag/posts.html' %}
 {% endblock %}
