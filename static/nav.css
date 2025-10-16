@@ -1,0 +1,35 @@
+.navbar {
+    background-color: #7d0041;
+}
+
+.navbar-anchor {
+    color: #ff0085;
+    display: block;
+    font-size: 1.5em;
+    padding: 1em;
+}
+
+.navbar-anchor:hover {
+    color: #00a6ff;
+}
+
+.navbar-anchors {
+    align-items: center;
+    display: flex;
+    list-style-type: none;
+}
+
+@media (max-width: 768px) {
+    .navbar-anchor {
+        font-size: 1.2em;
+        padding: 0.5em;
+    }
+
+    .navbar-anchors {
+        flex-direction: column;
+    }
+}
+
+.navbar-logo {
+    font-weight: bold;
+}
