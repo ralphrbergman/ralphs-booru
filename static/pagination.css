@@ -1,0 +1,20 @@
+.pagination-bar {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    list-style-type: none;
+}
+
+.pagination-element {
+    border: 1px solid black;
+}
+
+/* Without this, anchor elements won't have the same padding around them as paragraph. */
+.pagination-element a {
+    display: block;
+}
+
+.pagination-element a, p {
+    padding: 10px;
+}

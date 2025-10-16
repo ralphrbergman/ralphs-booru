@@ -6,18 +6,5 @@
 
 {% block body %}
     {% include 'frag/posts.html' %}
-
-    <ul>
-        {% for page in bar %}
-            {% if page['page'] != current_page %}
-                <li>
-                    <a href="{{ page['url'] }}">{{ page['page'] }}</a>
-                </li>
-            {% else %}
-                <li>
-                    <p>{{ current_page }}</p>
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+    {% include 'frag/pagination.html' %}
 {% endblock %}
