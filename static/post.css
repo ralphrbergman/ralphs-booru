@@ -13,6 +13,13 @@
     width: 15rem;
 }
 
+@media (max-width: 600px) {
+    .post-container {
+        height: 10rem;
+        width: 10rem;
+    }
+}
+
 /* Sizing made for profile page. */
 .post-prof-container {
     height: 10rem;
