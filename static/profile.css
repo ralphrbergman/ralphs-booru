@@ -1,0 +1,28 @@
+.basic-details {
+    align-items: center;
+    display: flex;
+    gap: 0.5em;
+}
+
+.edit-btn {
+    user-select: none;
+}
+
+.profile-container {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 5em;
+    justify-content: center;
+
+    padding-left: 15em;
+    padding-right: 15em;
+}
+
+.profile-picture {
+    max-width: 15rem;
+}
+
+.username {
+    font-size: 2em;
+}

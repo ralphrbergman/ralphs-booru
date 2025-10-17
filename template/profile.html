@@ -1,12 +1,28 @@
 {% extends 'layout.html' %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'profile.css') }}">
+{% endblock %}
+
 {% block body %}
-    <img src="{{ user.avatar }}" alt="{{ user.name }}'s profile picture">
-    <p>{{ user.username }}</p>
-    <a href="{{ url_for('Account.edit_profile_page') }}">Edit</a>
-    <p>Join Date: {{ user.created }}</p>
+    <div class="profile-container">
+        <div class="basic-details">
+            <img class="profile-picture" src="{{ user.avatar }}" alt="{{ user.name }}'s profile picture">
 
-    <p>{{ user.name }}'s latest posts:</p>
+            <div>
+                <p class="username">{{ user.username }}</p>
+                <a class="edit-btn" href="{{ url_for('Account.edit_profile_page') }}">(Edit)</a>
+            </div>
+        </div>
 
-    {% include 'frag/posts.html' %}
+        <div>
+            <p>Posts: {{ user.posts | length }}</p>
+            <p>Join Date: {{ user.created }}</p>
+        </div>
+
+        <div>
+            <p>{{ user.name }}'s latest posts:</p>
+            {% include 'frag/posts.html' %}
+        </div>
+    </div>
 {% endblock %}
