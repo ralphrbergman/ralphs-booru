@@ -1,14 +1,28 @@
 {% extends 'layout.html' %}
 
-{% block body %}
-    <form method="post">
-        <input type="text" name="search">
-        <input type="submit" value="Search">
-    </form>
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'index.css') }}">
+{% endblock %}
 
-    <div>
-        {% for digit in count %}
-            <div style="border: solid gray; display: inline; padding: 0.5rem;">{{ digit }}</div>
-        {% endfor %}
+{% block body %}
+    <div class="index-container">
+        <form method="post">
+            <input class="search-box" type="text" name="search" placeholder="tag1 tag2">
+            <input class="search-btn" type="submit" value="Search">
+        </form>
+
+        <div class="digits">
+            {% for digit in count %}
+                <div class="digit">
+                    {{ digit }}
+
+                    {% for n in range(digit | int) %}
+                        <div class="digit-bar"></div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <p class="digit">Posts</p>
+        </div>
     </div>
 {% endblock %}
