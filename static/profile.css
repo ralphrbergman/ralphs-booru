@@ -1,7 +1,7 @@
 .basic-details {
     align-items: center;
     display: flex;
-    gap: 0.5em;
+    gap: 1em;
 }
 
 .edit-btn {
@@ -9,14 +9,21 @@
 }
 
 .profile-container {
-    align-items: start;
+    align-items: center;
     display: flex;
     flex-direction: column;
     gap: 5em;
     justify-content: center;
 
-    padding-left: 15em;
-    padding-right: 15em;
+    padding-left: 15rem;
+    padding-right: 15rem;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
 }
 
 .profile-picture {
