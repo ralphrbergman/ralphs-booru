@@ -1,27 +1,45 @@
 {% extends 'layout.html' %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'edit.css') }}">
+{% endblock %}
+
 {% block body %}
-    <form enctype="multipart/form-data" method="post">
-        {{ form.hidden_tag() }}
+    <div class="edit-container">
+        <form class="edit-form" enctype="multipart/form-data" method="post">
+            {{ form.hidden_tag() }}
 
-        <label for="files">File(s) to upload:</label>
-        <input type="file" name="files" accept=".gif, .jpg, .jpeg, .mp3, .mp4, .png, .webm, .webp" multiple required>
+            <div class="input-group">
+                <label for="files">File(s):</label>
+                <input type="file" name="files" accept=".gif, .jpg, .jpeg, .mp3, .mp4, .png, .webm, .webp" multiple required>
+            </div>
 
-        <label for="directory">Directory:</label>
-        <input type="text" name="directory">
+            <div class="input-group">
+                <label for="directory">Directory:</label>
+                <input type="text" name="directory">
+            </div>
 
-        <label for="op">Original Poster:</label>
-        <input type="text" name="op">
+            <div class="input-group">
+                <label for="op">Original Poster:</label>
+                <input type="text" name="op">
+            </div>
 
-        <label for="src">Source:</label>
-        <input type="text" name="src">
+            <div class="input-group">
+                <label for="src">Source:</label>
+                <input type="text" name="src">
+            </div>
 
-        <label for="caption">Caption:</label>
-        <textarea name="caption"></textarea>
+            <div class="input-group">
+                <label for="caption">Caption:</label>
+                <textarea name="caption"></textarea>
+            </div>
 
-        <label for="tags">Tags:</label>
-        <textarea name="tags"></textarea>
+            <div class="input-group">
+                <label for="tags">Tags:</label>
+                <textarea name="tags"></textarea>
+            </div>
 
-        <input type="submit" name="submit" value="Upload">
-    </form>
+            <input type="submit" name="submit" value="Upload">
+        </form>
+    </div>
 {% endblock %}
