@@ -22,6 +22,7 @@
 
         <div>
             <p>{{ user.name }}'s latest posts:</p>
+            {% set container_name = 'post-prof-container' %}
             {% include 'frag/posts.html' %}
         </div>
     </div>
