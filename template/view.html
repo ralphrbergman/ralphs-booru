@@ -1,32 +1,53 @@
 {% extends 'layout.html' %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
+{% endblock %}
+
 {% block body %}
-    {% include 'content.html' %}
+    <div class="view-container">
+        <div class="details">
+            <a href="{{ url_for('Post.edit_page', post_id = post.id) }}">Edit</a>
 
-    <p>ID: {{ post.id }}</p>
-    <p>Posted: {{ post.created }}</p>
-    <p>Uploader: <a href="{{ post.author.profile_url }}">{{ post.author.username }}</a></p>
+            <div>
+                <p class="notable">Tags:</p>
+                <ul class="tag-list">
+                    {% for tag in post.tags | sort(attribute='name') %}
+                        <li>
+                            <a href="{{ url_for('Post.browse_paged', page = 1, tags = tag.name) }}">{{ tag.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
-    {% if post.width %}
-        <p>Size: {{ post.dimensions }}</p>
-    {% endif %}
+            <div class="post-details">
+                <p class="notable">Statistics:</p>
 
-    {% if post.src %}
-        <p>Source: {{ post.src }}</p>
-    {% endif %}
+                <p>ID: {{ post.id }}</p>
+                <p>Posted: {{ post.created }}</p>
+                <p>Uploader: <a href="{{ post.author.profile_url }}">{{ post.author.username }}</a></p>
 
-    {% if post.op %}
-        <p>OP: {{ post.op }}</p>
-    {% endif %}
+                {% if post.width %}
+                    <p>Size: {{ post.dimensions }}</p>
+                {% endif %}
 
-    <p>Name: {{ post.name }}</p>
-    <p>Type: {{ post.mime }}</p>
+                {% if post.src %}
+                    <p>Source: {{ post.src }}</p>
+                {% endif %}
 
-    <label for="caption">Caption:</label>
-    <textarea name="caption" readonly>{% if post.caption is not none %}{{ post.caption }}{% endif %}</textarea>
+                {% if post.op %}
+                    <p>OP: {{ post.op }}</p>
+                {% endif %}
 
-    <label for="tags">Tags:</label>
-    <textarea name="tags" readonly>{{ post.tags | map(attribute = 'name') | join(' ') }}</textarea>
+                <p>Name: {{ post.name }}</p>
+                <p>Type: {{ post.mime }}</p>
 
-    <a href="{{ url_for('Post.edit_page', post_id = post.id) }}">Edit</a>
+                {% if post.caption is not none %}
+                    <p class="caption">Caption: "<i>{{ post.caption }}</i>"</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% include 'content.html' %}
+    </div>
 {% endblock %}
