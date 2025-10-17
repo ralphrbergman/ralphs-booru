@@ -1,23 +1,37 @@
 {% extends 'layout.html' %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'edit_profile.css') }}">
+{% endblock %}
+
 {% block body %}
-    <form enctype="multipart/form-data" method="post">
-        {{ form.hidden_tag() }}
+    <div class="profile-container">
+        <form class="profile-form" enctype="multipart/form-data" method="post">
+            {{ form.hidden_tag() }}
 
-        <label for="avatar">Upload your own avatar:</label>
-        <input type="file" name="avatar">
+            <div class="input-group">
+                <label for="avatar">Avatar:</label>
+                <input type="file" name="avatar">
+            </div>
 
-        <label for="username">Username:</label>
-        <input type="text" name="username" value="{{ user.name }}" disabled>
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" value="{{ user.name }}" disabled>
+            </div>
 
-        <label for="email">E-mail:</label>
-        <input type="email" name="email" value="{% if user.mail is not none %}{{ user.mail }}{% endif %}">
+            <div class="input-group">
+                <label for="email">E-mail:</label>
+                <input type="email" name="email" value="{% if user.mail is not none %}{{ user.mail }}{% endif %}">
+            </div>
 
-        <label for="pw">Password:</label>
-        <input type="password" name="pw">
+            <div class="input-group">
+                <label for="pw">Password:</label>
+                <input type="password" name="pw">
+            </div>
 
-        <a href="{{ url_for('Account.edit_password_page') }}">Edit Password</a>
+            <a href="{{ url_for('Account.edit_password_page') }}">Edit Password</a>
 
-        <input type="submit" value="Submit">
-    </form>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 {% endblock %}
