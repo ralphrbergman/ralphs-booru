@@ -5,6 +5,17 @@
     text-decoration: none;
 }
 
+.input-group {
+    align-items: center;
+    display: flex;
+    gap: 0.5em;
+}
+
+.input-group input, textarea {
+    flex-grow: 1;
+    min-width: 0em;
+}
+
 .notable {
     font-weight: bold;
 }

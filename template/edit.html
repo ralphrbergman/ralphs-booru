@@ -1,29 +1,47 @@
 {% extends 'layout.html' %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'edit.css') }}">
+{% endblock %}
+
 {% block body %}
-    {% include 'content.html' %}
+    <div class="edit-container">
+        <form class="edit-form" method="post">
+            {{ form.hidden_tag() }}
 
-    <form method="post">
-        {{ form.hidden_tag() }}
+            <div class="input-group">
+                <label for="directory">Directory:</label>
+                <input type="text" name="directory" value="{% if post.directory is not none %}{{ post.directory }}{% endif %}">
+            </div>
 
-        <label for="directory">Directory:</label>
-        <input type="text" name="directory" value="{% if post.directory is not none %}{{ post.directory }}{% endif %}">
+            <div class="input-group">
+                <label for="op">Original Poster:</label>
+                <input type="text" name="op" value="{% if post.op is not none %}{{ post.op }}{% endif %}">
+            </div>
 
-        <label for="op">Original Poster:</label>
-        <input type="text" name="op" value="{% if post.op is not none %}{{ post.op }}{% endif %}">
+            <div class="input-group">
+                <label for="src">Source:</label>
+                <input type="text" name="src" value="{% if post.src is not none %}{{ post.src }}{% endif %}">
+            </div>
 
-        <label for="src">Source:</label>
-        <input type="text" name="src" value="{% if post.src is not none %}{{ post.src }}{% endif %}">
+            <div class="input-group">
+                <label for="caption">Caption:</label>
+                <textarea name="caption">{% if post.caption is not none %}{{ post.caption }}{% endif %}</textarea>
+            </div>
 
-        <label for="caption">Caption:</label>
-        <input type="text" name="caption" value="{% if post.caption is not none %}{{ post.caption }}{% endif %}">
+            <div class="input-group">
+                <label for="tags">Tags:</label>
+                <textarea name="tags">{% if post.tags is not none %}{{ post.tags | map(attribute = 'name') | join(' ') }}{% endif %}</textarea>
+            </div>
 
-        <label for="tags">Tags:</label>
-        <input type="text" name="tags" value="{% if post.tags is not none %}{{ post.tags | map(attribute = 'name') | join(' ') }}{% endif %}">
+            <div class="input-group">
+                <label for="deleted">Delete:</label>
+                <input type="checkbox" name="deleted">
+            </div>
 
-        <label for="deleted">Delete:</label>
-        <input type="checkbox" name="deleted">
+            <input type="submit" value="Submit">
+        </form>
 
-        <input type="submit" value="Submit">
-    </form>
+        {% include 'content.html' %}
+    </div>
 {% endblock %}

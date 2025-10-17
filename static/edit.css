@@ -1,0 +1,32 @@
+.edit-container {
+    align-items: center;
+    display: flex;
+    gap: 5em;
+    height: 100vh;
+    justify-content: center;
+    padding: 2em;
+}
+
+.edit-container audio, img, video {
+    height: 100%;
+    overflow: hidden;
+    object-fit: contain;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 40%;
+}
+
+@media (max-width: 768px) {
+    .edit-container {
+        flex-direction: column;
+    }
+
+    .edit-form {
+        order: 1;
+        width: 75%;
+    }
+}
