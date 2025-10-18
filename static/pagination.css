@@ -16,5 +16,6 @@
 }
 
 .pagination-element a, p {
+    color: #000;
     padding: 10px;
 }
