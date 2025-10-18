@@ -1,8 +1,14 @@
+@import 'values.css';
+
 * {
     font-family: Roboto;
     margin: 0;
     padding: 0;
     text-decoration: none;
+}
+
+a {
+    color: var(--link-color);
 }
 
 .input-group {

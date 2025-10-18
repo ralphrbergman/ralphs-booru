@@ -1,16 +1,19 @@
+@import 'values.css';
+
 .navbar {
-    background-color: #7d0041;
+    background-color: var(--bg-color);
+    user-select: none;
 }
 
 .navbar-anchor {
-    color: #ff0085;
+    color: #fff;
     display: block;
     font-size: 1em;
     padding: 1em;
 }
 
 .navbar-anchor:hover {
-    color: #00a6ff;
+    color: var(--link-color);
 }
 
 .navbar-anchors {
