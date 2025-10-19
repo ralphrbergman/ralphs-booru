@@ -173,7 +173,10 @@ def upload_page():
                     tags = form.tags.data
                 )
 
-                flash(f'Successfully uploaded post #{post.id}')
+                if post is not None:
+                    flash(f'Successfully uploaded post #{post.id}')
+                else:
+                    flash(f'Uploading file {file.filename} failed')
 
             return redirect(url_for('Post.browse_page'))
         else:

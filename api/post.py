@@ -6,6 +6,7 @@ from typing import Optional
 import ffmpeg
 from magic import from_file
 from sqlalchemy import func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import UnmappedInstanceError
 
 from db import Post, User, db
@@ -78,16 +79,28 @@ def create_post(
         db.session.add(tag)
 
     db.session.add(post)
-    db.session.commit()
 
-    thumbnail = create_thumbnail(post)
     try:
-        thumbnail.post_id = post.id
-
         db.session.commit()
-    except AttributeError as exc:
-        # No thumbnail was made.
-        pass
+
+        thumbnail = create_thumbnail(post)
+
+        try:
+            thumbnail.post_id = post.id
+
+            db.session.commit()
+        except AttributeError as exc:
+            # No thumbnail was made.
+            pass
+    except IntegrityError as exc:
+        # Error likely of post that already exists.
+        db.session.rollback()
+
+        # Move back the file.
+        copy(post.path, path)
+        post.path.unlink(missing_ok = True)
+
+        return
 
     return post
 
