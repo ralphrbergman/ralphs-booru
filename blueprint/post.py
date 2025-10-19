@@ -1,6 +1,7 @@
 from math import floor
 from os import getenv
 from pathlib import Path
+from shutil import copy
 from typing import Optional
 
 from flask import Blueprint, request, flash, redirect, render_template, send_file, url_for
@@ -11,6 +12,7 @@ from api import create_post, create_tag, delete_post, get_post, get_tag
 from db import db, Post, Tag
 from form import PostForm, UploadForm
 
+CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 TEMP = Path(getenv('TEMP'))
 
 post_bp = Blueprint(
@@ -113,7 +115,10 @@ def edit_page(post_id: int):
                 flash(f'Permanently deleted post #{post.id}')
                 return redirect(url_for('Post.browse_page'))
 
-            post.directory = form.directory.data
+            directory = form.directory.data
+            original_path = post.path
+
+            post.directory = directory
             post.op = form.op.data
             post.src = form.src.data
             post.caption = form.caption.data
@@ -132,6 +137,15 @@ def edit_page(post_id: int):
                 new_tags.append(tag)
 
             post.tags = new_tags
+
+            # Move file to new directory.
+            new_dir = CONTENT_PATH / Path(directory)
+            new_dir.mkdir(exist_ok = True, parents = True)
+            new_path = new_dir / post.name
+
+            if new_path != original_path:
+                copy(original_path, new_path)
+                original_path.unlink(missing_ok = True)
 
             db.session.commit()
 
