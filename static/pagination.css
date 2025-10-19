@@ -15,7 +15,8 @@
     display: block;
 }
 
-.pagination-element a, p {
+.pagination-element a,
+.pagination-element p {
     color: #000;
     padding: 10px;
 }
