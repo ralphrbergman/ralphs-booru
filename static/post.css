@@ -20,6 +20,15 @@
     }
 }
 
+.posts-container-wrapper {
+    padding-bottom: 2rem;
+    padding-top: 4rem;
+}
+
+.posts-container-mini-wrapper {
+    padding: 1rem;
+}
+
 /* Sizing made for profile page. */
 .post-prof-container {
     height: 10rem;

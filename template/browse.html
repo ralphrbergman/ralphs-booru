@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'frag/posts.html' %}
+    <div class="posts-container-wrapper">
+        {% include 'frag/posts.html' %}
+    </div>
+
     {% include 'frag/pagination.html' %}
 {% endblock %}
