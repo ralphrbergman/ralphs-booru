@@ -40,7 +40,7 @@ class Post(db.Model):
     height: Mapped[int] = mapped_column(nullable = True)
     width: Mapped[int] = mapped_column(nullable = True)
 
-    @validates('caption', 'directory', 'ext', 'md5', 'mime', 'tags')
+    @validates('caption', 'directory', 'ext', 'md5', 'mime', 'op', 'src', 'tags')
     def validate_post(self, key: str, value: Any) -> Any:
         if not value:
             return None
