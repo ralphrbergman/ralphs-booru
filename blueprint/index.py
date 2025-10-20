@@ -17,4 +17,4 @@ def index_page():
 
         return render_template('index.html', count = str(count), form = form)
     else:
-        return redirect(url_for('Post.browse_paged', page = 1, tags = form.search.data))
+        return redirect(url_for('Post.browse_paged', page = 1, terms = form.search.data))

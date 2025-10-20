@@ -6,7 +6,7 @@ from typing import Optional
 
 from flask import Blueprint, request, flash, redirect, render_template, send_file, url_for
 from flask_login import current_user, login_required
-from sqlalchemy import select
+from sqlalchemy import or_, select
 
 from api import create_post, create_tag, delete_post, get_post, get_tag
 from db import db, Post, Tag
@@ -68,22 +68,33 @@ def browse_paged(page: int):
     args = request.args
 
     limit = args.get('limit', DEFAULT_LIMIT, type = int)
-    tags = args.get('tags')
+    terms = args.get('terms', str())
 
     stmt = select(Post).order_by(
         Post.id.desc()
     )
 
-    try:
-        for tag_name in tags.split(' '):
-            if tag_name[0] != '-':
-                where = Post.tags.any(Tag.name == tag_name)
-            else:
-                where = ~Post.tags.any(Tag.name == tag_name[1:])
+    for term in terms.split():
+        try:
+            # It's an attribute
 
-            stmt = stmt.where(where)
-    except (AttributeError, TypeError) as exc:
-        pass
+            name, value = term.split(':', 1)
+            col = getattr(Post, name)
+
+            if not len(value):
+                # Look for posts that don't have the column set.
+                where = or_(col == None, col == '')
+            else:
+                where = col == value
+        except ValueError:
+            # It's a tag
+
+            if term[0] != '-':
+                where = Post.tags.any(Tag.name == term)
+            else:
+                where = ~Post.tags.any(Tag.name == term[1:])
+
+        stmt = stmt.where(where)
 
     posts = db.paginate(
         stmt,
@@ -91,7 +102,7 @@ def browse_paged(page: int):
         per_page = limit
     )
 
-    bar = create_pagination_bar(page, posts.pages, limit = limit, tags = tags)
+    bar = create_pagination_bar(page, posts.pages, limit = limit, terms = terms)
 
     return render_template(
         'browse.html',
