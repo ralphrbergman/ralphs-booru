@@ -68,7 +68,7 @@ def browse_paged(page: int):
     args = request.args
 
     limit = args.get('limit', DEFAULT_LIMIT, type = int)
-    terms = args.get('terms', str())
+    terms = args.get('terms', '-nsfw')
 
     stmt = select(Post).order_by(
         Post.id.desc()

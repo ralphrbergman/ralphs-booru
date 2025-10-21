@@ -11,6 +11,10 @@ a {
     color: var(--link-color);
 }
 
+.bg {
+    background-color: var(--bg-color);
+}
+
 .input-group {
     align-items: center;
     display: flex;
@@ -24,4 +28,8 @@ a {
 
 .notable {
     font-weight: bold;
+}
+
+.no-select {
+    user-select: none;
 }

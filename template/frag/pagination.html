@@ -6,9 +6,9 @@
     {% for page in bar %}
         <li class="pagination-element">
             {% if page['page'] != current_page %}
-                <a href="{{ page['url'] }}">{{ page['page'] }}</a>
+                <a class="no-select" href="{{ page['url'] }}">{{ page['page'] }}</a>
             {% else %}
-                <p>{{ current_page }}</p>
+                <p class="bg no-select">{{ current_page }}</p>
             {% endif %}
         </li>
     {% endfor %}
