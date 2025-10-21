@@ -1,5 +1,6 @@
 .caption {
     max-width: 50vh;
+    white-space: pre-wrap;
 }
 
 .details {
