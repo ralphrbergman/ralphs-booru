@@ -30,6 +30,10 @@
     max-width: 15rem;
 }
 
+.role {
+    font-size: 1.25rem;
+}
+
 .username {
-    font-size: 2em;
+    font-size: 2rem;
 }

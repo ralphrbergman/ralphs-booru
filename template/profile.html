@@ -11,6 +11,10 @@
 
             <div>
                 <p class="username">{{ user.username }}</p>
+                {% if user.role is not none %}
+                    <p class="role">{{ user.role_name }}</p>
+                {% endif %}
+
                 {% if current_user == user %}
                     <a class="edit-btn" href="{{ url_for('Account.edit_profile_page') }}">(Edit)</a>
                 {% endif %}

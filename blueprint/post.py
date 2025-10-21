@@ -120,7 +120,7 @@ def edit_page(post_id: int):
         return render_template('edit.html', form = form, post = post)
     else:
         if form.validate_on_submit():
-            if form.deleted.data:
+            if form.deleted.data and current_user.is_moderator:
                 delete_post(post)
 
                 flash(f'Permanently deleted post #{post.id}')

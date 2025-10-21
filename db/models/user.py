@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from flask import url_for
@@ -8,6 +9,12 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
 
+class RoleEnum(Enum):
+    ADMIN = 'adm'
+    MODERATOR = 'mod'
+    REGULAR = None
+    TERMINATED = 'ter'
+
 class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
     created: Mapped[datetime] = mapped_column(default = func.now())
@@ -16,7 +23,12 @@ class User(db.Model, UserMixin):
     name: Mapped[str] = mapped_column(String(length = 20), nullable = False, unique = True)
     mail: Mapped[str] = mapped_column(nullable = True, unique = True)
     password: Mapped[str] = mapped_column(String(length = 128), nullable = False)
+
     posts: Mapped[list['Post']] = relationship('Post', back_populates = 'author')
+    # Defines user's role within the system.
+    # Certain users can terminate accounts, delete posts and some can't
+    # comment due to restrictions put in place by a moderator.
+    role: Mapped[str] = mapped_column(nullable = True)
 
     @validates('mail', 'password')
     def validate_user(self, key: str, value: str) -> Optional[str]:
@@ -30,8 +42,17 @@ class User(db.Model, UserMixin):
         return url_for('Account.avatar_page', filename = self.avatar_name)
 
     @property
+    def is_moderator(self) -> bool:
+        return self.role == RoleEnum.ADMIN.value or self.role == RoleEnum.MODERATOR.value
+        # return self.role == 'mod' or self.role == 'adm'
+
+    @property
     def profile_url(self) -> str:
         return url_for('Account.profile_page', user_id = self.id)
+
+    @property
+    def role_name(self) -> str:
+        return RoleEnum(self.role).name.title()
 
     @property
     def username(self) -> str:
