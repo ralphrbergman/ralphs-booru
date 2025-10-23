@@ -8,5 +8,6 @@ Flask-WTF
 ffmpeg-python
 
 Pillow
+pyopenssl
 python-dotenv
 python-magic
