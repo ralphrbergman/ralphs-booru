@@ -8,7 +8,7 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
 from api import create_user, check_password, get_user, set_password
-from api.decorators import anonymous_only
+from api.decorators import anonymous_only, user_protect
 from db import db
 from form import LoginForm, PasswordForm, SignupForm, UserForm
 
@@ -25,6 +25,7 @@ def avatar_page(filename: str):
 
 @account_bp.route('/edit_profile', methods = ['GET', 'POST'])
 @login_required
+@user_protect
 def edit_profile_page():
     form = UserForm()
     user = get_user(current_user.id)
@@ -59,6 +60,7 @@ def edit_profile_page():
             return redirect(url_for('Account.edit_profile_page'))
 
 @account_bp.route('/edit_password', methods = ['GET', 'POST'])
+@user_protect
 def edit_password_page():
     form = PasswordForm()
     user = get_user(current_user.id)
@@ -85,6 +87,7 @@ def edit_password_page():
 
 @account_bp.route('/login', methods = ['GET', 'POST'])
 @anonymous_only
+@user_protect
 def login_page():
     form = LoginForm()
 
@@ -130,6 +133,7 @@ def profile_page(user_id: int):
 
 @account_bp.route('/signup', methods = ['GET', 'POST'])
 @anonymous_only
+@user_protect
 def signup_page():
     form = SignupForm()
 

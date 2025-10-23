@@ -9,6 +9,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import or_, select
 
 from api import create_post, create_tag, delete_post, get_post, get_tag
+from api.decorators import post_protect
 from db import db, Post, Tag
 from form import PostForm, UploadForm
 
@@ -112,6 +113,7 @@ def browse_paged(page: int):
     )
 
 @post_bp.route('/edit/<int:post_id>', methods = ['GET', 'POST'])
+@post_protect
 def edit_page(post_id: int):
     form = PostForm()
     post = get_post(post_id)
@@ -177,6 +179,7 @@ def view_file_resource(post_id: int):
 
 @post_bp.route('/upload', methods = ['GET', 'POST'])
 @login_required
+@post_protect
 def upload_page():
     form = UploadForm()
 
