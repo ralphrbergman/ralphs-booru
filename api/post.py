@@ -111,6 +111,8 @@ def delete_post(post: Post) -> None:
     Args:
         post (Post)
     """
+    post.path.unlink(missing_ok = True)
+
     try:
         db.session.delete(post.thumbnail)
     except UnmappedInstanceError as exc:
