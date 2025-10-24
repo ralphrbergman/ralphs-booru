@@ -7,7 +7,9 @@
 {% block body %}
     <div class="view-container">
         <div class="details">
-            <a href="{{ url_for('Post.edit_page', post_id = post.id) }}">Edit</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('Post.edit_page', post_id = post.id) }}">Edit</a>
+            {% endif %}
 
             <div>
                 <p class="notable">Tags:</p>
