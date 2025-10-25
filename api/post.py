@@ -104,13 +104,16 @@ def create_post(
 
     return post
 
-def delete_post(post: Post) -> None:
+def delete_post(post: Post | int) -> None:
     """
     Deletes given post.
 
     Args:
         post (Post)
     """
+    if isinstance(post, int):
+        post = get_post(post)
+
     post.path.unlink(missing_ok = True)
 
     try:

@@ -1,21 +1,22 @@
 from os import getenv
 
+from apiflask import APIFlask
 from dotenv import load_dotenv
-from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
 
 from api import get_user
-from blueprint import account_bp, index_bp, post_bp, thumbnail_bp
+from blueprint import api_bp, account_bp, index_bp, post_bp, thumbnail_bp
 from db import db, User
 from encryption import bcrypt
 
 load_dotenv()
 
-def create_app() -> Flask:
-    app = Flask(
+def create_app() -> APIFlask:
+    app = APIFlask(
         import_name = __name__,
-        template_folder = 'template'
+        template_folder = 'template',
+        title = 'Ralphs Booru'
     )
 
     app.config['SECRET_KEY'] = getenv('SECRET_KEY')
@@ -40,6 +41,7 @@ def create_app() -> Flask:
     # Initialize database migration interface
     migrate = Migrate(app, db)
 
+    app.register_blueprint(api_bp)
     app.register_blueprint(account_bp)
     app.register_blueprint(index_bp)
     app.register_blueprint(post_bp)
