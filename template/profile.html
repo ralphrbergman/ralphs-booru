@@ -22,7 +22,7 @@
         </div>
 
         <div>
-            <p>Posts: {{ user.posts | length }}</p>
+            <p>Posts: {{ user.posts | length }} <a href="{{ url_for('Post.browse_paged', page = 1, terms = 'author_id:' + user.id | string) }}">(View all)</a></p>
             <p>Join Date: {{ user.created }}</p>
         </div>
 
