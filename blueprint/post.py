@@ -68,34 +68,53 @@ def browse_page():
 def browse_paged(page: int):
     args = request.args
 
-    limit = args.get('limit', DEFAULT_LIMIT, type = int)
-    terms = args.get('terms', '-nsfw')
+    limit = args.get('limit', default = DEFAULT_LIMIT, type = int)
+    terms = args.get('terms', default = '-nsfw')
+
+    # Prevent excessive amounts of posts per page.
+    if limit and limit > 100:
+        limit = 100
+
+    # Ensure all URI arguments are passed in the address.
+    if len(args) < 2:
+        return redirect(
+            url_for(
+                'Post.browse_paged',
+                limit = limit,
+                page = page,
+                terms = terms
+            )
+        )
 
     stmt = select(Post).order_by(
         Post.id.desc()
     )
 
-    for term in terms.split():
-        try:
-            # It's an attribute
+    try:
+        for term in terms.split():
+            try:
+                # It's an attribute
 
-            name, value = term.split(':', 1)
-            col = getattr(Post, name)
+                name, value = term.split(':', 1)
+                col = getattr(Post, name)
 
-            if not len(value):
-                # Look for posts that don't have the column set.
-                where = or_(col == None, col == '')
-            else:
-                where = col == value
-        except ValueError:
-            # It's a tag
+                if not len(value):
+                    # Look for posts that don't have the column set.
+                    where = or_(col == None, col == '')
+                else:
+                    where = col == value
+            except ValueError:
+                # It's a tag
 
-            if term[0] != '-':
-                where = Post.tags.any(Tag.name == term)
-            else:
-                where = ~Post.tags.any(Tag.name == term[1:])
+                if term[0] != '-':
+                    where = Post.tags.any(Tag.name == term)
+                else:
+                    where = ~Post.tags.any(Tag.name == term[1:])
 
-        stmt = stmt.where(where)
+            stmt = stmt.where(where)
+    except AttributeError as exc:
+        # No terms we're supplied.
+        pass
 
     posts = db.paginate(
         stmt,
