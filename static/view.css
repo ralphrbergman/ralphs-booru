@@ -1,13 +1,18 @@
 .caption {
-    max-width: 50vh;
+    max-width: 50vw;
     white-space: pre-wrap;
 }
 
 .details {
     display: flex;
     flex-direction: column;
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 1.1vw, 2.5rem);
     gap: 1.5em;
+    width: 50%;
+}
+
+.details * {
+    font-size: inherit;
 }
 
 .post-details {
@@ -26,7 +31,7 @@
     gap: 5em;
     height: 100vh;
     justify-content: center;
-    padding: 2em;
+    padding: 1em;
 }
 
 @media (max-width: 768px) {
@@ -44,4 +49,5 @@
     height: 100vh;
     overflow: hidden;
     object-fit: contain;
+    width: 100vw;
 }

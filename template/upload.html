@@ -1,12 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'edit.css') }}">
 {% endblock %}
 
 {% block body %}
-    <div class="edit-container">
-        <form class="edit-form" enctype="multipart/form-data" method="post">
+    <div class="view-container">
+        <form class="details" enctype="multipart/form-data" method="post">
             {{ form.hidden_tag() }}
 
             <div class="input-group">
@@ -39,7 +40,9 @@
                 <textarea name="tags"></textarea>
             </div>
 
-            <input type="submit" name="submit" value="Upload">
+            <div class="input-group">
+                <input type="submit" name="submit" value="Upload">
+            </div>
         </form>
     </div>
 {% endblock %}
