@@ -52,8 +52,6 @@ def create_post(
                 if not tag:
                     continue
 
-                    tag_objs.append(tag)
-
             post.tags.append(tag)
     except AttributeError as exc:
         pass
@@ -174,3 +172,33 @@ def get_size(path: Path) -> int:
         stream.seek(0, 2)
 
         return stream.tell()
+
+def replace_post(post: Post, path: Path) -> Post:
+    """
+    Replaces given Post with new file.
+
+    Args:
+        post (Post): Post to replace
+        path (Path): New file's Path object
+
+    Returns:
+        Post
+    """
+    original_id = post.id
+
+    new_post = create_post(
+        author = post.author,
+        path = path,
+        op = post.op,
+        src = post.src,
+        caption = post.caption,
+        tags = [ tag.name for tag in post.tags ]
+    )
+    delete_post(post)
+
+    new_post.id = original_id
+    db.session.commit()
+
+    create_thumbnail(new_post)
+
+    return post

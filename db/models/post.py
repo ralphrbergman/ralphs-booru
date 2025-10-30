@@ -61,6 +61,8 @@ class Post(db.Model):
 
     @property
     def view_uri(self) -> str:
-        path = url_for('Post.view_file_resource', post_id = self.id)
+        # 2025.10.31 - Added 'v' parameter to trick around caching posts who
+        # might have been replaced but the browser hasn't picked it up yet.
+        path = url_for('Post.view_file_resource', post_id = self.id, v = self.modified)
 
         return path

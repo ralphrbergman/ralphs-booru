@@ -7,8 +7,13 @@
 
 {% block body %}
     <div class="view-container">
-        <form class="details" method="post">
+        <form class="details" enctype="multipart/form-data" method="post">
             {{ form.hidden_tag() }}
+
+            <div class="input-group">
+                <label for="new_file" title="Select this usually when you found a better quality file.">Replace with:</label>
+                <input type="file" name="new_file">
+            </div>
 
             <div class="input-group">
                 <label for="directory">Directory:</label>

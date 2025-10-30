@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import BooleanField, MultipleFileField, PasswordField, StringField
+from wtforms import BooleanField, FileField, MultipleFileField, PasswordField, StringField
 from wtforms.validators import DataRequired, EqualTo
 
 from .fields import StrongPasswordField
@@ -12,6 +12,7 @@ class LoginForm(FlaskForm, UsernameMixin, WeakPasswordMixin):
 
 class PostForm(FlaskForm, PostMixin, SubmitMixin):
     deleted = BooleanField('deleted')
+    new_file = FileField('new_file')
 
 class PasswordForm(FlaskForm, WeakPasswordMixin, SubmitMixin):
     new_pw = StrongPasswordField('new_pw')
