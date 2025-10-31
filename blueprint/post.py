@@ -21,6 +21,7 @@ post_bp = Blueprint(
     import_name = __name__
 )
 
+DEFAULT_BLUR = 'true'
 DEFAULT_LIMIT = 20
 PAGINATION_DEPTH = 5
 
@@ -68,6 +69,7 @@ def browse_page():
 def browse_paged(page: int):
     args = request.args
 
+    blur = args.get('blur', default = DEFAULT_BLUR)
     limit = args.get('limit', default = DEFAULT_LIMIT, type = int)
     terms = args.get('terms', default = '-nsfw')
 
@@ -80,6 +82,7 @@ def browse_paged(page: int):
         return redirect(
             url_for(
                 'Post.browse_paged',
+                blur = blur,
                 limit = limit,
                 page = page,
                 terms = terms
@@ -122,11 +125,12 @@ def browse_paged(page: int):
         per_page = limit
     )
 
-    bar = create_pagination_bar(page, posts.pages, limit = limit, terms = terms)
+    bar = create_pagination_bar(page, posts.pages, blur = blur, limit = limit, terms = terms)
 
     return render_template(
         'browse.html',
         bar = bar,
+        blur = blur.lower() == 'true',
         current_page = page,
         posts = posts
     )

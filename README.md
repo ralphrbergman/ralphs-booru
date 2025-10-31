@@ -16,6 +16,10 @@ ALLOW_USERS=true|false
 CONTENT_PATH=<path/to/media>
 # Name of SQLite3 database file.
 DATABASE_URI=sqlite:///<path-to-db>
+# Name of Not Safe For Work tag. (Optional)
+NSFW_TAG=nsfw
+# Directories of sensitive (e.g NSFW) content.
+SENSITIVE_DIRS=<directory-names-separated-by-comma>
 # Path to temporary files, preferred it's in project's root.
 # This directory stores thumbnails before they get moved.
 TEMP=<path/to/temp>

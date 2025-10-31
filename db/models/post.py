@@ -4,14 +4,17 @@ from pathlib import Path
 from typing import Any
 
 from flask import url_for
-from sqlalchemy import ForeignKey, String, func
+from sqlalchemy import ForeignKey, String, func, select
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
+from .tag import Tag
 from .tag_assoc import TagAssociation
 from .thumbnail import Thumbnail
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
+NSFW_TAG_NAME = getenv('NSFW_TAG', 'nsfw')
+SENSITIVE_DIRS = getenv('SENSITIVE_DIRS', '').split(',')
 
 class Post(db.Model):
     id: Mapped[int] = mapped_column(primary_key = True)
@@ -54,6 +57,22 @@ class Post(db.Model):
     @property
     def name(self) -> str:
         return f'{self.md5}.{self.ext}'
+
+    @property
+    def nsfw(self) -> bool:
+        """
+        Returns True if Post has NSFW tag, or is in a sensitive directory.
+        """
+        directory = self.directory
+        nsfw_tag = db.session.execute(select(Post.id).filter(
+            Post.id == self.id,
+            Post.tags.any(Tag.name == NSFW_TAG_NAME)
+        )).first() is not None
+
+        if (directory and directory.split('/')[0] in SENSITIVE_DIRS) or nsfw_tag:
+            return True
+
+        return False
 
     @property
     def path(self) -> Path:

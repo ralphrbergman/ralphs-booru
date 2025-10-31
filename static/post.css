@@ -5,12 +5,21 @@
     justify-content: center;
 }
 
+.post-blur {
+    filter: blur(0.5em);
+}
+
+.post-blur:hover {
+    filter: blur();
+}
+
 .post-container {
     align-items: center;
     border: 1px solid black;
     display: flex;
     height: 15rem;
     justify-content: center;
+    overflow: hidden;
     width: 15rem;
     word-break: break-all;
 }

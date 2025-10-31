@@ -129,7 +129,12 @@ def profile_page(user_id: int):
     # Return 10 posts the user has recently uploaded.
     posts = list(reversed(user.posts))[:10]
 
-    return render_template('profile.html', posts = posts, user = user)
+    return render_template(
+        'profile.html',
+        blur = request.args.get('blur', 'true') == 'true',
+        posts = posts,
+        user = user
+    )
 
 @account_bp.route('/signup', methods = ['GET', 'POST'])
 @anonymous_only

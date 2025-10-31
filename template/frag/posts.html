@@ -7,7 +7,7 @@
         <div>
             <a class="{{ container_name }} post-container" href="{{ url_for('Post.view_page', post_id = post.id) }}">
                 {% if post.thumbnail is not none %}
-                    <img class="post-thumbnail" src="{{ url_for('Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ post.id }} Thumbnail">
+                    <img class="post-thumbnail {% if blur and post.nsfw %}post-blur{% endif %}" src="{{ url_for('Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ post.id }} Thumbnail">
                 {% else %}
                     <p>{{ post.name }}</p>
                 {% endif %}
