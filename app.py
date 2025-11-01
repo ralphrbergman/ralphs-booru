@@ -6,6 +6,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 
 from api import get_user
+from brand import brand
 from blueprint import api_bp, account_bp, index_bp, post_bp, thumbnail_bp
 from db import db, User
 from encryption import bcrypt
@@ -19,6 +20,7 @@ def create_app() -> APIFlask:
         title = 'Ralphs Booru'
     )
 
+    app.jinja_env.globals['brand'] = brand
     app.config['SECRET_KEY'] = getenv('SECRET_KEY')
     # Initialize database
     app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URI')

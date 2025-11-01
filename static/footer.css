@@ -1,0 +1,21 @@
+.footer-anchors {
+    list-style-type: none;
+}
+
+.footer-content {
+    display: flex;
+}
+
+.main-footer {
+    align-items: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+
+    padding-bottom: 1em;
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-top: 1em;
+}

@@ -1,0 +1,19 @@
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'footer.css') }}">
+{% endblock %}
+
+<footer class="bg main-footer">
+    <div class="footer-content">
+        <ul class="footer-anchors">
+            <li><p class="notable">Links</p></li>
+            <li><a href="{{ url_for('Help.help_page') }}">Help</a></li>
+            <li><a href="{{ url_for('Contact.contact_page') }}">Contact Me</a></li>
+            <li><a href="{{ brand['source-url'] }}">Source Code</a></li>
+        </ul>
+    </div>
+
+    <div>
+        <p>{{ brand['contact']['address'] }} v{{ brand['version'] }}</p>
+        <p>{{ brand['copyright'] }}</p>
+    </div>
+</footer>
