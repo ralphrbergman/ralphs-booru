@@ -22,11 +22,19 @@
             <div class="input-group">
                 <label for="op">Original Poster:</label>
                 <input type="text" name="op" value="{% if post.op is not none %}{{ post.op }}{% endif %}">
+
+                {% if post.is_hyperlink(post.op) %}
+                    <a href="{{ post.op }}">Open</a>
+                {% endif %}
             </div>
 
             <div class="input-group">
                 <label for="src">Source:</label>
                 <input type="text" name="src" value="{% if post.src is not none %}{{ post.src }}{% endif %}">
+
+                {% if post.is_hyperlink(post.src) %}
+                    <a href="{{ post.src }}">Open</a>
+                {% endif %}
             </div>
 
             <div class="input-group">

@@ -2,6 +2,7 @@ from datetime import datetime
 from os import getenv
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 from flask import url_for
 from sqlalchemy import ForeignKey, String, func, select
@@ -42,6 +43,11 @@ class Post(db.Model):
 
     height: Mapped[int] = mapped_column(nullable = True)
     width: Mapped[int] = mapped_column(nullable = True)
+
+    @classmethod
+    def is_hyperlink(cls, value: str) -> bool:
+        url = urlparse(value)
+        return any(( url.netloc, url.scheme ))
 
     @validates('caption', 'directory', 'ext', 'md5', 'mime', 'op', 'src', 'tags')
     def validate_post(self, key: str, value: Any) -> Any:

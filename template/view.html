@@ -34,11 +34,23 @@
                 {% endif %}
 
                 {% if post.src %}
-                    <p>Source: {{ post.src }}</p>
+                    <p>Source: 
+                        {% if post.is_hyperlink(post.src) %}
+                            <a href="{{ post.src }}">{{ post.src }}</a>
+                        {% else %}
+                            {{ post.src }}
+                        {% endif %}
+                    </p>
                 {% endif %}
 
                 {% if post.op %}
-                    <p>OP: {{ post.op }}</p>
+                    <p>OP: 
+                        {% if post.is_hyperlink(post.op) %}
+                            <a href="{{ post.op }}">{{ post.op }}</a>
+                        {% else %}
+                            {{ post.op }}
+                        {% endif %}
+                    </p>
                 {% endif %}
 
                 <p>Name: {{ post.name }}</p>
