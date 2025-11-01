@@ -3,18 +3,6 @@
     white-space: pre-wrap;
 }
 
-.details {
-    display: flex;
-    flex-direction: column;
-    font-size: clamp(1rem, 1.1vw, 2.5rem);
-    gap: 1.5em;
-    width: 50%;
-}
-
-.details * {
-    font-size: inherit;
-}
-
 .post-details {
     display: flex;
     flex-direction: column;
@@ -35,11 +23,6 @@
 }
 
 @media (max-width: 768px) {
-    .details {
-        font-size: 1rem;
-        order: 1;
-    }
-
     .view-container {
         flex-direction: column;
     }

@@ -1,15 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <form method="post">
-        {{ form.hidden_tag() }}
+    <div class="center-container">
+        <form class="form" method="post">
+            {{ form.hidden_tag() }}
 
-        <label for="username">Username:</label>
-        <input type="text" name="username">
+            <label for="username">Username:</label>
+            <input type="text" name="username">
 
-        <label for="pw">Password:</label>
-        <input type="password" name="pw">
+            <label for="pw">Password:</label>
+            <input type="password" name="pw">
 
-        <input type="submit" name="submit" value="Login">
-    </form>
+            <input type="submit" name="submit" value="Login">
+        </form>
+    </div>
 {% endblock %}

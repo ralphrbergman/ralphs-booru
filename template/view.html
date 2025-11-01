@@ -6,7 +6,7 @@
 
 {% block body %}
     <div class="view-container">
-        <div class="details">
+        <div class="form form-lg gapped-form">
             {% if current_user.is_authenticated %}
                 <a href="{{ url_for('Post.edit_page', post_id = post.id) }}">Edit</a>
             {% endif %}

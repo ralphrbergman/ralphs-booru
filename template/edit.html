@@ -2,12 +2,11 @@
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'edit.css') }}">
 {% endblock %}
 
 {% block body %}
     <div class="view-container">
-        <form class="details" enctype="multipart/form-data" method="post">
+        <form class="form form-lg" enctype="multipart/form-data" method="post">
             {{ form.hidden_tag() }}
 
             <div class="input-group">

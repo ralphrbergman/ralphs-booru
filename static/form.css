@@ -1,0 +1,26 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(1rem, 1.1vw, 2.5rem);
+    gap: 0.25em;
+    width: 25em;
+}
+
+.form-lg {
+    width: 100%;
+}
+
+.form * {
+    font-size: inherit;
+}
+
+.gapped-form {
+    gap: 1.5em;
+}
+
+@media (max-width: 768px) {
+    .form {
+        font-size: 1rem;
+        order: 1;
+    }
+}
