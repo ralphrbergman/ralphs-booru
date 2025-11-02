@@ -35,6 +35,7 @@ def create_app() -> APIFlask:
 
     # Initialize session management
     login_manager = LoginManager(app)
+    login_manager.login_view = 'Account.login_page'
 
     @login_manager.user_loader
     def load_user(user_id: str) -> User:

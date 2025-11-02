@@ -60,6 +60,7 @@ def edit_profile_page():
             return redirect(url_for('Account.edit_profile_page'))
 
 @account_bp.route('/edit_password', methods = ['GET', 'POST'])
+@login_required
 @user_protect
 def edit_password_page():
     form = PasswordForm()
