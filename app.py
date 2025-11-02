@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 
 from api import get_user
 from brand import brand
-from blueprint import api_bp, account_bp, index_bp, post_bp, thumbnail_bp
+from blueprint import api_bp, account_bp, contact_bp, help_bp, index_bp, post_bp, thumbnail_bp
 from db import db, User
 from encryption import bcrypt
 
@@ -45,6 +45,8 @@ def create_app() -> APIFlask:
 
     app.register_blueprint(api_bp)
     app.register_blueprint(account_bp)
+    app.register_blueprint(contact_bp)
+    app.register_blueprint(help_bp)
     app.register_blueprint(index_bp)
     app.register_blueprint(post_bp)
     app.register_blueprint(thumbnail_bp)
