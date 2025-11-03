@@ -1,8 +1,6 @@
-from math import floor
 from os import getenv
 from pathlib import Path
 from shutil import copy
-from typing import Optional
 
 from flask import Blueprint, request, flash, redirect, render_template, send_file, url_for
 from flask_login import current_user, login_required
@@ -12,6 +10,7 @@ from api import create_post, create_tag, delete_post, get_post, get_tag, replace
 from api.decorators import post_protect
 from db import db, Post, Tag
 from form import PostForm, UploadForm
+from .utils import create_pagination_bar
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 TEMP = Path(getenv('TEMP'))
@@ -23,43 +22,6 @@ post_bp = Blueprint(
 
 DEFAULT_BLUR = 'true'
 DEFAULT_LIMIT = 20
-PAGINATION_DEPTH = 5
-
-def create_pagination_bar(current_page: int, total_pages: int, **kwargs) -> list[dict]:
-    bar = list()
-
-    def add_item(page: int, display_value: Optional[str] = None) -> None:
-        bar.append({
-            'page': display_value or page,
-            'url': url_for('Post.browse_paged', page = page, **kwargs)
-        })
-
-    if current_page > 1:
-        if current_page - 1 > PAGINATION_DEPTH:
-            add_item(1, '<<')
-
-        add_item(current_page - 1, '<')
-
-        # Count pages backwards.
-        for index, page in enumerate(range(max(current_page - PAGINATION_DEPTH, 1), current_page)):
-            add_item(page)
-
-    add_item(current_page)
-
-    if current_page < total_pages:
-        # Now forwards.
-        for index, page in enumerate(range(current_page + 1, total_pages + 1)):
-            if index == PAGINATION_DEPTH:
-                break
-
-            add_item(page)
-
-        add_item(current_page + 1, '>')
-
-        if current_page < total_pages - floor(PAGINATION_DEPTH):
-            add_item(total_pages, '>>')
-
-    return bar
 
 @post_bp.route('/browse')
 def browse_page():
@@ -125,7 +87,14 @@ def browse_paged(page: int):
         per_page = limit
     )
 
-    bar = create_pagination_bar(page, posts.pages, blur = blur, limit = limit, terms = terms)
+    bar = create_pagination_bar(
+        page,
+        posts.pages,
+        'Post.browse_paged',
+        blur = blur,
+        limit = limit,
+        terms = terms
+    )
 
     return render_template(
         'browse.html',
