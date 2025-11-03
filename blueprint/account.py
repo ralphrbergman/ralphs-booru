@@ -95,18 +95,19 @@ def login_page():
     if request.method == 'GET':
         return render_template('login.html', form = form)
     else:
+        next_page = request.args.get('next')
         user = get_user(form.username.data)
 
         if not user:
             flash('Incorrect username')
-            return redirect(url_for('Account.login_page'))
+            return redirect(url_for('Account.login_page', next = next_page))
 
         if form.validate_on_submit():
             if check_password(user.password, form.pw.data):
                 login_user(user)
 
                 flash(f'Welcome back, {user.name}')
-                return redirect(url_for('Account.profile_page', user_id = user.id))
+                return redirect(next_page or url_for('Account.profile_page', user_id = user.id))
             else:
                 flash('Incorrect password')
         else:
@@ -114,7 +115,7 @@ def login_page():
                 for error in field:
                     flash(error)
 
-        return redirect(url_for('Account.login_page'))
+        return redirect(url_for('Account.login_page', next = next_page))
 
 @account_bp.route('/logout')
 @login_required
