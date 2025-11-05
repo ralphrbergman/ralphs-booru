@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class="center-container">
+        <form class="form" method="post">
+            {{ form.hidden_tag() }}
+
+            <div class="input-group">
+                <label for="name">Name:</label>
+                <input type="text" name="name" value="{{ tag.name }}">
+            </div>
+
+            <div class="input-group">
+                <label for="type">Type:</label>
+                <select name="type">
+                    {% for tag_type in tag_types %}
+                        <option value="{{ tag_type }}" {% if tag_type == tag.type %}selected{% endif %}>{{ tag_type | title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="desc">Description:</label>
+                <textarea name="desc">{% if form.desc.data is not none %}{{ form.desc.data }}{% endif %}</textarea>
+            </div>
+
+            <input type="submit" value="Update">
+        </form>
+    </div>
+{% endblock %}

@@ -10,9 +10,11 @@ class Tag(db.Model):
     id: Mapped[int] = mapped_column(primary_key = True)
     name: Mapped[str] = mapped_column(nullable = False, unique = True)
     created: Mapped[datetime] = mapped_column(default = func.now())
+    type: Mapped[str] = mapped_column(server_default = 'general', nullable = False)
+    desc: Mapped[str] = mapped_column(nullable = True)
 
-    @validates('name')
-    def validate_name(self, key: str, value: str) -> Optional[str]:
+    @validates('name', 'desc')
+    def validate_tag(self, key: str, value: str) -> Optional[str]:
         value = value.strip()
 
         if not value:

@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'tag.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="center-container">
+        <table class="tag-table">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th></th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+
+            {% for tag in tags %}
+                <tr>
+                    <td>{{ tag.id }}</td>
+                    <td><a href="{{ url_for('Post.browse_paged', page = 1, terms = tag.name) }}">{{ tag.name }}</a></td>
+                    <td><a class="no-select" href="{{ url_for('Tag.edit_page', tag_id = tag.id) }}">Edit</a></td>
+                    <td>{{ tag.type }}</td>
+                    <td>{{ tag.desc }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    {% include 'frag/pagination.html' %}
+{% endblock %}

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.exc import IntegrityError
 
 from db import db, Post, Tag
@@ -35,18 +35,21 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
 
     return tag
 
-def get_tag(name: str) -> Optional[Tag]:
+def get_tag(id: str | int) -> Optional[Tag]:
     """
     Queries for a tag and returns.
 
     Args:
-        name (str)
+        name (str | int)
 
     Returns:
         Tag
     """
     return db.session.scalar(
         select(Tag).where(
-            Tag.name.is_(name)
+            or_(
+                Tag.id.is_(id),
+                Tag.name.is_(id)
+            )
         )
     )

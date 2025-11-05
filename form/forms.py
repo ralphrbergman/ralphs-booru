@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import BooleanField, FileField, MultipleFileField, PasswordField, StringField
+from wtforms import BooleanField, FileField, MultipleFileField, PasswordField, StringField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo
 
 from .fields import StrongPasswordField
@@ -26,6 +26,11 @@ class SignupForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, StrongPassword
         DataRequired(message = 'You need to confirm your password'),
         EqualTo('pw', message = 'Mismatch between password and confirmation password')
     ])
+
+class TagForm(FlaskForm, SubmitMixin):
+    name = StringField('name', validators = [DataRequired()])
+    type = SelectField('type')
+    desc = TextAreaField('desc')
 
 class UserForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, WeakPasswordMixin):
     pass
