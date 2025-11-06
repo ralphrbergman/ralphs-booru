@@ -2,8 +2,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'nav.css') }}">
 {% endblock %}
 
-<nav class="navbar">
-    <ul class="navbar-anchors">
+<nav id="navbar">
+    <ul id="navbar-anchors">
         <li><a class="navbar-anchor navbar-logo" href="{{ url_for('Index.index_page') }}">{{ brand['full_brand'] }}</a></li>
         <li><a class="navbar-anchor" href="{{ url_for('Index.index_page') }}">Index</a></li>
         <li><a class="navbar-anchor" href="{{ url_for('Post.browse_page') }}">Browse</a></li>
@@ -18,4 +18,10 @@
             <li><a class="navbar-anchor" href="{{ url_for('Account.logout_page') }}">Logout</a></li>
         {% endif %}
     </ul>
+
+    <button id="menu-toggler">Menu</button>
 </nav>
+
+{% block script %}
+    <script src="{{ url_for('static', filename = 'nav.js') }}"></script>
+{% endblock %}

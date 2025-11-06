@@ -1,25 +1,33 @@
 @import 'values.css';
 
-.navbar {
+#navbar {
     background-color: var(--bg-color);
     user-select: none;
 }
 
-.navbar-anchor {
+.navbar-anchor, #menu-toggler {
     color: #fff;
     display: block;
     font-size: 1em;
     padding: 1em;
 }
 
-.navbar-anchor:hover {
+.navbar-anchor:hover,
+#menu-toggler:hover {
     color: var(--link-color);
 }
 
-.navbar-anchors {
+#navbar-anchors, #navbar {
     align-items: center;
     display: flex;
     list-style-type: none;
+}
+
+#menu-toggler {
+    border: none;
+    background-color: transparent;
+    border-top: 1px solid var(--link-color);
+    display: none;
 }
 
 @media (max-width: 768px) {
@@ -27,11 +35,15 @@
         padding: 0.5em;
     }
 
-    .navbar-anchors {
+    #navbar-anchors, #navbar {
         flex-direction: column;
+    }
+
+    #menu-toggler {
+        display: block;
     }
 }
 
-.navbar-logo {
+#navbar-logo {
     font-weight: bold;
 }
