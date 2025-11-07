@@ -196,13 +196,18 @@ def replace_post(post: Post, path: Path) -> Post:
         caption = post.caption,
         tags = [ tag.name for tag in post.tags ]
     )
+    new_thumb = new_post.thumbnail
+
     delete_post(post)
 
     new_post.id = original_id
     new_post.created = original_created
     new_post.modified = original_modified
-    db.session.commit()
 
-    create_thumbnail(new_post)
+    if new_thumb:
+        # Tie post with its new thumbnail.
+        new_thumb.post_id = new_post.id
+
+    db.session.commit()
 
     return post
