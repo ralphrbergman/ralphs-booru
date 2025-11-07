@@ -185,6 +185,8 @@ def replace_post(post: Post, path: Path) -> Post:
         Post
     """
     original_id = post.id
+    original_created = post.created
+    original_modified = post.modified
 
     new_post = create_post(
         author = post.author,
@@ -197,6 +199,8 @@ def replace_post(post: Post, path: Path) -> Post:
     delete_post(post)
 
     new_post.id = original_id
+    new_post.created = original_created
+    new_post.modified = original_modified
     db.session.commit()
 
     create_thumbnail(new_post)
