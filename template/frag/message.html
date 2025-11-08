@@ -1,0 +1,7 @@
+{% with messages = get_flashed_messages() %}
+    <div id="messages">
+        {% for message in messages %}
+            <span class="message">{{ message }}</span>
+        {% endfor %}
+    </div>
+{% endwith %}

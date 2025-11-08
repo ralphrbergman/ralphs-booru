@@ -13,14 +13,7 @@
     </head>
     <body>
         {% include 'frag/nav.html' %}
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div>{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% include 'frag/message.html' %}
 
         {% block body %}
         {% endblock %}

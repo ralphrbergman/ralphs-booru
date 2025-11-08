@@ -47,6 +47,20 @@ a {
     min-width: 0em;
 }
 
+.message {
+    border-radius: 0.1em;
+    background-color: var(--bg-color);
+    padding: 0.5em;
+}
+
+#messages {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    margin: 0.5em;
+}
+
 .notable {
     font-weight: bold;
 }
