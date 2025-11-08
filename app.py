@@ -27,9 +27,6 @@ def create_app() -> APIFlask:
 
     db.init_app(app)
 
-    with app.app_context():
-        db.create_all()
-
     # Initialize encrypting
     bcrypt.init_app(app)
 
