@@ -3,6 +3,36 @@
     white-space: pre-wrap;
 }
 
+.comment {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1em;
+}
+
+.comment div {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-content {
+    flex-basis: 100%;
+}
+
+.commenter-picture {
+    height: 7rem;
+    width: 7rem;
+}
+
+#comment-form {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+}
+
+#comment-section {
+    margin: 1em;
+}
+
 .post-details {
     display: flex;
     flex-direction: column;

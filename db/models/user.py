@@ -24,6 +24,7 @@ class User(db.Model, UserMixin):
     mail: Mapped[str] = mapped_column(nullable = True, unique = True)
     password: Mapped[str] = mapped_column(String(length = 128), nullable = False)
 
+    comments: Mapped[list['Comment']] = relationship('Comment', back_populates = 'author')
     posts: Mapped[list['Post']] = relationship('Post', back_populates = 'author')
     # Defines user's role within the system.
     # Certain users can terminate accounts, delete posts and some can't

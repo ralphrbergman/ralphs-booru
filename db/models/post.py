@@ -44,6 +44,8 @@ class Post(db.Model):
     height: Mapped[int] = mapped_column(nullable = True)
     width: Mapped[int] = mapped_column(nullable = True)
 
+    comments: Mapped[list['Comment']] = relationship(back_populates = 'post')
+
     @classmethod
     def is_hyperlink(cls, value: str) -> bool:
         url = urlparse(value)
