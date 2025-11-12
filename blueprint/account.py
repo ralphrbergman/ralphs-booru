@@ -104,7 +104,7 @@ def login_page():
 
         if form.validate_on_submit():
             if check_password(user.password, form.pw.data):
-                login_user(user)
+                login_user(user, remember = form.remember.data)
 
                 flash(f'Welcome back, {user.name}')
                 return redirect(next_page or url_for('Account.profile_page', user_id = user.id))
@@ -165,7 +165,7 @@ def signup_page():
             if not user:
                 return redirect(url_for('Account.signup_page'))
 
-            login_user(user)
+            login_user(user, remember = True)
 
             flash(f'Welcome, {user.name}')
             return redirect(url_for('Account.profile_page', user_id = user.id))

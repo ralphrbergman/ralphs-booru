@@ -8,7 +8,7 @@ from .mixins import AvatarMixin, EmailMixin, PostMixin, SubmitMixin, StrongPassw
 from .validators import validate_extension
 
 class LoginForm(FlaskForm, UsernameMixin, WeakPasswordMixin):
-    pass
+    remember = BooleanField('remember')
 
 class PostForm(FlaskForm, PostMixin, SubmitMixin):
     deleted = BooleanField('deleted')
