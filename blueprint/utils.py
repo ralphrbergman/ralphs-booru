@@ -5,12 +5,12 @@ from flask import url_for
 
 PAGINATION_DEPTH = 5
 
-def create_pagination_bar(current_page: int, total_pages: int, endpoint: str, **kwargs) -> list[dict]:
+def create_pagination_bar(current_page: int, total_pages: int, endpoint: str, USE_DISPLAY_VALUE: Optional[bool] = True, **kwargs) -> list[dict]:
     bar = list()
 
     def add_item(page: int, display_value: Optional[str] = None) -> None:
         bar.append({
-            'page': display_value or page,
+            'page': display_value if display_value and USE_DISPLAY_VALUE else page,
             'url': url_for(endpoint, page = page, **kwargs)
         })
 

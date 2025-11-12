@@ -1,17 +1,88 @@
 from hashlib import md5 as _md5
 from pathlib import Path
 from shutil import copy
-from typing import Optional
+from typing import Literal, Optional
 
 import ffmpeg
+from flask_sqlalchemy.pagination import SelectPagination
 from magic import from_file
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import UnmappedInstanceError
 
-from db import Post, User, db
+from db import Post, Tag, User, db
 from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
+
+# How many posts per page to serve?
+DEFAULT_LIMIT = 20
+# What default term(s) shall be used when none are provided?
+DEFAULT_TERMS = '-nsfw'
+DEFAULT_SORT = 'desc'
+# Post count threshold per page.
+LIMIT_THRESHOLD = 100
+
+def browse_post(
+    limit: Optional[int] = DEFAULT_LIMIT,
+    page: Optional[int] = 1,
+    terms: Optional[str] = DEFAULT_TERMS,
+    sort_str: Optional[Literal['asc', 'desc']] = DEFAULT_SORT
+) -> SelectPagination:
+    """
+    Creates and executes a select of posts by given criteria.
+
+    Args:
+        limit: How many posts per page to display
+        page: Page number
+        terms: Terms to search for if any
+        sort_str: Sorting way
+
+    Returns:
+        SelectPagination
+    """
+    # Prevent excessive amounts of posts per page.
+    if limit and limit > LIMIT_THRESHOLD:
+        limit = LIMIT_THRESHOLD
+
+    # Apply sorting.
+    stmt = select(Post).order_by(
+        getattr(Post.id, sort_str)()
+    )
+
+    # Apply term selection.
+    try:
+        for term in terms.split():
+            try:
+                # It's an attribute
+
+                name, value = term.split(':', 1)
+                col = getattr(Post, name)
+
+                if not len(value):
+                    # Look for posts that don't have the column set.
+                    where = or_(col == None, col == '')
+                else:
+                    where = col == value
+            except ValueError:
+                # It's a tag
+
+                if term[0] != '-':
+                    where = Post.tags.any(Tag.name == term)
+                else:
+                    where = ~Post.tags.any(Tag.name == term[1:])
+
+            stmt = stmt.where(where)
+    except AttributeError as exc:
+        # No terms we're supplied.
+        pass
+
+    posts = db.paginate(
+        stmt,
+        page = page,
+        per_page = limit
+    )
+
+    return posts
 
 def count_all() -> int:
     return db.session.scalar(select(func.count(Post.id)))

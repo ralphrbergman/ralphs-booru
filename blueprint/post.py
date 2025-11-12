@@ -4,24 +4,21 @@ from shutil import copy
 
 from flask import Blueprint, request, flash, redirect, render_template, send_file, url_for
 from flask_login import current_user, login_required
-from sqlalchemy import or_, select
 
-from api import create_post, create_tag, delete_post, get_post, get_tag, replace_post
+from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, browse_post, create_post, create_tag, delete_post, get_post, get_tag, replace_post
 from api.decorators import post_protect
-from db import db, Post, Tag
+from db import db
 from form import PostForm, UploadForm
 from .utils import create_pagination_bar
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
+DEFAULT_BLUR = 'true'
 TEMP = Path(getenv('TEMP'))
 
 post_bp = Blueprint(
     name = 'Post',
     import_name = __name__
 )
-
-DEFAULT_BLUR = 'true'
-DEFAULT_LIMIT = 20
 
 @post_bp.route('/browse')
 def browse_page():
@@ -33,11 +30,8 @@ def browse_paged(page: int):
 
     blur = args.get('blur', default = DEFAULT_BLUR)
     limit = args.get('limit', default = DEFAULT_LIMIT, type = int)
-    terms = args.get('terms', default = '-nsfw')
-
-    # Prevent excessive amounts of posts per page.
-    if limit and limit > 100:
-        limit = 100
+    terms = args.get('terms', default = DEFAULT_TERMS)
+    sort_str = args.get('sort', default = DEFAULT_SORT)
 
     # Ensure all URI arguments are passed in the address.
     if len(args) < 2:
@@ -47,45 +41,12 @@ def browse_paged(page: int):
                 blur = blur,
                 limit = limit,
                 page = page,
-                terms = terms
+                terms = terms,
+                sort = sort_str
             )
         )
 
-    stmt = select(Post).order_by(
-        Post.id.desc()
-    )
-
-    try:
-        for term in terms.split():
-            try:
-                # It's an attribute
-
-                name, value = term.split(':', 1)
-                col = getattr(Post, name)
-
-                if not len(value):
-                    # Look for posts that don't have the column set.
-                    where = or_(col == None, col == '')
-                else:
-                    where = col == value
-            except ValueError:
-                # It's a tag
-
-                if term[0] != '-':
-                    where = Post.tags.any(Tag.name == term)
-                else:
-                    where = ~Post.tags.any(Tag.name == term[1:])
-
-            stmt = stmt.where(where)
-    except AttributeError as exc:
-        # No terms we're supplied.
-        pass
-
-    posts = db.paginate(
-        stmt,
-        page = page,
-        per_page = limit
-    )
+    posts = browse_post(limit, page, terms, sort_str)
 
     bar = create_pagination_bar(
         page,
@@ -93,7 +54,8 @@ def browse_paged(page: int):
         'Post.browse_paged',
         blur = blur,
         limit = limit,
-        terms = terms
+        terms = terms,
+        sort = sort_str
     )
 
     return render_template(

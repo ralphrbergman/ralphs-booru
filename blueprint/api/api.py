@@ -2,6 +2,7 @@ from flask import Blueprint
 
 from .comment import comment_bp
 from .post import post_bp
+from .posts import posts_bp
 
 api_bp = Blueprint(
     name = 'REST API',
@@ -11,3 +12,4 @@ api_bp = Blueprint(
 
 api_bp.register_blueprint(comment_bp)
 api_bp.register_blueprint(post_bp)
+api_bp.register_blueprint(posts_bp)
