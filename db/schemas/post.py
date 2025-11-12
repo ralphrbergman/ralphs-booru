@@ -49,7 +49,7 @@ class PostOut(PostIn):
 
     dimensions = String()
     name = String()
-    view_url = String(required = True)
+    view_url = String(attribute = 'view_uri', required = True)
 
 class PostsOut(Schema):
     posts = Nested(PostOut, many = True)
