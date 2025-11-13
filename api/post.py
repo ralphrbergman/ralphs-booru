@@ -1,5 +1,6 @@
 from hashlib import md5 as _md5
 from pathlib import Path
+from re import findall, sub, search
 from shutil import copy
 from typing import Literal, Optional
 
@@ -13,6 +14,10 @@ from sqlalchemy.orm.exc import UnmappedInstanceError
 from db import Post, Tag, User, db
 from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
+
+ATTR_PATTERN = r'[a-zA-Z]+:[a-zA-Z0-9/]+'  # attr:value
+CAPTION_PATTERN = r'"([^"]*)"'  # "hello world"
+TAG_PATTERN = r'[a-zA-Z0-9-_]+'  # tag1 tag2 tag3
 
 # How many posts per page to serve?
 DEFAULT_LIMIT = 20
@@ -49,32 +54,52 @@ def browse_post(
         getattr(Post.id, sort_str)()
     )
 
-    # Apply term selection.
+    caption = None
+
     try:
-        for term in terms.split():
-            try:
-                # It's an attribute
-
-                name, value = term.split(':', 1)
-                col = getattr(Post, name)
-
-                if not len(value):
-                    # Look for posts that don't have the column set.
-                    where = or_(col == None, col == '')
-                else:
-                    where = col == value
-            except ValueError:
-                # It's a tag
-
-                if term[0] != '-':
-                    where = Post.tags.any(Tag.name == term)
-                else:
-                    where = ~Post.tags.any(Tag.name == term[1:])
-
-            stmt = stmt.where(where)
-    except AttributeError as exc:
-        # No terms we're supplied.
+        # Capture caption text from terms.
+        caption = search(CAPTION_PATTERN, terms)[1]
+        terms = sub(CAPTION_PATTERN, '', terms)
+    except TypeError:
         pass
+
+    # Capture attribute selectors.
+    attrs = findall(ATTR_PATTERN, terms)
+    terms = sub(ATTR_PATTERN, '', terms)
+
+    # Get tags.
+    tags = findall(TAG_PATTERN, terms)
+
+    # Look for words in posts in unordered sequence.
+    try:
+        for word in caption.split():
+            stmt = stmt.where(
+                Post.caption.like(f'%{word}%')
+            )
+    except AttributeError:
+        pass
+
+    # Apply attribute selectors.
+    for attr in attrs:
+        name, value = attr.split(':', 1)
+        col = getattr(Post, name)
+
+        if not len(value):
+            # Look for posts that don't have the column set.
+            where = or_(col == None, col == '')
+        else:
+            where = col == value
+
+        stmt = stmt.where(where)
+
+    # Apply tag selection.
+    for tag in tags:
+        if tag[0] != '-':
+            where = Post.tags.any(Tag.name == tag)
+        else:
+            where = ~Post.tags.any(Tag.name == tag[1:])
+
+        stmt = stmt.where(where)
 
     posts = db.paginate(
         stmt,
