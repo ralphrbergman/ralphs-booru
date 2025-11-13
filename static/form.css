@@ -20,7 +20,6 @@
 
 @media (max-width: 768px) {
     .form {
-        font-size: 1rem;
         order: 1;
     }
 }
