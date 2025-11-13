@@ -2,6 +2,7 @@ brand = {
     'contact': {
         'address': 'example.com',
         'mail': 'user@example.com',
+        'media': {},
         'name': 'Your Name',
     },
     'full_brand': 'Ralphs Booru',

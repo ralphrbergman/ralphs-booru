@@ -1,4 +1,27 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+    <div class="center-container">
+        <p>You can get in touch with me</p>
+
+        <table>
+            <tr>
+                <th>Means</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                {% if brand['contact']['mail'] %}
+                    <td>E-mail</td>
+                    <td><a href="mailto:{{ brand['contact']['mail'] }}">{{ brand['contact']['mail'] }}</a></td>
+                {% endif %}
+            </tr>
+
+            {% for contact in brand['contact']['media'].items() %}
+                <tr>
+                    <td>{{ contact[0] }}</td>
+                    <td>{{ contact[1] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}
