@@ -19,6 +19,9 @@ class PostsIn(Schema):
     directory = String(load_default = None)
     op = String(load_default = None)
     source = String(attribute = 'src', load_default = None)
+
+    add_tags = List(String(), load_default = None)
+    rem_tags = List(String(), load_default = None)
     tags = List(String(), load_default = None)
 
 class TagOut(Schema):

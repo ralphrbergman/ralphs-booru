@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 
 from api import create_post, create_tag, delete_post, get_post, get_tag
 from api.decorators import moderator_only, post_protect
-from db import db
+from db import Tag, db
 from db.schemas import FileIn, PostIn, PostsIn, PostOut, PostsOut
 
 TEMP = Path(getenv('TEMP'))
@@ -66,8 +66,6 @@ def post_upload_route(data: FileIn):
 @login_required
 @post_protect
 def post_modify_route(data: PostsIn):
-    posts = list()
-
     attrs = {
         'caption': data['caption'],
         'directory': data['directory'],
@@ -75,30 +73,48 @@ def post_modify_route(data: PostsIn):
         'src': data['src'],
         'tags': data['tags']
     }
+    add_tags = data['add_tags']
+    rem_tags = data['rem_tags']
+
+    posts = list()
+
+    def query_tags(tag_names: list[str]) -> list[Tag]:
+        tags = list()
+
+        for tag_name in tag_names:
+            tag = get_tag(tag_name) or create_tag(tag_name)
+
+            tags.append(tag)
+
+        return tags
 
     for post_id in data['posts']:
         post = get_post(post_id)
-
-        if not post:
-            continue
+        if not post: continue
 
         for attr, value in attrs.items():
             if attr != 'tags':
+                # Handle basic attributes of post.
                 setattr(post, attr, value)
             else:
-                tags = list()
+                # Handle overriding tags.
+                tags = query_tags(value)
+                post.tags = tags
 
-                try:
-                    for tag_name in value:
-                        tag = get_tag(tag_name) or create_tag(tag_name, [post])
+        if add_tags:
+            # Handle adding tags.
+            tags = query_tags(add_tags)
 
-                        tags.append(tag)
-                except TypeError as exc:
-                    pass
+            post.tags = post.tags + tags
 
-                setattr(post, attr, tags)
+        if rem_tags:
+            # Handle removing tags.
+            tags = query_tags(rem_tags)
+
+            for tag in tags:
+                post.tags.remove(tag)
 
         db.session.commit()
         posts.append(post)
 
-    return { 'posts': posts }
+    return {'posts': posts}
