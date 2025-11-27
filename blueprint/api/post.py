@@ -67,14 +67,14 @@ def post_upload_route(data: FileIn):
 @post_protect
 def post_modify_route(data: PostsIn):
     attrs = {
-        'caption': data['caption'],
-        'directory': data['directory'],
-        'op': data['op'],
-        'src': data['src'],
-        'tags': data['tags']
+        'caption': data.get('caption'),
+        'directory': data.get('directory'),
+        'op': data.get('op'),
+        'src': data.get('src'),
+        'tags': data.get('tags')
     }
-    add_tags = data['add_tags']
-    rem_tags = data['rem_tags']
+    add_tags = data.get('add_tags')
+    rem_tags = data.get('rem_tags')
 
     posts = list()
 
@@ -93,6 +93,8 @@ def post_modify_route(data: PostsIn):
         if not post: continue
 
         for attr, value in attrs.items():
+            if value is None: continue
+
             if attr != 'tags':
                 # Handle basic attributes of post.
                 setattr(post, attr, value)

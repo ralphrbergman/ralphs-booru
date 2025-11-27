@@ -15,14 +15,14 @@ class PostIn(Schema):
 class PostsIn(Schema):
     posts = List(Integer, required = True)
 
-    caption = String(load_default = None)
-    directory = String(load_default = None)
-    op = String(load_default = None)
-    source = String(attribute = 'src', load_default = None)
+    caption = String(required = False)
+    directory = String(required = False)
+    op = String(required = False)
+    source = String(attribute = 'src', required = False)
 
-    add_tags = List(String(), load_default = None)
-    rem_tags = List(String(), load_default = None)
-    tags = List(String(), load_default = None)
+    add_tags = List(String(), required = False)
+    rem_tags = List(String(), required = False)
+    tags = List(String(), required = False)
 
 class TagOut(Schema):
     name = String(required = True)
