@@ -10,4 +10,5 @@
 .tag-table-wrapper {
     display: flex;
     justify-content: center;
+    overflow-x: scroll;
 }
