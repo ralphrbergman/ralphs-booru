@@ -1,6 +1,13 @@
-.tag-table tr td {
+.tag-table th, .tag-table td {
     padding-bottom: 0.1em;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-top: 0.1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+/* TODO: */
+/* For some reason I can't use center-container class for the table */
+/* because it will overlap on vertically smaller screens with other elements. */
+.tag-table-wrapper {
+    display: flex;
+    justify-content: center;
 }
