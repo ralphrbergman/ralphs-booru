@@ -245,7 +245,7 @@ def get_hash(path: Path) -> str:
         return _md5(stream.read()).hexdigest()
 
 def get_mime(path: Path) -> str:
-    return from_file(path, mime = True)
+    return from_file(str(path), mime = True)
 
 def get_post(post_id: int) -> Optional[Post]:
     """
