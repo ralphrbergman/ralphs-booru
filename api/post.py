@@ -15,7 +15,7 @@ from db import Post, Tag, User, db
 from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
 
-ATTR_PATTERN = r'[a-zA-Z]+:[a-zA-Z0-9/]+'  # attr:value
+ATTR_PATTERN = r'[a-zA-Z]+:\S*'  # attr:value
 CAPTION_PATTERN = r'"([^"]*)"'  # "hello world"
 TAG_PATTERN = r'[a-zA-Z0-9-_]+'  # tag1 tag2 tag3
 
