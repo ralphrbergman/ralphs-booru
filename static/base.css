@@ -43,7 +43,8 @@ a {
     }
 }
 
-.input-group input, textarea {
+.input-group input,
+.input-group textarea {
     flex-grow: 1;
     min-width: 0em;
 }

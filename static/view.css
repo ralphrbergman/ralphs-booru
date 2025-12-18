@@ -58,7 +58,9 @@
     }
 }
 
-.view-container audio, img, video {
+.view-container audio,
+.view-container img,
+.view-container video {
     height: 100vh;
     overflow: hidden;
     object-fit: contain;

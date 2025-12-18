@@ -5,7 +5,8 @@
     user-select: none;
 }
 
-.navbar-anchor, #menu-toggler {
+.navbar-anchor,
+#menu-toggler {
     color: #fff;
     display: block;
     padding: 1em;
@@ -16,7 +17,8 @@
     color: var(--link-color);
 }
 
-#navbar-anchors, #navbar {
+#navbar-anchors,
+#navbar {
     align-items: center;
     display: flex;
     list-style-type: none;
@@ -34,7 +36,8 @@
         padding: 0.5em;
     }
 
-    #navbar-anchors, #navbar {
+    #navbar-anchors,
+    #navbar {
         flex-direction: column;
     }
 

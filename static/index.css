@@ -33,7 +33,8 @@
     justify-content: center;
 }
 
-.search-box, .search-btn {
+.search-box,
+.search-btn {
     border: 0.1rem solid var(--bg-color);
     cursor: pointer;
     font-size: 1.5rem;
