@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from flask import url_for
 from sqlalchemy import ForeignKey, String, func, select
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
@@ -57,6 +58,18 @@ class Post(db.Model):
             return None
 
         return value
+
+    @hybrid_property
+    def category(self) -> str:
+        return self.mime.split('/')[0] if self.mime else None
+
+    @category.expression
+    def category(cls):
+        return func.substr(
+            cls.mime,
+            1,
+            func.instr(cls.mime, '/') - 1
+        )
 
     @property
     def dimensions(self) -> str:
