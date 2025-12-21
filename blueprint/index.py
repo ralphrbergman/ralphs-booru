@@ -12,9 +12,13 @@ index_bp = Blueprint(
 def index_page():
     form = SearchForm()
 
-    if request.method == 'GET':
-        count = count_all_posts()
+    if form.validate_on_submit():
+        raw_query = form.search.data.strip()
 
-        return render_template('index.html', count = str(count), form = form)
-    else:
-        return redirect(url_for('Post.browse_paged', page = 1, terms = form.search.data))
+        if 'nsfw' not in raw_query:
+            raw_query = f'{raw_query} -nsfw' if len(raw_query) > 0 else '-nsfw'
+
+        return redirect(url_for('Post.browse_paged', page = 1, terms = raw_query))
+
+    count = count_all_posts()
+    return render_template('index.html', count = str(count), form = form)

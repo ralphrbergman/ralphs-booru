@@ -7,6 +7,8 @@
 {% block body %}
     <div class="index-container">
         <form method="post">
+            {{ form.hidden_tag() }}
+
             <input class="search-box" type="text" name="search" placeholder="tag1 tag2">
             <input class="search-btn" type="submit" value="Search">
         </form>
