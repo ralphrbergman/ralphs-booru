@@ -4,41 +4,32 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    font-size: 2.5rem;
-    gap: 0.05em;
+    font-size: 2rem;
+    gap: var(--smallest-gap);
     height: 100%;
     justify-content: end;
 }
 
 .digit-bar {
     background-color: var(--bg-color);
-    height: 0.5em;
-    width: 1.5em;
+    height: var(--small-gap);
+    width: 1.5rem;
 }
 
 .digits {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5em;
+    gap: var(--small-gap);
     user-select: none;
-}
-
-.index-container {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-    height: 100vh;
-    justify-content: center;
 }
 
 .search-box,
 .search-btn {
     border: 0.1rem solid var(--bg-color);
     cursor: pointer;
-    font-size: 1.5rem;
-    padding: 1rem;
+    font-size: var(--larger-font-size);
+    padding: var(--medium-gap);
 }
 
 .search-btn {

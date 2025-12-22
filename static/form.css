@@ -1,8 +1,10 @@
+@import 'values.css';
+
 .form {
     display: flex;
     flex-direction: column;
     font-size: clamp(0.75rem, 1.1vw, 2.5rem);
-    gap: 0.25em;
+    gap: var(--small-gap);;
     width: 25em;
 }
 
@@ -15,7 +17,7 @@
 }
 
 .gapped-form {
-    gap: 1.5em;
+    gap: var(--medium-gap);
 }
 
 @media (max-width: 768px) {

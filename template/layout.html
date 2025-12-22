@@ -15,8 +15,10 @@
         {% include 'frag/nav.html' %}
         {% include 'frag/message.html' %}
 
-        {% block body %}
-        {% endblock %}
+        <div class="content-wrapper">
+            {% block body %}
+            {% endblock %}
+        </div>
 
         {% include 'frag/footer.html' %}
 

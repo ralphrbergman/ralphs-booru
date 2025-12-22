@@ -1,7 +1,9 @@
+@import 'values.css';
+
 .posts {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: var(--small-gap);
     justify-content: center;
 }
 
@@ -26,24 +28,9 @@
 
 @media (max-width: 600px) {
     .post-container {
-        height: 10rem;
-        width: 10rem;
+        height: 7rem;
+        width: 7rem;
     }
-}
-
-.posts-container-wrapper {
-    padding-bottom: 2rem;
-    padding-top: 4rem;
-}
-
-.posts-container-mini-wrapper {
-    padding: 1rem;
-}
-
-/* Sizing made for profile page. */
-.post-prof-container {
-    height: 10rem;
-    width: 10rem;
 }
 
 .post-thumbnail {

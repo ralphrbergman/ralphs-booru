@@ -29,10 +29,8 @@
         <div>
             <p>{{ user.name }}'s latest posts:</p>
 
-            <div class="posts-container-mini-wrapper">
-                {% set container_name = 'post-prof-container' %}
-                {% include 'frag/posts.html' %}
-            </div>
+            {% set container_name = 'post-prof-container' %}
+            {% include 'frag/posts.html' %}
         </div>
     </div>
 {% endblock %}

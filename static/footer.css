@@ -1,3 +1,5 @@
+@import 'values.css';
+
 .footer-anchors {
     list-style-type: none;
 }
@@ -11,11 +13,11 @@
     color: white;
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: var(--medium-gap);;
     justify-content: center;
 
-    padding-bottom: 1em;
+    padding-bottom: var(--medium-gap);;
     padding-left: 25%;
     padding-right: 25%;
-    padding-top: 1em;
+    padding-top: var(--medium-gap);;
 }

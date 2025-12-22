@@ -1,3 +1,5 @@
+@import 'values.css';
+
 .caption {
     max-width: 50vw;
     white-space: pre-wrap;
@@ -6,7 +8,7 @@
 .comment {
     display: flex;
     flex-wrap: wrap;
-    margin: 1em;
+    margin: var(--medium-gap);
 }
 
 .comment div {
@@ -26,17 +28,17 @@
 #comment-form {
     display: flex;
     flex-direction: column;
-    margin: 1em;
+    margin: var(--medium-gap);
 }
 
 #comment-section {
-    margin: 1em;
+    margin: var(--medium-gap);
 }
 
 .post-details {
     display: flex;
     flex-direction: column;
-    gap: 0.25em;
+    gap: var(--small-gap);
 }
 
 .tag-list {
@@ -46,10 +48,10 @@
 .view-container {
     align-items: center;
     display: flex;
-    gap: 5em;
+    gap: var(--gap);
     height: 100vh;
     justify-content: center;
-    padding: 1em;
+    padding: var(--medium-gap);
 }
 
 @media (max-width: 768px) {

@@ -1,8 +1,8 @@
 @import 'values.css';
 
 * {
-    font-family: sans-serif, Roboto;
-    font-size: 1.2rem;
+    font-family: var(--font);
+    font-size: var(--font-size);
     margin: 0;
     padding: 0;
     text-decoration: none;
@@ -25,10 +25,18 @@ a {
     width: 100%;
 }
 
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    padding-bottom: var(--gap);
+    padding-top: var(--gap);
+}
+
 .input-group {
     align-items: center;
     display: flex;
-    gap: 0.5em;
+    gap: var(--small-gap);;
 }
 
 @media (max-width: 768px) {
@@ -50,17 +58,17 @@ a {
 }
 
 .message {
-    border-radius: 0.1em;
+    border-radius: var(--smaller-gap);;
     background-color: var(--bg-color);
-    padding: 0.5em;
+    padding: var(--small-gap);;
 }
 
 #messages {
     align-items: center;
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
-    margin: 0.5em;
+    gap: var(--small-gap);;
+    margin: var(--small-gap);;
 }
 
 .notable {
@@ -69,4 +77,8 @@ a {
 
 .no-select {
     user-select: none;
+}
+
+.table-container {
+    height: 100%;
 }

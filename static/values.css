@@ -1,4 +1,17 @@
 :root {
+    /* Color configuration. */
     --bg-color: #9532e6;
     --link-color: #59e1ff;
+
+    /* Font configuration. */
+    --font: sans-serif, Roboto;
+    --font-size: 1.1rem;
+    --larger-font-size: 1.2rem;
+
+    /* Sizing configuration. */
+    --gap: 2.5rem;
+    --medium-gap: 1rem;
+    --small-gap: 0.5rem;
+    --smaller-gap: 0.1rem;
+    --smallest-gap: 0.05rem;
 }
