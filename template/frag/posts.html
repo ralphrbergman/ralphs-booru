@@ -8,6 +8,7 @@
             <a class="{{ container_name }} post-container" href="{{ url_for('Post.view_page', post_id = post.id) }}" data-post-id="{{ post.id }}">
                 {% if post.thumbnail is not none %}
                     <img class="post-thumbnail {% if blur and post.nsfw %}post-blur{% endif %}" src="{{ url_for('Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ post.id }} Thumbnail">
+                    <p class="post-type">{{ post.cat.title() }}</p>
                 {% else %}
                     <p>{{ post.cat.title() }}</p>
                 {% endif %}

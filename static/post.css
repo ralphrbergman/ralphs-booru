@@ -18,10 +18,11 @@
 .post-container {
     align-items: center;
     border: 1px solid black;
-    display: flex;
+    display: inline-flex;
     height: 15rem;
     justify-content: center;
     overflow: hidden;
+    position: relative;
     width: 15rem;
     word-break: break-all;
 }
@@ -31,6 +32,11 @@
         height: 7rem;
         width: 7rem;
     }
+}
+
+.post-type {
+    background-color: black;
+    position: absolute;
 }
 
 .post-thumbnail {
