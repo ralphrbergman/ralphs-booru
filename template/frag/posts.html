@@ -9,7 +9,7 @@
                 {% if post.thumbnail is not none %}
                     <img class="post-thumbnail {% if blur and post.nsfw %}post-blur{% endif %}" src="{{ url_for('Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ post.id }} Thumbnail">
                 {% else %}
-                    <p>{{ post.name }}</p>
+                    <p>{{ post.cat.title() }}</p>
                 {% endif %}
             </a>
         </div>

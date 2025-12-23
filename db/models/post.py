@@ -60,10 +60,10 @@ class Post(db.Model):
         return value
 
     @hybrid_property
-    def category(self) -> str:
+    def cat(self) -> str:
         return self.mime.split('/')[0] if self.mime else None
 
-    @category.expression
+    @cat.expression
     def category(cls):
         return func.substr(
             cls.mime,
