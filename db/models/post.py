@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import floor, log, pow
 from os import getenv
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,7 @@ from .thumbnail import Thumbnail
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 NSFW_TAG_NAME = getenv('NSFW_TAG', 'nsfw')
 SENSITIVE_DIRS = getenv('SENSITIVE_DIRS', '').split(',')
+DISK_SIZES = ('B', 'KB', 'MB', 'GB')
 
 class Post(db.Model):
     id: Mapped[int] = mapped_column(primary_key = True)
@@ -74,6 +76,13 @@ class Post(db.Model):
     @property
     def dimensions(self) -> str:
         return f'{self.width}x{self.height}'
+
+    @property
+    def disk_size(self) -> str:
+        index = int(floor(log(self.size, 1024)))
+        size = round(self.size / pow(1024, index), 2)
+
+        return f'{size}{DISK_SIZES[index]}'
 
     @property
     def name(self) -> str:
