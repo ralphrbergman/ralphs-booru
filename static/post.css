@@ -34,9 +34,13 @@
     }
 }
 
-.post-type {
+.post-flairs {
     background-color: black;
+    display: flex;
+    gap: var(--smaller-gap);
     position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .post-thumbnail {
