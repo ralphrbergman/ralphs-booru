@@ -1,7 +1,9 @@
 @import 'values.css';
 
-.flair:not(:last-child)::after {
-    content: '•';
+.flair {
+    filter: brightness(0) invert(1);
+    max-height: 1.5rem;
+    max-height: 1.5rem;
 }
 
 .posts {
