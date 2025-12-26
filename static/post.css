@@ -1,5 +1,9 @@
 @import 'values.css';
 
+.flair:not(:last-child)::after {
+    content: '•';
+}
+
 .posts {
     display: flex;
     flex-wrap: wrap;

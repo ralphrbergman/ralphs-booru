@@ -10,8 +10,22 @@
                     <img class="post-thumbnail {% if blur and post.nsfw %}post-blur{% endif %}" src="{{ url_for('Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ post.id }} Thumbnail">
                 {% endif %}
 
-                <div class="post-flairs">
-                    <p class="post-type">{{ post.cat.title() }}</p>
+                <div class="post-flairs no-select">
+                    {% if post.caption %}
+                        <p class="flair">C</p>
+                    {% endif %}
+
+                    {% if post.op %}
+                        <p class="flair">OP</p>
+                    {% endif %}
+
+                    {% if post.src %}
+                        <p class="flair">Source</p>
+                    {% endif %}
+
+                    {% if post.cat != 'image' %}
+                        <p class="post-type flair">{{ post.cat.title() }}</p>
+                    {% endif %}
                 </div>
             </a>
         </div>
