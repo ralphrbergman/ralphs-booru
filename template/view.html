@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% set title = 'View ' ~ post.id %}
+
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
 {% endblock %}
@@ -63,7 +65,7 @@
             </div>
         </div>
 
-        {% include 'content.html' %}
+        {% include 'frag/content.html' %}
     </div>
 
     {% set comments = post.comments %}

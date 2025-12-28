@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% set title = 'Edit Post: ' ~ post.id %}
+
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
 {% endblock %}
@@ -55,6 +57,6 @@
             <input type="submit" value="Submit">
         </form>
 
-        {% include 'content.html' %}
+        {% include 'frag/content.html' %}
     </div>
 {% endblock %}

@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% set title = user.username %}
+
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'profile.css') }}">
 {% endblock %}
