@@ -26,6 +26,11 @@
                 <textarea name="desc">{% if form.desc.data is not none %}{{ form.desc.data }}{% endif %}</textarea>
             </div>
 
+            <div class="input-group">
+                <label for="deleted">Delete:</label>
+                <input type="checkbox" name="deleted">
+            </div>
+
             <input type="submit" value="Update">
         </form>
     </div>

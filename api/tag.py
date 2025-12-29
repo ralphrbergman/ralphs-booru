@@ -35,6 +35,19 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
 
     return tag
 
+def delete_tag(tag_id: str | int) -> None:
+    """
+    Deletes given tag.
+
+    Args:
+        tag_id (str | int)
+    """
+    tag = get_tag(tag_id)
+
+    if tag:
+        db.session.delete(tag)
+        db.session.commit()
+
 def get_tag(id: str | int) -> Optional[Tag]:
     """
     Queries for a tag and returns.

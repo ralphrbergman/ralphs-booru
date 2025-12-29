@@ -1,10 +1,13 @@
-from wtforms import EmailField, FileField, SubmitField, StringField, TextAreaField
+from wtforms import BooleanField, EmailField, FileField, SubmitField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Length
 
 from .fields import StrongPasswordField, WeakPasswordField
 
 class AvatarMixin:
     avatar = FileField('avatar')
+
+class DeletedMixin:
+    deleted = BooleanField('deleted')
 
 class EmailMixin:
     email = EmailField('email')

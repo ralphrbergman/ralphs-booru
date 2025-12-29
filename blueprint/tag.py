@@ -1,8 +1,8 @@
 from flask import Blueprint, request, flash, redirect, render_template, url_for
-from flask_login import login_required
+from flask_login import current_user, login_required
 from sqlalchemy import select
 
-from api import get_tag
+from api import delete_tag, get_tag
 from api.decorators import post_protect
 from db import db, Tag
 from form import TagForm
@@ -26,6 +26,12 @@ def edit_page(tag_id: int):
     if request.method == 'GET':
         return render_template('edit_tag.html', form = form, tag = tag, tag_types = TAG_TYPES)
     else:
+        if form.deleted.data and current_user.is_authenticated and current_user.is_moderator:
+            delete_tag(tag.id)
+
+            flash(f'Permanently deleted tag #{tag.id}')
+            return redirect(url_for('Tag.tag_page'))
+
         tag.name = form.name.data
         tag.type = form.type.data
         tag.desc = form.desc.data

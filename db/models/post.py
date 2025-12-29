@@ -32,7 +32,7 @@ class Post(db.Model):
     src: Mapped[str] = mapped_column(nullable = True)
 
     caption: Mapped[str] = mapped_column(nullable = True)
-    tags: Mapped[list['Tag']] = db.relationship('Tag', secondary = TagAssociation, backref = 'posts')
+    tags: Mapped[list['Tag']] = db.relationship('Tag', secondary = TagAssociation, back_populates = 'posts')
     thumbnail: Mapped[Thumbnail] = relationship('Thumbnail', back_populates = 'post')
 
     # Filesystem attributes.

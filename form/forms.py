@@ -4,14 +4,13 @@ from wtforms import BooleanField, FileField, MultipleFileField, PasswordField, S
 from wtforms.validators import DataRequired, EqualTo
 
 from .fields import StrongPasswordField
-from .mixins import AvatarMixin, EmailMixin, PostMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
+from .mixins import AvatarMixin, DeletedMixin, EmailMixin, PostMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
 from .validators import validate_extension
 
 class LoginForm(FlaskForm, UsernameMixin, WeakPasswordMixin):
     remember = BooleanField('remember')
 
-class PostForm(FlaskForm, PostMixin, SubmitMixin):
-    deleted = BooleanField('deleted')
+class PostForm(FlaskForm, DeletedMixin, PostMixin, SubmitMixin):
     new_file = FileField('new_file')
 
 class PasswordForm(FlaskForm, WeakPasswordMixin, SubmitMixin):
@@ -27,7 +26,7 @@ class SignupForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, StrongPassword
         EqualTo('pw', message = 'Mismatch between password and confirmation password')
     ])
 
-class TagForm(FlaskForm, SubmitMixin):
+class TagForm(FlaskForm, DeletedMixin, SubmitMixin):
     name = StringField('name', validators = [DataRequired()])
     type = SelectField('type')
     desc = TextAreaField('desc')
