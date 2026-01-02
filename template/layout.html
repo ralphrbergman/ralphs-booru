@@ -2,9 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="description" content="Ralph's kind of booru">
-        <meta name="author" content="ralphrbergman">
+        <meta name="description" content="{{ brand['description'] }}">
+        <meta name="author" content="{{ brand['contact']['name'] }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block meta %}
+        {% endblock %}
 
         <title>{{ title }}</title>
 
