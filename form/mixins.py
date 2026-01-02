@@ -1,10 +1,13 @@
+from flask_wtf.file import FileAllowed
 from wtforms import BooleanField, EmailField, FileField, SubmitField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Length
 
 from .fields import StrongPasswordField, WeakPasswordField
 
 class AvatarMixin:
-    avatar = FileField('avatar')
+    avatar = FileField('avatar', validators = [
+        FileAllowed(['gif', 'jpg', 'jpeg', 'png', 'webp'], message = 'You can only have a picture as your avatar. (e.g gif, jpg, jpeg, png or webp)')
+    ])
 
 class DeletedMixin:
     deleted = BooleanField('deleted')
