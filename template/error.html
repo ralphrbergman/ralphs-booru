@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% set title = 'Error: ' ~ code %}
+
+{% block body %}
+    <div class="center-container">
+        <p>Oops! You encountered HTTP {{ code }} error!</p>
+        <p>{{ message }}</p>
+    </div>
+{% endblock %}

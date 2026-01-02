@@ -2,7 +2,7 @@ from os import getenv
 from pathlib import Path
 from typing import Optional
 
-from flask import Blueprint, request, flash, redirect, render_template, send_from_directory, url_for
+from flask import Blueprint, request, abort, flash, redirect, render_template, send_from_directory, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
@@ -28,7 +28,11 @@ def avatar_page(filename: str):
 @user_protect
 def edit_profile_page():
     form = UserForm()
-    user = get_user(current_user.id)
+
+    try:
+        user = get_user(current_user.id)
+    except AttributeError as exc:
+        return abort(404)
 
     if request.method == 'GET':
         return render_template('edit_profile.html', form = form, user = user)
@@ -64,7 +68,11 @@ def edit_profile_page():
 @user_protect
 def edit_password_page():
     form = PasswordForm()
-    user = get_user(current_user.id)
+
+    try:
+        user = get_user(current_user.id)
+    except AttributeError as exc:
+        return abort(404)
 
     if request.method == 'GET':
         return render_template('edit_password.html', form = form)
@@ -128,6 +136,10 @@ def logout_page():
 @account_bp.route('/profile/<int:user_id>')
 def profile_page(user_id: int):
     user = get_user(user_id)
+
+    if not user:
+        return abort(404)
+
     # Return 10 posts the user has recently uploaded.
     posts = list(reversed(user.posts))[:10]
 

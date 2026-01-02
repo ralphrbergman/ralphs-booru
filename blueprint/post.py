@@ -2,7 +2,7 @@ from os import getenv
 from pathlib import Path
 from shutil import copy
 
-from flask import Blueprint, request, flash, redirect, render_template, send_file, url_for
+from flask import Blueprint, request, abort, flash, redirect, render_template, send_file, url_for
 from flask_login import current_user, login_required
 
 from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, browse_post, create_post, create_tag, delete_post, get_post, get_tag, replace_post
@@ -73,6 +73,9 @@ def edit_page(post_id: int):
     form = PostForm()
     post = get_post(post_id)
 
+    if not post:
+        return abort(404)
+
     if request.method == 'GET':
         return render_template('edit.html', form = form, post = post)
     else:
@@ -136,13 +139,21 @@ def edit_page(post_id: int):
 
 @post_bp.route('/view/<int:post_id>')
 def view_page(post_id: int):
-    return render_template('view.html', post = get_post(post_id))
+    post = get_post(post_id)
+
+    if not post:
+        return abort(404)
+
+    return render_template('view.html', post = post)
 
 @post_bp.route('/view_f/<int:post_id>')
 def view_file_resource(post_id: int):
     post = get_post(post_id)
 
-    return send_file(post.path)
+    try:
+        return send_file(post.path)
+    except FileNotFoundError as exc:
+        return b''
 
 @post_bp.route('/upload', methods = ['GET', 'POST'])
 @login_required

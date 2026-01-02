@@ -1,4 +1,4 @@
-from flask import Blueprint, request, flash, redirect, render_template, url_for
+from flask import Blueprint, request, abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import select
 
@@ -22,6 +22,9 @@ TAG_TYPES = ('artist', 'character', 'copyright', 'general', 'meta')
 def edit_page(tag_id: int):
     form = TagForm()
     tag = get_tag(tag_id)
+
+    if not tag:
+        return abort(404)
 
     if request.method == 'GET':
         return render_template('edit_tag.html', form = form, tag = tag, tag_types = TAG_TYPES)
