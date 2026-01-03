@@ -12,7 +12,7 @@ from db import db
 class RoleEnum(Enum):
     ADMIN = 'adm'
     MODERATOR = 'mod'
-    REGULAR = None
+    REGULAR = 'reg'
     TERMINATED = 'ter'
 
 class User(db.Model, UserMixin):
@@ -29,7 +29,7 @@ class User(db.Model, UserMixin):
     # Defines user's role within the system.
     # Certain users can terminate accounts, delete posts and some can't
     # comment due to restrictions put in place by a moderator.
-    role: Mapped[str] = mapped_column(nullable = True)
+    role: Mapped[str] = mapped_column(nullable = False, default = 'reg')
 
     @validates('mail', 'password')
     def validate_user(self, key: str, value: str) -> Optional[str]:
@@ -45,7 +45,6 @@ class User(db.Model, UserMixin):
     @property
     def is_moderator(self) -> bool:
         return self.role == RoleEnum.ADMIN.value or self.role == RoleEnum.MODERATOR.value
-        # return self.role == 'mod' or self.role == 'adm'
 
     @property
     def profile_url(self) -> str:
