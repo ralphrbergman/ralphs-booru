@@ -14,6 +14,12 @@
             <li><a class="navbar-anchor" href="{{ url_for('Account.login_page') }}">Login</a></li>
             <li><a class="navbar-anchor" href="{{ url_for('Account.signup_page') }}">Sign-Up</a></li>
         {% else %}
+            {% if current_user.is_moderator %}
+                <div id="special-anchors">
+                    <a class="navbar-anchor" href="{{ url_for('Manage User.user_list_page') }}">Users</a>
+                </div>
+            {% endif %}
+
             <li><a class="navbar-anchor" href="{{ url_for('Post.upload_page') }}">Upload</a></li>    
             <li><a class="navbar-anchor" href="{{ url_for('Account.profile_page', user_id = current_user.id) }}">My Profile</a></li>
             <li><a class="navbar-anchor" href="{{ url_for('Account.logout_page') }}">Logout</a></li>

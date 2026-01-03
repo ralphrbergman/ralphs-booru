@@ -1,5 +1,5 @@
 from flask_wtf.file import FileAllowed
-from wtforms import BooleanField, EmailField, FileField, SubmitField, StringField, TextAreaField
+from wtforms import BooleanField, EmailField, FileField, PasswordField, RadioField, SubmitField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Length
 
 from .fields import StrongPasswordField, WeakPasswordField
@@ -22,11 +22,23 @@ class PostMixin:
     caption = TextAreaField('caption')
     tags = TextAreaField('tags')
 
+class RoleMixin:
+    role = RadioField('role', choices = [
+        ('ter', 'Terminated:'),
+        ('reg', 'None:'),
+        ('mod', 'Moderator:'),
+        ('adm', 'Administrator:')
+    ],
+    default = 'reg')
+
 class SubmitMixin:
     submit = SubmitField('submit')
 
 class StrongPasswordMixin:
     pw = StrongPasswordField('pw')
+
+class OptionalPasswordMixin:
+    pw = PasswordField('pw')
 
 class UsernameMixin:
     username = StringField('username', validators = [

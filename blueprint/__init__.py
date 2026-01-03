@@ -5,6 +5,7 @@ from .comment import comment_bp
 from .error import err_bp
 from .help import help_bp
 from .index import index_bp
+from .manage_user import manage_user_bp
 from .post import post_bp
 from .tag import tag_bp
 from .thumbnail import thumbnail_bp

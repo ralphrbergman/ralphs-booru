@@ -79,6 +79,10 @@ a {
     user-select: none;
 }
 
+#special-anchors {
+    background-color: var(--contrast-color);
+}
+
 .table-container {
     height: 100%;
 }

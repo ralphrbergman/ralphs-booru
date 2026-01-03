@@ -4,11 +4,14 @@ from wtforms import BooleanField, FileField, MultipleFileField, PasswordField, S
 from wtforms.validators import DataRequired, EqualTo
 
 from .fields import StrongPasswordField
-from .mixins import AvatarMixin, DeletedMixin, EmailMixin, PostMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
+from .mixins import AvatarMixin, DeletedMixin, EmailMixin, OptionalPasswordMixin, PostMixin, RoleMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
 from .validators import validate_extension
 
 class LoginForm(FlaskForm, UsernameMixin, WeakPasswordMixin):
     remember = BooleanField('remember')
+
+class ManageUserForm(FlaskForm, EmailMixin, OptionalPasswordMixin, RoleMixin, SubmitMixin, UsernameMixin):
+    pass
 
 class PostForm(FlaskForm, DeletedMixin, PostMixin, SubmitMixin):
     new_file = FileField('new_file')

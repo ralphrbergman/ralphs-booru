@@ -1,10 +1,35 @@
-from typing import Optional
+from typing import Literal, Optional
 
+from flask_sqlalchemy.pagination import SelectPagination
 from sqlalchemy import or_, select
 from sqlalchemy.exc import IntegrityError
 
 from db import db, User
 from encryption import bcrypt
+
+DEFAULT_LIMIT = 20
+DEFAULT_SORT = 'desc'
+LIMIT_THRESHOLD = 100
+
+def browse_user(
+    limit: Optional[int] = DEFAULT_LIMIT,
+    page: Optional[int] = 1,
+    sort_str: Optional[Literal['asc', 'desc']] = DEFAULT_SORT
+):
+    if limit and limit > LIMIT_THRESHOLD:
+        limit = LIMIT_THRESHOLD
+
+    stmt = select(User).order_by(
+        getattr(User.id, sort_str)()
+    )
+
+    users = db.paginate(
+        stmt,
+        page = page,
+        per_page = limit
+    )
+
+    return users
 
 def create_user(name: str, mail: str, password: str, avatar: Optional[str] = None) -> Optional[User]:
     """
