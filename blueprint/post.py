@@ -46,7 +46,7 @@ def browse_paged(page: int):
             )
         )
 
-    posts = browse_post(limit, page, terms, sort_str)
+    posts = browse_post(limit = limit, page = page, terms = terms, sort_str = sort_str)
 
     bar = create_pagination_bar(
         page,

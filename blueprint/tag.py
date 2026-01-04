@@ -1,10 +1,9 @@
 from flask import Blueprint, request, abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
-from sqlalchemy import select
 
-from api import delete_tag, get_tag
+from api import browse_tag, delete_tag, get_tag
 from api.decorators import post_protect
-from db import db, Tag
+from db import db
 from form import TagForm
 from .utils import create_pagination_bar
 
@@ -50,11 +49,7 @@ def tag_page():
 
 @tag_bp.route('<int:page>')
 def tag_paged(page: int):
-    tags = db.paginate(
-        select(Tag),
-        page = page,
-        per_page = 25
-    )
+    tags = browse_tag(page = page)
 
     bar = create_pagination_bar(
         tags.page,

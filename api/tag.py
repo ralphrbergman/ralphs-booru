@@ -1,9 +1,14 @@
 from typing import Optional
 
+from flask_sqlalchemy.pagination import SelectPagination
 from sqlalchemy import or_, select
 from sqlalchemy.exc import IntegrityError
 
+from api import browse_element
 from db import db, Post, Tag
+
+def browse_tag(*args, **kwargs) -> SelectPagination:
+    return browse_element(Tag, *args, **kwargs)
 
 def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
     """
