@@ -1,5 +1,16 @@
 {% extends 'layout.html' %}
 
+{% block meta %}
+    {% if post.cat == 'image' %}
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="{{ request.url_root }}{{ post.thumbnail.view_uri }}">
+    {% elif post.cat == 'video' %}
+        <meta name="twitter:card" content="player">
+        <meta name="twitter:player:stream", content="{{ post.view_uri }}">
+        <meta name="twitter:player:stream:content_type" content="{{ post.mime }}">
+    {% endif %}
+{% endblock %}
+
 {% set title = 'View ' ~ post.id %}
 
 {% block style %}
