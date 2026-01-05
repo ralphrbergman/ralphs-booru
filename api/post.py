@@ -16,7 +16,7 @@ from .base import browse_element
 from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
 
-ATTR_PATTERN = r'[a-zA-Z0-9]+:\S*'  # attr:value
+ATTR_PATTERN = r'[a-zA-Z0-9_]+:\S*'  # attr:value
 CAPTION_PATTERN = r'"([^"]*)"'  # "hello world"
 TAG_PATTERN = r'[a-zA-Z0-9-_]+'  # tag1 tag2 tag3
 
