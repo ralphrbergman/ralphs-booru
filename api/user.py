@@ -55,22 +55,27 @@ def check_password(password: bytes, other_password: str) -> bool:
 
 def get_user(user_id: int) -> Optional[User]:
     """
-    Returns user from given user ID which can also be the user's username.
+    Returns user from given user ID.
 
     Args:
-        user_id: User's unique ID or username
+        user_id: User's unique ID
 
     Returns:
         User: Found user, if any
     """
-    return db.session.scalar(
-        select(User).where(
-            or_(
-                User.id.is_(user_id),
-                User.name.is_(user_id)
-            )
-        )
-    )
+    return db.session.scalar(select(User).where(User.id.is_(user_id)))
+
+def get_user_by_username(username: str) -> Optional[User]:
+    """
+    Returns user from given username.
+
+    Args:
+        username: Username
+
+    Returns:
+        User: Found user, if any
+    """
+    return db.session.scalar(select(User).where(User.name.is_(username)))
 
 def set_password(password: str) -> bytes:
     """
