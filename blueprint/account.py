@@ -7,7 +7,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
-from api import create_user, check_password, get_user, set_password
+from api import create_user, check_password, get_user, get_user_by_username, set_password
 from api.decorators import anonymous_only, user_protect
 from db import db
 from form import LoginForm, PasswordForm, SignupForm, UserForm
@@ -104,7 +104,7 @@ def login_page():
         return render_template('login.html', form = form)
     else:
         next_page = request.args.get('next')
-        user = get_user(form.username.data)
+        user = get_user_by_username(form.username.data)
 
         if not user:
             flash('Incorrect username')
