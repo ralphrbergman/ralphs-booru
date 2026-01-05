@@ -7,32 +7,30 @@
 {% endblock %}
 
 {% block body %}
-    <div class="profile-container">
-        <div class="basic-details">
-            <img class="profile-picture" src="{{ user.avatar }}" alt="{{ user.name }}'s profile picture">
-
-            <div>
-                <p class="username">{{ user.username }}</p>
-                {% if user.role is not none %}
-                    <p class="role">{{ user.role_name }}</p>
-                {% endif %}
-
-                {% if current_user == user %}
-                    <a class="edit-btn" href="{{ url_for('Account.edit_profile_page') }}">(Edit)</a>
-                {% endif %}
-            </div>
-        </div>
+    <div class="basic-details">
+        <img class="profile-picture" src="{{ user.avatar }}" alt="{{ user.name }}'s profile picture">
 
         <div>
-            <p>Posts: {{ user.posts | length }} <a href="{{ url_for('Post.browse_paged', page = 1, terms = 'author_id:' + user.id | string) }}">(View all)</a></p>
-            <p>Join Date: {{ user.created }}</p>
-        </div>
+            <p class="username">{{ user.username }}</p>
+            {% if user.role is not none %}
+                <p class="role">{{ user.role_name }}</p>
+            {% endif %}
 
-        <div>
-            <p>{{ user.name }}'s latest posts:</p>
-
-            {% set container_name = 'post-prof-container' %}
-            {% include 'frag/posts.html' %}
+            {% if current_user == user %}
+                <a class="edit-btn" href="{{ url_for('Account.edit_profile_page') }}">(Edit)</a>
+            {% endif %}
         </div>
+    </div>
+
+    <div>
+        <p>Posts: {{ user.posts | length }} <a href="{{ url_for('Post.browse_paged', page = 1, terms = 'author_id:' + user.id | string) }}">(View all)</a></p>
+        <p>Join Date: {{ user.created }}</p>
+    </div>
+
+    <div>
+        <p>{{ user.name }}'s latest posts:</p>
+
+        {% set container_name = 'post-prof-container' %}
+        {% include 'frag/posts.html' %}
     </div>
 {% endblock %}

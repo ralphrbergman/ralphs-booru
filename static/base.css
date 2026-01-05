@@ -3,13 +3,19 @@
 * {
     font-family: var(--font);
     font-size: var(--font-size);
+
     margin: 0;
     padding: 0;
+
     text-decoration: none;
 }
 
 a {
     color: var(--link-color);
+}
+
+body {
+    background-color: #f0f0f0;
 }
 
 .bg {
@@ -31,11 +37,16 @@ a {
 }
 
 .content-wrapper {
+    background-color: white;
     display: flex;
     flex-direction: column;
     gap: var(--gap);
-    padding-bottom: var(--gap);
-    padding-top: var(--gap);
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: var(--gap);
+    width: 80%;
 }
 
 .input-group {
@@ -73,7 +84,6 @@ a {
     display: flex;
     flex-direction: column;
     gap: var(--small-gap);;
-    margin: var(--small-gap);;
 }
 
 .notable {

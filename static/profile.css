@@ -10,23 +10,6 @@
     user-select: none;
 }
 
-.profile-container {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-    justify-content: center;
-    padding-left: var(--gap);
-    padding-right: var(--gap);
-}
-
-@media (max-width: 768px) {
-    .profile-container {
-        padding-left: none;
-        padding-right: none;
-    }
-}
-
 .profile-picture {
     max-width: 15rem;
 }

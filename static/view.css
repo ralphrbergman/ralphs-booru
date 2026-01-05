@@ -31,10 +31,6 @@
     margin: var(--medium-gap);
 }
 
-#comment-section {
-    margin: var(--medium-gap);
-}
-
 .post-details {
     display: flex;
     flex-direction: column;
