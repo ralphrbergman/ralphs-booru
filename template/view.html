@@ -1,10 +1,19 @@
 {% extends 'layout.html' %}
 
 {% block meta %}
+    <meta name="og:type" content="article">
+    <meta name="og:url" content="{{ request.url }}">
+    <meta name="og:image" content="{{ request.url_root }}{{ post.thumbnail.view_uri }}">
+
     {% if post.cat == 'image' %}
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:image" content="{{ request.url_root }}{{ post.thumbnail.view_uri }}">
     {% elif post.cat == 'video' %}
+        <meta name="og:video" content="{{ post.view_uri }}">
+        <meta name="og:video:height" content="{{ post.height }}">
+        <meta name="og:video:width" content="{{ post.width }}">
+        <meta name="og:video:type" content="{{ post.mime }}">
+
         <meta name="twitter:card" content="player">
         <meta name="twitter:player:stream", content="{{ post.view_uri }}">
         <meta name="twitter:player:stream:content_type" content="{{ post.mime }}">
