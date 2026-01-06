@@ -3,6 +3,7 @@
 {% block meta %}
     <meta name="og:type" content="article">
     <meta name="og:url" content="{{ request.url }}">
+    <meta name="og:image" content="{{ request.url_root }}{{ post.thumbnail.view_uri }}">
 
     {% if post.cat == 'image' %}
         <meta name="og:image" content="{{ request.url_root }}{{ post.thumbnail.view_uri }}">
