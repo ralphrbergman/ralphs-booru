@@ -22,7 +22,7 @@ NSFW_TAG=nsfw
 SENSITIVE_DIRS=<directory-names-separated-by-comma>
 # Path to temporary files, preferred it's in project's root.
 # This directory stores thumbnails before they get moved.
-TEMP=<path/to/temp>
+TEMP_PATH=<path/to/temp>
 # Secret key for authentication salting.
 SECRET_KEY=abc
 ```
