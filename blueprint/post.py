@@ -1,19 +1,13 @@
-from os import getenv
-from pathlib import Path
-from shutil import copy
-
 from flask import Blueprint, request, abort, flash, redirect, render_template, send_file, url_for
 from flask_login import current_user, login_required
 
-from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, browse_post, create_post, create_tag, delete_post, get_post, get_tag, replace_post
+from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, add_tags, browse_post, create_post, delete_post, get_post, move_post, replace_post, save_file
 from api.decorators import post_protect
 from db import db
 from form import PostForm, UploadForm
-from .utils import create_pagination_bar
+from .utils import create_pagination_bar, flash_errors
 
-CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 DEFAULT_BLUR = 'true'
-TEMP = Path(getenv('TEMP'))
 
 post_bp = Blueprint(
     name = 'Post',
@@ -76,66 +70,39 @@ def edit_page(post_id: int):
     if not post:
         return abort(404)
 
-    if request.method == 'GET':
-        return render_template('edit.html', form = form, post = post)
-    else:
-        if form.validate_on_submit():
-            if current_user.is_authenticated and current_user.is_moderator:
+    if form.validate_on_submit():
+        if current_user.is_authenticated:
+            if (current_user == post.author or current_user.is_moderator) and form.deleted.data:
+                delete_post(post)
+
+                flash(f'Permanently deleted post #{post.id}')
+                return redirect(url_for('Post.browse_page'))
+
+            if current_user.is_moderator:
                 file = form.new_file.data
 
-                if form.deleted.data:
-                    delete_post(post)
-
-                    flash(f'Permanently deleted post #{post.id}')
-                    return redirect(url_for('Post.browse_page'))
-
                 if file:
-                    temp_path = TEMP / file.filename
-                    file.save(temp_path)
-
-                    post = replace_post(post, temp_path)
+                    post = replace_post(post, file)
 
                     if post:
                         flash(f'Successfully exchanged post #{post.id} for a new file!')
+                    else:
+                        flash(f'Failed to exchange post #{post.id}.')
 
-            directory = form.directory.data
-            original_path = post.path
+            post.op = form.op.data.strip()
+            post.src = form.src.data.strip()
+            post.caption = form.caption.data.strip()
 
-            post.directory = directory
-            post.op = form.op.data
-            post.src = form.src.data
-            post.caption = form.caption.data
-
-            new_tags = list()
-
-            for tag_name in form.tags.data.split(' '):
-                if len(tag_name) == 0:
-                    break
-
-                tag = get_tag(tag_name)
-
-                if not tag:
-                    tag = create_tag(tag_name)
-
-                new_tags.append(tag)
-
-            post.tags = new_tags
-
-            # Move file to new directory.
-            new_dir = CONTENT_PATH / Path(directory)
-            new_dir.mkdir(exist_ok = True, parents = True)
-            new_path = new_dir / post.name
-
-            if new_path != original_path:
-                copy(original_path, new_path)
-                original_path.unlink(missing_ok = True)
+            post.tags = add_tags(form.tags.data.split(' '))
+            move_post(post, form.directory.data.strip())
 
             db.session.commit()
 
             return redirect(url_for('Post.view_page', post_id = post_id))
 
-        # So far there isn't anything that will invalidate the form.
-        # So I guess there's no point in displaying errors?
+    flash_errors(form)
+
+    return render_template('edit.html', form = form, post = post)
 
 @post_bp.route('/view/<int:post_id>')
 def view_page(post_id: int):
@@ -161,33 +128,27 @@ def view_file_resource(post_id: int):
 def upload_page():
     form = UploadForm()
 
-    if request.method == 'GET':
-        return render_template('upload.html', form = form)
-    else:
-        if form.validate_on_submit():
-            for file in form.files.data:
-                temp_path = TEMP / file.filename
-                file.save(temp_path)
+    if form.validate_on_submit():
+        for file in form.files.data:
+            temp_path = save_file(file)
 
-                post = create_post(
-                    author = current_user,
-                    path = temp_path,
-                    op = form.op.data,
-                    src = form.src.data,
-                    directory = form.directory.data,
-                    caption = form.caption.data,
-                    tags = form.tags.data
-                )
+            post = create_post(
+                author = current_user,
+                path = temp_path,
+                op = form.op.data.strip(),
+                src = form.src.data.strip(),
+                directory = form.directory.data.strip(),
+                caption = form.caption.data.strip(),
+                tags = form.tags.data
+            )
 
-                if post is not None:
-                    flash(f'Successfully uploaded post #{post.id}')
-                else:
-                    flash(f'Uploading file {file.filename} failed')
+            if post is not None:
+                flash(f'Successfully uploaded post #{post.id}')
+            else:
+                flash(f'Uploading file {file.filename} failed')
 
-            return redirect(url_for('Post.browse_page'))
-        else:
-            for field in form.errors.values():
-                for error in field:
-                    flash(error)
+        return redirect(url_for('Post.browse_page'))
 
-        return redirect(url_for('Post.upload_page'))
+    flash_errors(form)
+
+    return render_template('upload.html', form = form)

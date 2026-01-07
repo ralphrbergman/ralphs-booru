@@ -11,7 +11,7 @@ from api.decorators import moderator_only, post_protect
 from db import Tag, db
 from db.schemas import FileIn, PostIn, PostsIn, PostOut, PostsOut
 
-TEMP = Path(getenv('TEMP'))
+TEMP = Path(getenv('TEMP_PATH'))
 
 post_bp = APIBlueprint(
     name = 'Post API',

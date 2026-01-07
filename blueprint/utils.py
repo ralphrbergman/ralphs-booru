@@ -1,7 +1,8 @@
 from math import floor
 from typing import Optional
 
-from flask import url_for
+from flask import flash, url_for
+from flask_wtf import FlaskForm
 
 PAGINATION_DEPTH = 5
 
@@ -40,3 +41,8 @@ def create_pagination_bar(current_page: int, total_pages: int, endpoint: str, US
             add_item(total_pages, '>>')
 
     return bar
+
+def flash_errors(form: FlaskForm) -> None:
+    for field in form.errors.values():
+        for error in field:
+            flash(error)

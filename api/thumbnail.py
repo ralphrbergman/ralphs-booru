@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 
 from db import db, Post, Thumbnail
 
-TEMP = Path(getenv('TEMP'))
+TEMP = Path(getenv('TEMP_PATH'))
 
 # Define how large thumbnails should be in pixels.
 TARGET = 250

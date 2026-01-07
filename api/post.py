@@ -1,4 +1,5 @@
 from hashlib import md5 as _md5
+from os import getenv
 from pathlib import Path
 from re import findall, sub, search
 from shutil import copy
@@ -10,18 +11,22 @@ from magic import from_file
 from sqlalchemy import Select, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import UnmappedInstanceError
+from werkzeug.datastructures import FileStorage
 
 from db import Post, Tag, User, db
 from .base import browse_element
 from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
 
+NONALPHA = r'[^a-zA-Z0-9.]'
 ATTR_PATTERN = r'[a-zA-Z0-9_]+:\S*'  # attr:value
 CAPTION_PATTERN = r'"([^"]*)"'  # "hello world"
 TAG_PATTERN = r'[a-zA-Z0-9-_]+'  # tag1 tag2 tag3
 
+CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 # What default term(s) shall be used when none are provided?
 DEFAULT_TERMS = '-nsfw'
+TEMP = Path(getenv('TEMP_PATH'))
 
 def browse_post(
     *args,
@@ -254,7 +259,37 @@ def get_size(path: Path) -> int:
 
         return stream.tell()
 
-def replace_post(post: Post, path: Path) -> Post:
+def move_post(post: Post, directory: str) -> None:
+    """
+    Moves post file to new directory.
+
+    Args:
+        post: Post to move
+        directory: Directory name
+    """
+    original_path = post.path
+
+    new_dir = CONTENT_PATH / Path(directory)
+    new_dir.mkdir(exist_ok = True, parents = True)
+    new_path = new_dir / post.name
+
+    if new_path != original_path:
+        copy(original_path, new_path)
+        original_path.unlink(missing_ok = True)
+
+    post.directory = directory
+    db.session.commit()
+
+def process_filename(filename: str) -> str:
+    """
+    Strips non-alphanumeric characters from filename.
+
+    Args:
+        filename: Filename
+    """
+    return sub(NONALPHA, '', filename)
+
+def replace_post(post: Post, file: FileStorage) -> Post:
     """
     Replaces given Post with new file.
 
@@ -265,6 +300,9 @@ def replace_post(post: Post, path: Path) -> Post:
     Returns:
         Post
     """
+    path = TEMP / process_filename(file.filename)
+    file.save(path)
+
     original_id = post.id
     original_created = post.created
     original_modified = post.modified
@@ -295,3 +333,20 @@ def replace_post(post: Post, path: Path) -> Post:
         db.session.commit()
 
     return post
+
+def save_file(file: FileStorage) -> Path:
+    """
+    Saves given file with filename processing before upload.
+
+    Args:
+        file: File to save
+
+    Returns:
+        Path: Saved file path
+    """
+    filename = process_filename(file.filename)
+
+    temp_path = TEMP / filename
+    file.save(temp_path)
+
+    return temp_path
