@@ -1,6 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block meta %}
+    {% if post.caption %}
+        <meta name="og:description" content="{{ post.caption }}">
+    {% endif %}
+
     <meta name="og:type" content="article">
     <meta name="og:url" content="{{ request.url }}">
     <meta name="og:image" content="{{ request.url_root }}{{ post.thumbnail.view_uri }}">
