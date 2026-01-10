@@ -24,8 +24,9 @@ CAPTION_PATTERN = r'"([^"]*)"'  # "hello world"
 TAG_PATTERN = r'[a-zA-Z0-9-_]+'  # tag1 tag2 tag3
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
+NSFW_TAG = getenv('NSFW_TAG')
 # What default term(s) shall be used when none are provided?
-DEFAULT_TERMS = '-nsfw'
+DEFAULT_TERMS = f'-{NSFW_TAG}'
 TEMP = Path(getenv('TEMP_PATH'))
 
 def browse_post(
@@ -58,11 +59,11 @@ def browse_post(
             pass
 
         # Capture attribute selectors.
-        attrs = findall(ATTR_PATTERN, terms)
+        attrs: list[str] = findall(ATTR_PATTERN, terms)
         terms = sub(ATTR_PATTERN, '', terms)
 
         # Get tags.
-        tags = findall(TAG_PATTERN, terms)
+        tags: list[str] = findall(TAG_PATTERN, terms)
 
         # Look for words in posts in unordered sequence.
         try:
@@ -85,6 +86,10 @@ def browse_post(
                 where = col == value
 
             stmt = stmt.where(where)
+
+        # Apply non-NSFW tag if it's not explicitly specified by user.
+        if f'-{NSFW_TAG}' not in tags and NSFW_TAG not in tags:
+            tags.append(f'-{NSFW_TAG}')
 
         # Apply tag selection.
         for tag in tags:
