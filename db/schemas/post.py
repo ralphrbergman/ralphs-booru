@@ -44,6 +44,7 @@ class PostOut(PostIn):
     md5 = String(required = True)
     ext = String(required = True)
 
+    cat = String(required = True)
     mime = String(required = True)
     size = Integer(required = True)
 
