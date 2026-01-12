@@ -85,7 +85,7 @@ def edit_page(post_id: int):
                     post = replace_post(post, file)
 
                     if post:
-                        flash(f'Successfully exchanged post #{post} for a new file!')
+                        flash(f'Successfully exchanged post #{post.id} for a new file!')
                     else:
                         flash('Failed to exchange post.')
                         return redirect(url_for('Post.edit_page', post_id = post_id))
