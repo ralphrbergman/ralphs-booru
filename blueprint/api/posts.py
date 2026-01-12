@@ -18,7 +18,12 @@ def posts_route(data: BrowseIn):
     sort_str = data['sort']
     terms = data['terms']
 
-    posts = browse_post(limit, page, terms, sort_str)
+    posts = browse_post(
+        limit = limit,
+        page = page,
+        terms = terms,
+        sort_str = sort_str
+    )
 
     return {
         'pages': posts.pages,

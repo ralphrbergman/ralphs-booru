@@ -8,7 +8,7 @@ class BrowseIn(Schema):
     page = Integer()
     limit = Integer()
     sort = String(validate = OneOf(('asc', 'desc')))
-    terms = String(load_default = None)
+    terms = String(load_default = '-nsfw')
 
 class BrowseOut(PostsOut):
     pages = Integer()
