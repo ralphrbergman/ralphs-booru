@@ -76,7 +76,11 @@ def browse_post(
         # Apply attribute selectors.
         for attr in attrs:
             name, value = attr.split(':', 1)
-            col = getattr(Post, name)
+            try:
+                col = getattr(Post, name)
+            # Skip attribute selector that doesn't exist.
+            except AttributeError as exc:
+                continue
 
             if not len(value):
                 # Look for posts that don't have the column set.
@@ -300,8 +304,11 @@ def replace_post(post: Post, file: FileStorage) -> Post:
     Returns:
         Post
     """
-    path = TEMP / process_filename(file.filename)
-    file.save(path)
+    path = save_file(file)
+
+    # We don't want to replace the same post with itself.
+    if post.md5 == get_hash(path):
+        return
 
     original_id = post.id
     original_created = post.created

@@ -29,39 +29,31 @@ def avatar_page(filename: str):
 def edit_profile_page():
     form = UserForm()
 
-    try:
-        user = get_user(current_user.id)
-    except AttributeError as exc:
-        return abort(404)
+    if form.validate_on_submit():
+        if check_password(current_user.password, form.pw.data):
+            avatar: Optional[FileStorage] = form.avatar.data
 
-    if request.method == 'GET':
-        return render_template('edit_profile.html', form = form, user = user)
-    else:
-        if form.validate_on_submit():
-            if check_password(user.password, form.pw.data):
-                avatar: Optional[FileStorage] = form.avatar.data
+            # Save & update current_user's avatar.
+            if avatar:
+                filename = secure_filename(avatar.filename)
+                avatar.save(AVATAR_PATH / filename)
 
-                # Save & update user's avatar.
-                if avatar:
-                    filename = secure_filename(avatar.filename)
-                    avatar.save(AVATAR_PATH / filename)
+                current_user.avatar_name = filename
 
-                    user.avatar_name = filename
+            current_user.mail = form.email.data
+            db.session.commit()
 
-                user.mail = form.email.data
-                db.session.commit()
-
-                flash('Updated profile successfully')
-            else:
-                flash('Invalid password provided')
-
-            return redirect(url_for('Account.profile_page', user_id = user.id))
+            flash('Updated profile successfully')
         else:
-            for field in form.errors.values():
-                for error in field:
-                    flash(error)
+            flash('Invalid password provided')
 
-            return redirect(url_for('Account.edit_profile_page'))
+        return redirect(url_for('Account.profile_page', user_id = current_user.id))
+
+    for field in form.errors.values():
+        for error in field:
+            flash(error)
+
+    return render_template('edit_profile.html', form = form, user = current_user)
 
 @account_bp.route('/edit_password', methods = ['GET', 'POST'])
 @login_required
@@ -69,30 +61,22 @@ def edit_profile_page():
 def edit_password_page():
     form = PasswordForm()
 
-    try:
-        user = get_user(current_user.id)
-    except AttributeError as exc:
-        return abort(404)
+    if form.validate_on_submit():
+        if check_password(current_user.password, form.pw.data):
+            current_user.password = set_password(form.new_pw.data)
+            db.session.commit()
 
-    if request.method == 'GET':
-        return render_template('edit_password.html', form = form)
-    else:
-        if form.validate_on_submit():
-            if check_password(user.password, form.pw.data):
-                user.password = set_password(form.new_pw.data)
-                db.session.commit()
-
-                flash('Successfully changed password')
-                return redirect(url_for('Account.edit_profile_page'))
-            else:
-                flash('Invalid password provided')
-                return redirect(url_for('Account.profile_page', user_id = user.id))
+            flash('Successfully changed password')
+            return redirect(url_for('Account.edit_profile_page'))
         else:
-            for field in form.errors.values():
-                for error in field:
-                    flash(error)
+            flash('Invalid password provided')
+            return redirect(url_for('Account.profile_page', user_id = current_user.id))
 
-            return redirect(url_for('Account.edit_password_page'))
+    for field in form.errors.values():
+        for error in field:
+            flash(error)
+
+    return render_template('edit_password.html', form = form)
 
 @account_bp.route('/login', methods = ['GET', 'POST'])
 @anonymous_only
@@ -100,30 +84,27 @@ def edit_password_page():
 def login_page():
     form = LoginForm()
 
-    if request.method == 'GET':
-        return render_template('login.html', form = form)
-    else:
+    if form.validate_on_submit():
         next_page = request.args.get('next')
-        user = get_user_by_username(form.username.data)
+        current_user = get_user_by_username(form.username.data)
 
-        if not user:
+        if not current_user:
             flash('Incorrect username')
             return redirect(url_for('Account.login_page', next = next_page))
 
-        if form.validate_on_submit():
-            if check_password(user.password, form.pw.data):
-                login_user(user, remember = form.remember.data)
+        if check_password(current_user.password, form.pw.data):
+            login_user(current_user, remember = form.remember.data)
 
-                flash(f'Welcome back, {user.name}')
-                return redirect(next_page or url_for('Account.profile_page', user_id = user.id))
-            else:
-                flash('Incorrect password')
+            flash(f'Welcome back, {current_user.name}')
+            return redirect(next_page or url_for('Account.profile_page', user_id = current_user.id))
         else:
-            for field in form.errors.values():
-                for error in field:
-                    flash(error)
+            flash('Incorrect password')
 
-        return redirect(url_for('Account.login_page', next = next_page))
+    for field in form.errors.values():
+        for error in field:
+            flash(error)
+
+    return render_template('login.html', form = form)
 
 @account_bp.route('/logout')
 @login_required
@@ -140,7 +121,7 @@ def profile_page(user_id: int):
     if not user:
         return abort(404)
 
-    # Return 10 posts the user has recently uploaded.
+    # Return 10 posts the current_user has recently uploaded.
     posts = list(reversed(user.posts))[:10]
 
     return render_template(
@@ -156,34 +137,33 @@ def profile_page(user_id: int):
 def signup_page():
     form = SignupForm()
 
-    if request.method == 'GET':
-        return render_template('signup.html', form = form)
-    else:
-        if form.validate_on_submit():
-            avatar: Optional[FileStorage] = form.avatar.data
-            avatar_filename = None
+    if form.validate_on_submit():
+        avatar: Optional[FileStorage] = form.avatar.data
+        avatar_filename = None
 
-            if avatar:
-                avatar_filename = secure_filename(avatar.filename)
-                avatar.save(AVATAR_PATH / avatar_filename)
+        if avatar:
+            avatar_filename = secure_filename(avatar.filename)
+            avatar.save(AVATAR_PATH / avatar_filename)
 
-            user = create_user(
-                name = form.username.data,
-                mail = form.email.data,
-                password = form.pw.data,
-                avatar = avatar_filename
-            )
+        current_user = create_user(
+            name = form.username.data,
+            mail = form.email.data,
+            password = form.pw.data,
+            avatar = avatar_filename
+        )
 
-            if not user:
-                return redirect(url_for('Account.signup_page'))
-
-            login_user(user, remember = True)
-
-            flash(f'Welcome, {user.name}')
-            return redirect(url_for('Account.profile_page', user_id = user.id))
-        else:
-            for field in form.errors.values():
-                for error in field:
-                    flash(error)
+        if not current_user:
+            flash('Failed to create your profile.')
 
             return redirect(url_for('Account.signup_page'))
+
+        login_user(current_user, remember = True)
+
+        flash(f'Welcome, {current_user.name}')
+        return redirect(url_for('Account.profile_page', user_id = current_user.id))
+
+    for field in form.errors.values():
+        for error in field:
+            flash(error)
+
+    return render_template('signup.html', form = form)

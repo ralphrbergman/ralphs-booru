@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
 from wtforms import BooleanField, FileField, MultipleFileField, PasswordField, StringField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired, EqualTo, ValidationError
 
+from api import get_user_by_username
 from .fields import StrongPasswordField
 from .mixins import AvatarMixin, DeletedMixin, EmailMixin, OptionalPasswordMixin, PostMixin, RoleMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin, WeakPasswordMixin
 from .validators import validate_extension
@@ -28,6 +29,12 @@ class SignupForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, StrongPassword
         DataRequired(message = 'You need to confirm your password'),
         EqualTo('pw', message = 'Mismatch between password and confirmation password')
     ])
+
+    def validate_username(self, username: str) -> None:
+        user = get_user_by_username(username.data)
+
+        if user:
+            raise ValidationError('Username is already taken.')
 
 class TagForm(FlaskForm, DeletedMixin, SubmitMixin):
     name = StringField('name', validators = [DataRequired()])

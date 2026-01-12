@@ -72,22 +72,23 @@ def edit_page(post_id: int):
 
     if form.validate_on_submit():
         if current_user.is_authenticated:
-            if (current_user == post.author or current_user.is_moderator) and form.deleted.data:
-                delete_post(post)
+            if (current_user == post.author or current_user.is_moderator):
+                if form.deleted.data:
+                    delete_post(post)
 
-                flash(f'Permanently deleted post #{post.id}')
-                return redirect(url_for('Post.browse_page'))
+                    flash(f'Permanently deleted post #{post.id}')
+                    return redirect(url_for('Post.browse_page'))
 
-            if current_user.is_moderator:
                 file = form.new_file.data
 
                 if file:
                     post = replace_post(post, file)
 
                     if post:
-                        flash(f'Successfully exchanged post #{post.id} for a new file!')
+                        flash(f'Successfully exchanged post #{post} for a new file!')
                     else:
-                        flash(f'Failed to exchange post #{post.id}.')
+                        flash('Failed to exchange post.')
+                        return redirect(url_for('Post.edit_page', post_id = post_id))
 
             post.op = form.op.data.strip()
             post.src = form.src.data.strip()
