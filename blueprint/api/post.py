@@ -7,7 +7,7 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
 from api import create_post, create_tag, delete_post, get_post, get_tag
-from api.decorators import moderator_only, post_protect
+from api.decorators import appropriate_user_only, post_protect
 from db import Tag, db
 from db.schemas import FileIn, PostIn, PostsIn, PostOut, PostsOut
 
@@ -23,7 +23,7 @@ post_bp = APIBlueprint(
 @post_bp.input(PostIn, arg_name = 'data')
 @post_bp.output(PostOut)
 @login_required
-@moderator_only
+@appropriate_user_only
 @post_protect
 def post_del_route(data: PostIn):
     post = get_post(data['post_id'])
@@ -64,6 +64,7 @@ def post_upload_route(data: FileIn):
 @post_bp.input(PostsIn, arg_name = 'data')
 @post_bp.output(PostsOut)
 @login_required
+@appropriate_user_only
 @post_protect
 def post_modify_route(data: PostsIn):
     attrs = {
