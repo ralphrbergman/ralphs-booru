@@ -109,13 +109,18 @@ def browse_post(
             tags.append(f'-{NSFW_TAG}')
 
         # Apply tag selection.
-        for tag in tags:
-            if tag[0] != '-':
-                where = Post.tags.any(Tag.name == tag)
-            else:
-                where = ~Post.tags.any(Tag.name == tag[1:])
 
-            stmt = stmt.where(where)
+        # Handle where a user wants to search for posts with no tags.
+        if 'no_tags' in tags:
+            stmt = stmt.where(~Post.tags.any())
+        else:
+            for tag in tags:
+                if tag[0] != '-':
+                    where = Post.tags.any(Tag.name == tag)
+                else:
+                    where = ~Post.tags.any(Tag.name == tag[1:])
+
+                stmt = stmt.where(where)
 
         return stmt
 
