@@ -1,4 +1,6 @@
 from .comment import CommentIn, CommentOut
-from .post import FileIn, PostIn, PostsIn, PostsOut, PostOut
-from .posts import BrowseIn, BrowseOut, CountOut
+from .file import FileIn
+from .post import PostIn, PostOut
+from .posts import BrowseIn, BrowseOut, CountOut, PostsIn, PostsOut
+from .tag import TagOut
 from .thumbnail import ThumbnailOut
