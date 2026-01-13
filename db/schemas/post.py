@@ -34,6 +34,7 @@ class PostOut(PostIn):
     created_at = DateTime(attribute = 'created', required = True)
     modified_at = DateTime(attribute = 'modified')
 
+    id = Integer(required = True)
     author = Integer(attribute = 'author_id', required = True)
 
     op = String()
