@@ -2,6 +2,8 @@ from apiflask import Schema
 from apiflask.fields import DateTime, File, Integer, List, Nested, String
 from apiflask.validators import FileType, Length
 
+from .thumbnail import ThumbnailOut
+
 class FileIn(Schema):
     files = List(File(required = True, validate = [
         FileType([ '.gif', '.jpg', '.jpeg', '.mp3', '.mp4', '.png', '.webm', '.webp' ]) 
@@ -53,6 +55,8 @@ class PostOut(PostIn):
 
     dimensions = String()
     name = String()
+    thumbnail = Nested(ThumbnailOut)
+    url = String(attribute = 'uri', required = True)
     view_url = String(attribute = 'view_uri', required = True)
 
 class PostsOut(Schema):
