@@ -19,7 +19,7 @@ from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
 
 NONALPHA = r'[^a-zA-Z0-9.]'
-ATTR_PATTERN = r'[a-zA-Z0-9_]+:\S*'  # attr:value
+ATTR_PATTERN = r'\b\w+:[<>]?\S*'  # attr:value, attr: , attr:<value, attr:>value
 CAPTION_PATTERN = r'"([^"]*)"'  # "hello world"
 TAG_PATTERN = r'[a-zA-Z0-9-_]+'  # tag1 tag2 tag3
 
@@ -76,7 +76,15 @@ def browse_post(
 
         # Apply attribute selectors.
         for attr in attrs:
-            name, value = attr.split(':', 1)
+            sign = ''
+
+            if '<' in attr:
+                sign = '<'
+            elif '>' in attr:
+                sign = '>'
+
+            name, value = attr.split(f':{sign}', 1)
+
             try:
                 col = getattr(Post, name)
             # Skip attribute selector that doesn't exist.
@@ -87,7 +95,12 @@ def browse_post(
                 # Look for posts that don't have the column set.
                 where = or_(col == None, col == '')
             else:
-                where = col == value
+                if sign == '<':
+                    where = col < value
+                elif sign == '>':
+                    where = col > value
+                else:
+                    where = col == value
 
             stmt = stmt.where(where)
 
