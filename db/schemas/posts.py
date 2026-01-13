@@ -12,3 +12,6 @@ class BrowseIn(Schema):
 
 class BrowseOut(PostsOut):
     pages = Integer()
+
+class CountOut(Schema):
+    count = Integer()

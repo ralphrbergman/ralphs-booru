@@ -1,7 +1,7 @@
 from apiflask import APIBlueprint
 
-from api import browse_post
-from db.schemas import BrowseIn, BrowseOut
+from api import browse_post, count_all_posts
+from db.schemas import BrowseIn, BrowseOut, CountOut
 
 posts_bp = APIBlueprint(
     name = 'Posts API',
@@ -29,3 +29,8 @@ def posts_route(data: BrowseIn):
         'pages': posts.pages,
         'posts': posts.items
     }
+
+@posts_bp.route('/count')
+@posts_bp.output(CountOut)
+def count_route():
+    return {'count': count_all_posts()}
