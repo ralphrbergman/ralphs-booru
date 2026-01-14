@@ -39,9 +39,9 @@
 
             <div>
                 <p>Score: {{ post.total_score }}</p>
-                <a href="#">Upvote</a>
+                <a href="" onclick="vote(event, {{ post.id }}, 1)">Upvote</a>
                 <br>
-                <a href="#">Downvote</a>
+                <a href="" onclick="vote(event, {{ post.id }}, -1)">Downvote</a>
             </div>
 
             <div>
@@ -97,6 +97,10 @@
         </div>
 
         {% include 'frag/content.html' %}
+
+        {% block script %}
+            <script src="{{ url_for('static', filename = 'js/voting.js') }}"></script>
+        {% endblock %}
     </div>
 
     {% set comments = post.comments %}
