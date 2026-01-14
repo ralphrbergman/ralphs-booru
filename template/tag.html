@@ -12,6 +12,7 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Count</th>
                 <th></th>
                 <th>Type</th>
                 <th>Description</th>
@@ -21,6 +22,7 @@
                 <tr>
                     <td>{{ tag.id }}</td>
                     <td><a href="{{ url_for('Post.browse_paged', page = 1, terms = tag.name) }}">{{ tag.name }}</a></td>
+                    <td>{{ tag.posts | length }}</td>
                     <td><a class="no-select" href="{{ url_for('Tag.edit_page', tag_id = tag.id) }}">Edit</a></td>
                     <td>{{ tag.type }}</td>
                     {% if tag.desc %}
