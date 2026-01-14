@@ -12,7 +12,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
 from .tag import Tag
-from .tag_assoc import TagAssociation
 from .thumbnail import Thumbnail
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
@@ -32,7 +31,7 @@ class Post(db.Model):
     src: Mapped[str] = mapped_column(nullable = True)
 
     caption: Mapped[str] = mapped_column(nullable = True)
-    tags: Mapped[list['Tag']] = db.relationship('Tag', secondary = TagAssociation, back_populates = 'posts')
+    tags: Mapped[list['Tag']] = db.relationship('Tag', secondary = 'tag_association', back_populates = 'posts')
     thumbnail: Mapped[Thumbnail] = relationship('Thumbnail', back_populates = 'post')
 
     # Filesystem attributes.

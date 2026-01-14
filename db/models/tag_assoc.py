@@ -1,11 +1,14 @@
-from sqlalchemy import Column, ForeignKey, Integer, Table, UniqueConstraint
+from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column
 
 from db import db
 
-TagAssociation = Table(
-    'tag_association',
-    db.Model.metadata,
-    Column('post_id', Integer, ForeignKey('post.id')),
-    Column('tag_id', Integer, ForeignKey('tag.id')),
-    UniqueConstraint('post_id', 'tag_id', name = 'uq_post_tag')
-)
+class TagAssociation(db.Model):
+    __tablename__ = 'tag_association'
+
+    post_id: Mapped[int] = mapped_column(ForeignKey('post.id'), primary_key = True)
+    tag_id: Mapped[int] = mapped_column(ForeignKey('tag.id'), primary_key = True)
+
+    __table_args__ = (
+        UniqueConstraint('post_id', 'tag_id', name = 'uq_post_tag'),
+    )
