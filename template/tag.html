@@ -23,7 +23,9 @@
                     <td><a href="{{ url_for('Post.browse_paged', page = 1, terms = tag.name) }}">{{ tag.name }}</a></td>
                     <td><a class="no-select" href="{{ url_for('Tag.edit_page', tag_id = tag.id) }}">Edit</a></td>
                     <td>{{ tag.type }}</td>
-                    <td>{{ tag.desc }}</td>
+                    {% if tag.desc %}
+                        <td>{{ tag.desc }}</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>
