@@ -48,6 +48,7 @@ class Post(db.Model):
     width: Mapped[int] = mapped_column(nullable = True)
 
     comments: Mapped[list['Comment']] = relationship(back_populates = 'post')
+    scores: Mapped[list['Score']] = relationship('Score', back_populates = 'post', cascade = 'all, delete-orphan')
 
     @classmethod
     def is_hyperlink(cls, value: str) -> bool:
@@ -107,6 +108,10 @@ class Post(db.Model):
     @property
     def path(self) -> Path:
         return CONTENT_PATH / (self.directory or '') / self.name
+
+    @property
+    def total_score(self) -> int:
+        return sum(score.value for score in self.scores)
 
     @property
     def uri(self) -> str:

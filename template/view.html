@@ -38,6 +38,13 @@
             {% endif %}
 
             <div>
+                <p>Score: {{ post.total_score }}</p>
+                <a href="#">Upvote</a>
+                <br>
+                <a href="#">Downvote</a>
+            </div>
+
+            <div>
                 <p class="notable">Tags:</p>
                 <ul class="tag-list">
                     {% for tag in post.tags | sort(attribute='name') %}
