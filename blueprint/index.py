@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, render_template, url_for
+from flask import Blueprint, redirect, render_template, url_for
 
 from api import count_all_posts
 from form import SearchForm
