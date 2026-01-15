@@ -11,6 +11,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
+from .serializer import SerializerMixin
 from .tag import Tag
 from .thumbnail import Thumbnail
 
@@ -19,7 +20,7 @@ NSFW_TAG_NAME = getenv('NSFW_TAG', 'nsfw')
 SENSITIVE_DIRS = getenv('SENSITIVE_DIRS', '').split(',')
 DISK_SIZES = ('B', 'KB', 'MB', 'GB')
 
-class Post(db.Model):
+class Post(db.Model, SerializerMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
     created: Mapped[datetime] = mapped_column(default = func.now())
     modified: Mapped[datetime] = mapped_column(nullable = True, onupdate = func.now())

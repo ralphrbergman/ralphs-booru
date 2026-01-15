@@ -8,6 +8,7 @@ from sqlalchemy import String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
+from .serializer import SerializerMixin
 
 class RoleEnum(Enum):
     ADMIN = 'adm'
@@ -15,7 +16,7 @@ class RoleEnum(Enum):
     REGULAR = 'reg'
     TERMINATED = 'ter'
 
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin, SerializerMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
     created: Mapped[datetime] = mapped_column(default = func.now())
     avatar_name: Mapped[str] = mapped_column(default = 'avatar.png')
