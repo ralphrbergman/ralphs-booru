@@ -6,6 +6,7 @@
 
 .footer-content {
     display: flex;
+    gap: var(--medium-gap);
 }
 
 .main-footer {
