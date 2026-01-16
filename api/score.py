@@ -21,6 +21,7 @@ def _set_vote(target_id: int, user_id: int, score_type: str, value: int) -> Opti
     try:
         db.session.commit()
     except IntegrityError as exc:
+        print(exc)
         db.session.rollback()
         return
 
