@@ -39,9 +39,9 @@
 
             <div>
                 <p>Score: {{ post.total_score }}</p>
-                <a href="" onclick="vote(event, {{ post.id }}, 1)">Upvote</a>
+                <a href="" onclick="vote(event, {{ post.id }}, 1, 'post')">Upvote</a>
                 <br>
-                <a href="" onclick="vote(event, {{ post.id }}, -1)">Downvote</a>
+                <a href="" onclick="vote(event, {{ post.id }}, -1, 'post')">Downvote</a>
             </div>
 
             <div>

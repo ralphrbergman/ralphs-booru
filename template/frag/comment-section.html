@@ -11,7 +11,7 @@
         <span class="comment">
             <img class="commenter-picture no-select" src="{{ author.avatar }}">
             <div>
-                <span><a href="{{ author.profile_url }}">{{ author.username }}</a> at {{ comment.created }} &gt; <a href="{{ url_for('Post.view_page', post_id = comment.post_id) }}">#{{ comment.post_id }}</a></span>
+                <span><a href="{{ author.profile_url }}">{{ author.username }}</a> at {{ comment.created }} &gt; <a href="{{ url_for('Post.view_page', post_id = comment.post_id) }}">#{{ comment.post_id }}</a> &lt;{{ comment.total_score }}&gt; <a href="" onclick="vote(event, {{ comment.id }}, 1, 'comment')">^</a> <a href="" onclick="vote(event, {{ comment.id }}, -1, 'comment')">⌄</a></span>
                 <span class="comment-content">{{ comment.content }}</span>
             </div>
         </span>

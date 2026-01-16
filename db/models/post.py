@@ -11,16 +11,17 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
-from .serializer import SerializerMixin
 from .tag import Tag
 from .thumbnail import Thumbnail
+from .mixins.score import ScoreMixin
+from .mixins.serializer import SerializerMixin
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 NSFW_TAG_NAME = getenv('NSFW_TAG', 'nsfw')
 SENSITIVE_DIRS = getenv('SENSITIVE_DIRS', '').split(',')
 DISK_SIZES = ('B', 'KB', 'MB', 'GB')
 
-class Post(db.Model, SerializerMixin):
+class Post(db.Model, ScoreMixin, SerializerMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
     created: Mapped[datetime] = mapped_column(default = func.now())
     modified: Mapped[datetime] = mapped_column(nullable = True, onupdate = func.now())
@@ -48,7 +49,12 @@ class Post(db.Model, SerializerMixin):
     width: Mapped[int] = mapped_column(nullable = True)
 
     comments: Mapped[list['Comment']] = relationship(back_populates = 'post')
-    scores: Mapped[list['Score']] = relationship('Score', back_populates = 'post', cascade = 'all, delete-orphan')
+    scores: Mapped[list['ScoreAssociation']] = relationship(
+        'ScoreAssociation',
+        primaryjoin="and_(Post.id == foreign(ScoreAssociation.target_id), ScoreAssociation.target_type == 'post')",
+        viewonly=True,
+        overlaps="scores"
+    )
 
     @classmethod
     def is_hyperlink(cls, value: str) -> bool:
@@ -108,10 +114,6 @@ class Post(db.Model, SerializerMixin):
     @property
     def path(self) -> Path:
         return CONTENT_PATH / (self.directory or '') / self.name
-
-    @property
-    def total_score(self) -> int:
-        return sum(score.value for score in self.scores)
 
     @property
     def uri(self) -> str:

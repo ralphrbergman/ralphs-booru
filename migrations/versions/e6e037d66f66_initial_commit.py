@@ -1,8 +1,8 @@
-"""Initial
+"""Initial commit
 
-Revision ID: 5a77f0b1abfb
+Revision ID: e6e037d66f66
 Revises: 
-Create Date: 2026-01-07 15:55:11.135296
+Create Date: 2026-01-16 15:28:11.036214
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5a77f0b1abfb'
+revision = 'e6e037d66f66'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -58,6 +58,16 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('md5')
     )
+    op.create_table('score_association',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('target_id', sa.Integer(), nullable=False),
+    sa.Column('target_type', sa.String(length=10), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('value', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('target_id', 'target_type', 'user_id', name='user_target_type_uc')
+    )
     op.create_table('comment',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created', sa.DateTime(), nullable=False),
@@ -69,10 +79,11 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('tag_association',
-    sa.Column('post_id', sa.Integer(), nullable=True),
-    sa.Column('tag_id', sa.Integer(), nullable=True),
+    sa.Column('post_id', sa.Integer(), nullable=False),
+    sa.Column('tag_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['post_id'], ['post.id'], ),
     sa.ForeignKeyConstraint(['tag_id'], ['tag.id'], ),
+    sa.PrimaryKeyConstraint('post_id', 'tag_id'),
     sa.UniqueConstraint('post_id', 'tag_id', name='uq_post_tag')
     )
     op.create_table('thumbnail',
@@ -91,6 +102,7 @@ def downgrade():
     op.drop_table('thumbnail')
     op.drop_table('tag_association')
     op.drop_table('comment')
+    op.drop_table('score_association')
     op.drop_table('post')
     op.drop_table('user')
     op.drop_table('tag')

@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column, validates
 
 from db import db
-from .serializer import SerializerMixin
+from .mixins.serializer import SerializerMixin
 
 class Tag(db.Model, SerializerMixin):
     id: Mapped[int] = mapped_column(primary_key = True)

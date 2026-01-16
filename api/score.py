@@ -1,36 +1,57 @@
-from sqlalchemy import and_, select
-from db import Score, db
+from typing import Optional
 
-def _set_vote(post_id: int, user_id: int, value: int) -> Score:
+from sqlalchemy import and_, select
+from sqlalchemy.exc import IntegrityError
+
+from db import ScoreAssociation, db
+
+def _set_vote(target_id: int, user_id: int, score_type: str, value: int) -> Optional[ScoreAssociation]:
     score = get_vote(
-        post_id = post_id,
-        user_id = user_id
+        target_id = target_id,
+        user_id = user_id,
+        score_type = score_type
     )
 
     if not score:
-        score = Score(post_id = post_id, user_id = user_id)
+        score = ScoreAssociation(target_id = target_id, user_id = user_id, target_type = score_type)
         db.session.add(score)
 
     score.value = value
 
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError as exc:
+        db.session.rollback()
+        return
+
     return score
 
-def add_vote(post_id: int, user_id: int) -> Score:
-    return _set_vote(post_id = post_id, user_id = user_id, value = 1)
+def add_vote(target_id: int, user_id: int, score_type: str) -> ScoreAssociation:
+    return _set_vote(
+        target_id = target_id,
+        user_id = user_id,
+        score_type = score_type,
+        value = 1
+    )
 
-def get_vote(post_id: int, user_id: int) -> Score:
+def get_vote(target_id: int, user_id: int, score_type: str = None) -> ScoreAssociation:
     score = db.session.scalars(
-        select(Score)\
+        select(ScoreAssociation)\
         .where(
             and_(
-                Score.post_id == post_id,
-                Score.user_id == user_id
+                ScoreAssociation.target_id == target_id,
+                ScoreAssociation.user_id == user_id,
+                ScoreAssociation.target_type == score_type
             )
         )
     ).first()
 
     return score
 
-def remove_vote(post_id: int, user_id: int) -> Score:
-    return _set_vote(post_id = post_id, user_id = user_id, value = -1)
+def remove_vote(target_id: int, user_id: int, score_type: str) -> ScoreAssociation:
+    return _set_vote(
+        target_id = target_id,
+        user_id = user_id,
+        score_type = score_type,
+        value = -1
+    )

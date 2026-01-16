@@ -8,7 +8,7 @@ from sqlalchemy import String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
-from .serializer import SerializerMixin
+from .mixins.serializer import SerializerMixin
 
 class RoleEnum(Enum):
     ADMIN = 'adm'
@@ -26,7 +26,7 @@ class User(db.Model, UserMixin, SerializerMixin):
     password: Mapped[str] = mapped_column(String(length = 128), nullable = False)
 
     comments: Mapped[list['Comment']] = relationship('Comment', back_populates = 'author')
-    scores: Mapped[list['Score']] = relationship('Score', back_populates = 'user')
+    scores: Mapped[list['ScoreAssociation']] = relationship('ScoreAssociation', back_populates = 'user')
     posts: Mapped[list['Post']] = relationship('Post', back_populates = 'author')
     # Defines user's role within the system.
     # Certain users can terminate accounts, delete posts and some can't

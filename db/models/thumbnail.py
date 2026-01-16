@@ -3,7 +3,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
-from .serializer import SerializerMixin
+from .mixins.serializer import SerializerMixin
 
 class Thumbnail(db.Model, SerializerMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
