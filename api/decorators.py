@@ -60,8 +60,6 @@ def owner_only(model_class):
 
         return wrapper
     return decorator
-
-def key_required(callback):
     """
     Restricts view to only be accessed by an API key.
     """

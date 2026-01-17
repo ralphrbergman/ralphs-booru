@@ -3,7 +3,8 @@ from flask_login import current_user
 from werkzeug.datastructures import FileStorage
 
 from api import create_post, delete_post, get_post, save_file
-from api.decorators import key_required, owner_only, post_protect
+from api.decorators import owner_only, post_protect
+from api_auth import auth
 from db import Post, db
 from db.schemas import PostFormIn, PostIn, PostOut
 
@@ -20,7 +21,7 @@ def obtain_post(post_id: int):
 
 @post_bp.delete('/<int:post_id>')
 @post_bp.output({}, status_code = 204)
-@key_required
+@post_bp.auth_required(auth)
 @owner_only(Post)
 def remove_post(post_id: int, post: Post):
     if not post:
@@ -33,7 +34,7 @@ def remove_post(post_id: int, post: Post):
 @post_bp.patch('/<int:post_id>')
 @post_bp.input(PostIn(partial = True), arg_name = 'data', schema_name = 'PostUpdate')
 @post_bp.output(PostOut)
-@key_required
+@post_bp.auth_required(auth)
 @post_protect
 @owner_only(Post)
 def update_post(post_id: int, data: PostIn, post: Post):
@@ -49,7 +50,7 @@ def update_post(post_id: int, data: PostIn, post: Post):
 @post_bp.post('')
 @post_bp.input(PostFormIn, arg_name = 'data', location = 'form_and_files')
 @post_bp.output(PostOut(many = True))
-@key_required
+@post_bp.auth_required(auth)
 @post_protect
 def upload_post(data: PostFormIn):
     files: list[FileStorage] = data['files']

@@ -1,7 +1,8 @@
 from apiflask import APIBlueprint, abort
 
 from api import browse_tag, create_tag, delete_tag, get_tag, get_post
-from api.decorators import key_required, post_protect
+from api.decorators import post_protect
+from api_auth import auth
 from db import db
 from db.schemas import TagIn, TagOut
 
@@ -23,6 +24,7 @@ def obtain_tag(tag_id: int):
 
 @tag_bp.delete('/<int:tag_id>')
 @tag_bp.output({}, status_code = 204)
+@tag_bp.auth_required(auth)
 def remove_tag(tag_id: int):
     tag = get_tag(tag_id)
 
@@ -36,7 +38,7 @@ def remove_tag(tag_id: int):
 @tag_bp.post('')
 @tag_bp.input(TagIn, arg_name = 'data')
 @tag_bp.output(TagOut)
-@key_required
+@tag_bp.auth_required(auth)
 @post_protect
 def upload_tag(data: TagIn):
     tag = create_tag(data['name'])
@@ -57,7 +59,7 @@ def upload_tag(data: TagIn):
 @tag_bp.patch('')
 @tag_bp.input(TagIn(partial = True), arg_name = 'data', schema_name = 'TagUpdate')
 @tag_bp.output(TagOut)
-@key_required
+@tag_bp.auth_required(auth)
 @post_protect
 def update_tag(data: TagIn):
     tag = get_tag(data['name'])

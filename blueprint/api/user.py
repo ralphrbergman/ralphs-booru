@@ -2,7 +2,7 @@ from apiflask import APIBlueprint, abort
 from flask_login import current_user
 
 from api import get_user, get_user_by_username
-from api.decorators import key_required
+from api_auth import auth
 from db.schemas import UserOut
 
 user_bp = APIBlueprint(
@@ -33,6 +33,6 @@ def obtain_user_by_username(username: str):
 
 @user_bp.get('/authenticated')
 @user_bp.output(UserOut)
-@key_required
+@user_bp.auth_required(auth)
 def obtain_authenticated_user():
     return current_user

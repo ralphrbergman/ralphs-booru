@@ -2,7 +2,8 @@ from apiflask import APIBlueprint, abort
 from flask_login import current_user
 
 from api import create_comment, delete_comment, get_comment, get_post
-from api.decorators import key_required, owner_only, post_protect
+from api.decorators import owner_only, post_protect
+from api_auth import auth
 from db import Comment, db
 from db.schemas import CommentIn, CommentOut
 
@@ -19,7 +20,7 @@ def obtain_comment(comment_id: int):
 
 @comment_bp.delete('/<int:comment_id>')
 @comment_bp.output({}, status_code = 204)
-@key_required
+@comment_bp.auth_required(auth)
 @owner_only(Comment)
 def remove_comment(comment_id: int, comment: Comment):
     if not comment:
@@ -32,7 +33,7 @@ def remove_comment(comment_id: int, comment: Comment):
 @comment_bp.patch('/<int:comment_id>')
 @comment_bp.input(CommentIn, arg_name = 'data')
 @comment_bp.output(CommentOut)
-@key_required
+@comment_bp.auth_required(auth)
 @post_protect
 @owner_only(Comment)
 def update_comment(comment_id: int, data: CommentIn, comment: Comment):
@@ -53,7 +54,7 @@ def update_comment(comment_id: int, data: CommentIn, comment: Comment):
 @comment_bp.post('')
 @comment_bp.input(CommentIn, arg_name = 'data')
 @comment_bp.output(CommentOut)
-@key_required
+@comment_bp.auth_required(auth)
 @post_protect
 def upload_comment(data: CommentIn):
     post = get_post(data['post_id'])
