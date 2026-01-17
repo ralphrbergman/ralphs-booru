@@ -13,6 +13,7 @@ brand = {
     'full_brand': 'EsmuRalfs.lv',
     'copyright': '(c) 2025 - present',
     'version': '0.1.0',
+    'url': 'https://www.esmuralfs.lv',
     'source-url': 'https://github.com/ralphrbergman/ralphs-booru'
 }
 

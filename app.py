@@ -20,6 +20,9 @@ def create_app() -> APIFlask:
         template_folder = 'template',
         title = 'Ralphs Booru'
     )
+    app.config['SERVERS'] = [
+        {'url': brand['url'], 'description': 'Production server'}
+    ]
 
     app.jinja_env.globals['brand'] = brand
     app.config['SECRET_KEY'] = getenv('SECRET_KEY')
