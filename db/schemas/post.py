@@ -1,38 +1,29 @@
 from apiflask import Schema
-from apiflask.fields import DateTime, Integer, Nested, String
+from apiflask.fields import Boolean, DateTime, Integer, List, Nested, String
 
-from .tag import TagOut
-from .thumbnail import ThumbnailOut
+from .base import AuthorSchema
+from .file import FileIn
 
 class PostIn(Schema):
-    post_id = Integer(required = True)
-
-class PostOut(PostIn):
-    created_at = DateTime(attribute = 'created', required = True)
-    modified_at = DateTime(attribute = 'modified')
-
-    id = Integer(required = True)
-    author = Integer(attribute = 'author_id', required = True)
-
     op = String()
-    source = String(attribute = 'src')
-
+    src = String()
     caption = String()
-    tags = Nested(TagOut, many = True)
 
+class PostFormIn(FileIn, PostIn):
     directory = String()
+
+class PostOut(AuthorSchema, PostIn):
+    modified = DateTime()
+    tags = List(Nested('TagOut', exclude = ('posts',)))
     md5 = String(required = True)
     ext = String(required = True)
-
-    cat = String(required = True)
     mime = String(required = True)
-    size = Integer(required = True)
-
     height = Integer()
     width = Integer()
-
-    dimensions = String()
-    name = String()
-    thumbnail = Nested(ThumbnailOut)
+    comments = List(Nested('CommentOut', exclude = ('post',)))
+    cat = String(required = True)
+    dimensions = String(required = True)
+    disk_size = String(required = True)
+    name = String(required = True)
+    nsfw = Boolean(required = True)
     url = String(attribute = 'uri', required = True)
-    view_url = String(attribute = 'view_uri', required = True)

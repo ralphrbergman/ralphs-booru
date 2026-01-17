@@ -7,7 +7,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
-from api import create_user, check_password, get_user, get_user_by_username, set_password
+from api import create_user, get_user, get_user_by_username
 from api.decorators import anonymous_only, user_protect
 from db import db
 from form import LoginForm, PasswordForm, SignupForm, UserForm
@@ -30,7 +30,7 @@ def edit_profile_page():
     form = UserForm()
 
     if form.validate_on_submit():
-        if check_password(current_user.password, form.pw.data):
+        if current_user.check_password(form.pw.data):
             avatar: Optional[FileStorage] = form.avatar.data
 
             # Save & update current_user's avatar.
@@ -62,8 +62,8 @@ def edit_password_page():
     form = PasswordForm()
 
     if form.validate_on_submit():
-        if check_password(current_user.password, form.pw.data):
-            current_user.password = set_password(form.new_pw.data)
+        if current_user.check_password(form.pw.data):
+            current_user.password = form.new_pw.data
             db.session.commit()
 
             flash('Successfully changed password')
@@ -92,7 +92,7 @@ def login_page():
             flash('Incorrect username')
             return redirect(url_for('Account.login_page', next = next_page))
 
-        if check_password(current_user.password, form.pw.data):
+        if current_user.check_password(form.pw.data):
             login_user(current_user, remember = form.remember.data)
 
             flash(f'Welcome back, {current_user.name}')

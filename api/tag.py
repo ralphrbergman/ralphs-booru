@@ -4,8 +4,8 @@ from flask_sqlalchemy.pagination import SelectPagination
 from sqlalchemy import or_, select
 from sqlalchemy.exc import IntegrityError
 
-from api import browse_element
 from db import db, Post, Tag
+from .base import browse_element
 
 def add_tags(tag_list: list[str]) -> list[Tag]:
     new_tags = list()
@@ -59,18 +59,12 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
 
     return tag
 
-def delete_tag(tag_id: str | int) -> None:
+def delete_tag(tag: Tag) -> None:
     """
     Deletes given tag.
-
-    Args:
-        tag_id (str | int)
     """
-    tag = get_tag(tag_id)
-
-    if tag:
-        db.session.delete(tag)
-        db.session.commit()
+    db.session.delete(tag)
+    db.session.commit()
 
 def get_tag(id: str | int) -> Optional[Tag]:
     """

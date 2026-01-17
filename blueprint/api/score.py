@@ -1,7 +1,9 @@
-from apiflask import APIBlueprint
-from flask_login import current_user, login_required
+from apiflask import APIBlueprint, abort
+from flask_login import current_user
 
-from api import add_vote, remove_vote
+from api import add_vote, delete_score, get_score, remove_vote
+from api.decorators import owner_only, post_protect
+from db import ScoreAssociation
 from db.schemas import ScoreIn, ScoreOut
 
 score_bp = APIBlueprint(
@@ -10,20 +12,35 @@ score_bp = APIBlueprint(
     url_prefix = '/score'
 )
 
-@score_bp.delete('')
-@login_required
-@score_bp.input(ScoreIn, arg_name = 'data', location = 'query')
+@score_bp.get('/<int:score_id>')
 @score_bp.output(ScoreOut)
-def downvote_route(data: ScoreIn):
-    score = remove_vote(target_id = data['target_id'], user_id = current_user.id, score_type = data['target_type'])
+def obtain_score(score_id: int):
+    score = get_score(score_id)
+
+    if not score:
+        abort(404, message = 'Score not found.')
 
     return score
 
+@score_bp.delete('/<int:score_id>')
+@score_bp.output({}, status_code = 204)
+@owner_only(ScoreAssociation)
+def remove_score(score_id: int, score: ScoreAssociation):
+    if not score:
+        abort(404, message = 'Score not found')
+
+    delete_score(score)
+
+    return {}
+
 @score_bp.post('')
-@login_required
-@score_bp.input(ScoreIn, arg_name = 'data', location = 'query')
+@score_bp.input(ScoreIn, arg_name = 'data')
 @score_bp.output(ScoreOut)
-def upvote_route(data: ScoreIn):
-    score = add_vote(target_id = data['target_id'], user_id = current_user.id, score_type = data['target_type'])
+@post_protect
+def upload_score(data: ScoreIn):
+    value: int = data['value']
+
+    payload = (data['target_id'], current_user.id, data['target_type'])
+    score = add_vote(*payload) if value == 1 else remove_vote(*payload)
 
     return score

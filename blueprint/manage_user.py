@@ -1,6 +1,6 @@
 from flask import Blueprint, request, flash, render_template
 
-from api import browse_user, get_user, set_password
+from api import browse_user, get_user
 from api.decorators import moderator_only
 from db import db, RoleEnum
 from form import ManageUserForm
@@ -43,7 +43,7 @@ def manage_user_page(user_id: int):
         pw = None
 
         if len(form.pw.data) > 0:
-            pw = set_password(form.pw.data)
+            pw = form.pw.data
 
         role = form.role.data
         username = form.username.data

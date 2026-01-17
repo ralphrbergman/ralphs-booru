@@ -29,7 +29,7 @@ def edit_page(tag_id: int):
         return render_template('edit_tag.html', form = form, tag = tag, tag_types = TAG_TYPES)
     else:
         if form.deleted.data and current_user.is_authenticated and current_user.is_moderator:
-            delete_tag(tag.id)
+            delete_tag(tag)
 
             flash(f'Permanently deleted tag #{tag.id}')
             return redirect(url_for('Tag.tag_page'))

@@ -1,4 +1,7 @@
+from typing import Optional
+
 from flask_sqlalchemy.pagination import SelectPagination
+from sqlalchemy import select
 
 from db import Comment, Post, User, db
 from .base import browse_element
@@ -23,5 +26,17 @@ def create_comment(content: str, author: User, post: Post) -> Comment:
 
     db.session.add(comment)
     db.session.commit()
+
+    return comment
+
+def delete_comment(comment: Comment) -> None:
+    db.session.delete(comment)
+    db.session.commit()
+
+def get_comment(comment_id: int) -> Optional[Comment]:
+    comment = db.session.execute(
+        select(Comment)
+        .where(Comment.id == comment_id)
+    ).scalars().first()
 
     return comment

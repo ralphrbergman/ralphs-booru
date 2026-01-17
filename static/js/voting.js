@@ -1,20 +1,16 @@
 function vote(event, targetId, score, targetType = 'post') {
     event.preventDefault();
 
-    const Url = `/api/score?target_id=${targetId}&target_type=${targetType}`
-    let method;
-
-    if (score == 1) {
-        method = 'POST';
-    } else {
-        method = 'DELETE';
-    }
-
-    fetch(Url, {
-        method: method,
+    fetch(`/api/score`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            'target_id': targetId,
+            'target_type': targetType,
+            'value': score
+        })
     }).then(response => {
         if (response.ok) {
             location.reload();

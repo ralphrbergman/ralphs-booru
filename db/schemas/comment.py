@@ -1,11 +1,11 @@
-from apiflask.fields import Boolean, DateTime, Integer, String
-from .post import PostIn
+from apiflask import Schema
+from apiflask.fields import Integer, String
 
-class CommentIn(PostIn):
-    content = String()
-    is_ui = Boolean(load_default = False)
+from .base import AuthorSchema, PostMixin, ScoreMixin
 
-class CommentOut(CommentIn):
-    id = Integer()
-    created = DateTime()
-    author_id = Integer()
+class CommentIn(Schema):
+    content = String(required = True)
+    post_id = Integer()
+
+class CommentOut(AuthorSchema, CommentIn, PostMixin, ScoreMixin):
+    pass

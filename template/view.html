@@ -97,20 +97,20 @@
         </div>
 
         {% include 'frag/content.html' %}
-
-        {% block script %}
-            <script src="{{ url_for('static', filename = 'js/voting.js') }}"></script>
-        {% endblock %}
     </div>
 
     {% set comments = post.comments %}
     {% block input_comment_section %}
-        <form action="/api/comment" method="post" id="comment-form">
-            <input type="hidden" name="is_ui" value="true">
+        <form id="comment-form">
             <input type="hidden" name="post_id" value="{{ post.id }}">
             <textarea name="content" placeholder="Your comment goes here."></textarea>
-            <input type="submit" value="Comment">
+            <button type="submit">Comment</button>
         </form>
     {% endblock %}
     {% include 'frag/comment-section.html' %}
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename = 'js/comment.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/voting.js') }}"></script>
 {% endblock %}

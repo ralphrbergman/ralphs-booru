@@ -35,7 +35,11 @@ def add_vote(target_id: int, user_id: int, score_type: str) -> ScoreAssociation:
         value = 1
     )
 
-def get_vote(target_id: int, user_id: int, score_type: str = None) -> ScoreAssociation:
+def delete_score(score: ScoreAssociation) -> None:
+    db.session.delete(score)
+    db.session.commit()
+
+def get_vote(target_id: int, user_id: int, score_type: str = None) -> Optional[ScoreAssociation]:
     score = db.session.scalars(
         select(ScoreAssociation)\
         .where(
@@ -48,6 +52,12 @@ def get_vote(target_id: int, user_id: int, score_type: str = None) -> ScoreAssoc
     ).first()
 
     return score
+
+def get_score(score_id: int) -> Optional[ScoreAssociation]:
+    return db.session.scalars(
+        select(ScoreAssociation)
+        .where(ScoreAssociation.id == score_id)
+    ).first()
 
 def remove_vote(target_id: int, user_id: int, score_type: str) -> ScoreAssociation:
     return _set_vote(

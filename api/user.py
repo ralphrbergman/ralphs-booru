@@ -1,10 +1,9 @@
 from typing import Optional
 
-from sqlalchemy import or_, select
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from db import db, User
-from encryption import bcrypt
 from .base import browse_element
 
 def browse_user(*args, **kwargs):
@@ -27,7 +26,7 @@ def create_user(name: str, mail: str, password: str, avatar: Optional[str] = Non
 
     user.name = name
     user.mail = mail
-    user.password = set_password(password)
+    user.password = password
     user.avatar_name = avatar
 
     db.session.add(user)
@@ -40,18 +39,6 @@ def create_user(name: str, mail: str, password: str, avatar: Optional[str] = Non
         return None
 
     return user
-
-def check_password(password: bytes, other_password: str) -> bool:
-    """
-    Checks whether the input password is the one stored.
-
-    Args:
-        other_password: The password
-
-    Returns:
-        bool: Whether the password is correct
-    """
-    return bcrypt.check_password_hash(password, other_password)
 
 def get_user(user_id: int) -> Optional[User]:
     """
@@ -76,17 +63,3 @@ def get_user_by_username(username: str) -> Optional[User]:
         User: Found user, if any
     """
     return db.session.scalar(select(User).where(User.name.is_(username)))
-
-def set_password(password: str) -> bytes:
-    """
-    Sets and returns password in hashed form.
-
-    Args:
-        password: The password to assign
-    
-    Returns:
-        bytes: Hashed password
-    """
-    hashed_password = bcrypt.generate_password_hash(password)
-
-    return hashed_password

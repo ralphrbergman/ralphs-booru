@@ -30,6 +30,8 @@
             <a href="{{ url_for('Account.edit_password_page') }}">Edit Password</a>
 
             <input type="submit" value="Submit">
+
+            <p>Your unique API key: {{ user.api_key }}<br><b>(Do not share it with anyone)</b></p>
         </form>
     </div>
 {% endblock %}

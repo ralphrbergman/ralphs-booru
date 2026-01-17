@@ -1,10 +1,12 @@
 from functools import wraps
 from os import getenv
 
-from flask import request, abort
+from apiflask import abort
+from flask import request
 from flask_login import current_user
+from sqlalchemy import select
 
-from .post import get_post
+from db import db
 
 ALLOW_USERS = getenv('ALLOW_USERS') == 'true'
 ALLOW_POSTS = getenv('ALLOW_POSTS') == 'true'
@@ -25,26 +27,52 @@ def anonymous_only(callback):
 
     return wrapper
 
-def appropriate_user_only(callback):
+def owner_only(model_class):
     """
     Restricts view for users that own a resource or are moderators.
 
     Args:
         callback: Route to restrict
     """
+    def decorator(callback):
+        @wraps(callback)
+        def wrapper(*args, **kwargs):
+            v_args = request.view_args
+
+            entity_id = list(v_args.values())[-1]
+            entity_name = list(v_args.keys())[-1].strip('_id')
+
+            entity = db.session.scalars(
+                select(model_class)
+                .where(model_class.id == entity_id)
+            ).first()
+            kwargs[entity_name] = entity
+
+            try:
+                if entity.author == current_user:
+                    return callback(*args, **kwargs)
+            except AttributeError as exc:
+                # Entity doesn't have 'author'.
+                if entity.user_id == current_user.id:
+                    return callback(*args, **kwargs)
+
+            return abort(401)
+
+        return wrapper
+    return decorator
+
+def key_required(callback):
+    """
+    Restricts view to only be accessed by an API key.
+    """
     @wraps(callback)
     def wrapper(*args, **kwargs):
-        json = request.get_json(silent = True)
+        auth_header = request.headers.get('Authorization')
 
-        if not json or 'post_id' not in json:
-            return abort(400)
+        if not current_user.is_authenticated or not auth_header:
+            abort(401, message = 'Valid API key is necessary. Pass it to Authorization header.')
 
-        post = get_post(json.get('post_id'))
-
-        if post and current_user.is_authenticated and current_user.is_moderator or post.author == current_user:
-            return callback(*args, **kwargs)
-        else:
-            return abort(401)
+        return callback(*args, **kwargs)
 
     return wrapper
 

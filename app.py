@@ -10,6 +10,7 @@ from brand import brand
 from blueprint import api_bp, account_bp, contact_bp, comment_bp, err_bp, help_bp, index_bp, manage_user_bp, post_bp, tag_bp, thumbnail_bp
 from db import db, User
 from encryption import bcrypt
+from login import login_manager
 
 load_dotenv()
 
@@ -31,8 +32,7 @@ def create_app() -> APIFlask:
     bcrypt.init_app(app)
 
     # Initialize session management
-    login_manager = LoginManager(app)
-    login_manager.login_view = 'Account.login_page'
+    login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id: str) -> User:
