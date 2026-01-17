@@ -43,7 +43,7 @@ body {
     gap: var(--gap);
     /* Have the page span almost all the height. */
     /* Looks weird and squashed when it's small on pages with less content. */
-    height: 95vh;
+    height: 100%;
 
     margin-left: auto;
     margin-right: auto;
