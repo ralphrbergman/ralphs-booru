@@ -84,6 +84,10 @@ def browse_post(
                 sign = '>'
 
             name, value = attr.split(f':{sign}', 1)
+            try:
+                value = int(value)
+            except ValueError as exc:
+                continue
 
             try:
                 col = getattr(Post, name)
@@ -91,7 +95,7 @@ def browse_post(
             except AttributeError as exc:
                 continue
 
-            if not len(value):
+            if value == 0:
                 # Look for posts that don't have the column set.
                 where = or_(col == None, col == '')
             else:

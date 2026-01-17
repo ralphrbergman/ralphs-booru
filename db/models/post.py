@@ -80,6 +80,30 @@ class Post(db.Model, ScoreMixin, SerializerMixin):
             func.instr(cls.mime, '/') - 1
         )
 
+    @hybrid_property
+    def year(self) -> int:
+        return self.created.year
+
+    @year.expression
+    def year(cls):
+        return func.extract('year', cls.created)
+
+    @hybrid_property
+    def month(self) -> int:
+        return self.created.year
+
+    @year.expression
+    def month(cls):
+        return func.extract('month', cls.created)
+
+    @hybrid_property
+    def day(self) -> int:
+        return self.created.year
+
+    @year.expression
+    def day(cls):
+        return func.extract('day', cls.created)
+
     @property
     def dimensions(self) -> str:
         return f'{self.width}x{self.height}'
