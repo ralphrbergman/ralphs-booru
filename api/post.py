@@ -87,7 +87,7 @@ def browse_post(
             try:
                 value = int(value)
             except ValueError as exc:
-                continue
+                pass
 
             try:
                 col = getattr(Post, name)
@@ -95,7 +95,7 @@ def browse_post(
             except AttributeError as exc:
                 continue
 
-            if value == 0:
+            if value == 0 or len(value) == 0:
                 # Look for posts that don't have the column set.
                 where = or_(col == None, col == '')
             else:
