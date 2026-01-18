@@ -95,7 +95,12 @@ def browse_post(
             except AttributeError as exc:
                 continue
 
-            if value == 0 or len(value) == 0:
+            try:
+                value = int(value)
+            except ValueError as exc:
+                pass
+
+            if value == 0 or (isinstance(value, str) and not len(value)):
                 # Look for posts that don't have the column set.
                 where = or_(col == None, col == '')
             else:
