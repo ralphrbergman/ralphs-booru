@@ -16,7 +16,7 @@ post_bp = Blueprint(
 
 @post_bp.route('/browse')
 def browse_page():
-    return redirect(url_for('Post.browse_paged', page = 1))
+    return redirect(url_for('Root.Post.browse_paged', page = 1))
 
 @post_bp.route('/browse/<int:page>')
 def browse_paged(page: int):
@@ -31,7 +31,7 @@ def browse_paged(page: int):
     if len(args) < 2:
         return redirect(
             url_for(
-                'Post.browse_paged',
+                'Root.Post.browse_paged',
                 blur = blur,
                 limit = limit,
                 page = page,
@@ -45,7 +45,7 @@ def browse_paged(page: int):
     bar = create_pagination_bar(
         page,
         posts.pages,
-        'Post.browse_paged',
+        'Root.Post.browse_paged',
         blur = blur,
         limit = limit,
         terms = terms,
@@ -77,7 +77,7 @@ def edit_page(post_id: int):
                     delete_post(post)
 
                     flash(f'Permanently deleted post #{post.id}')
-                    return redirect(url_for('Post.browse_page'))
+                    return redirect(url_for('Root.Post.browse_page'))
 
                 file = form.new_file.data
 
@@ -88,7 +88,7 @@ def edit_page(post_id: int):
                         flash(f'Successfully exchanged post #{post.id} for a new file!')
                     else:
                         flash('Failed to exchange post.')
-                        return redirect(url_for('Post.edit_page', post_id = post_id))
+                        return redirect(url_for('Root.Post.edit_page', post_id = post_id))
 
             post.op = form.op.data.strip()
             post.src = form.src.data.strip()
@@ -99,7 +99,7 @@ def edit_page(post_id: int):
 
             db.session.commit()
 
-            return redirect(url_for('Post.view_page', post_id = post_id))
+            return redirect(url_for('Root.Post.view_page', post_id = post_id))
 
     flash_errors(form)
 
@@ -148,7 +148,7 @@ def upload_page():
             else:
                 flash(f'Uploading file {file.filename} failed')
 
-        return redirect(url_for('Post.browse_page'))
+        return redirect(url_for('Root.Post.browse_page'))
 
     flash_errors(form)
 

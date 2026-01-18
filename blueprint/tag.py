@@ -32,7 +32,7 @@ def edit_page(tag_id: int):
             delete_tag(tag)
 
             flash(f'Permanently deleted tag #{tag.id}')
-            return redirect(url_for('Tag.tag_page'))
+            return redirect(url_for('Root.Tag.tag_page'))
 
         tag.name = form.name.data
         tag.type = form.type.data
@@ -41,11 +41,11 @@ def edit_page(tag_id: int):
         db.session.commit()
 
         flash(f'Updated tag {tag.id} successfully!')
-        return redirect(url_for('Tag.edit_page', tag_id = tag_id))
+        return redirect(url_for('Root.Tag.edit_page', tag_id = tag_id))
 
 @tag_bp.route('')
 def tag_page():
-    return redirect(url_for('Tag.tag_paged', page = 1))
+    return redirect(url_for('Root.Tag.tag_paged', page = 1))
 
 @tag_bp.route('<int:page>')
 def tag_paged(page: int):
@@ -54,7 +54,7 @@ def tag_paged(page: int):
     bar = create_pagination_bar(
         tags.page,
         tags.pages,
-        'Tag.tag_paged'
+        'Root.Tag.tag_paged'
     )
 
     return render_template(

@@ -141,10 +141,10 @@ class Post(db.Model, ScoreMixin, SerializerMixin):
 
     @property
     def uri(self) -> str:
-        return url_for('Post.view_page', post_id = self.id, v = self.modified, _external = True)
+        return url_for('Root.Post.view_page', post_id = self.id, v = self.modified, _external = True)
 
     @property
     def view_uri(self) -> str:
         # 2025.10.31 - Added 'v' parameter to trick around caching posts who
         # might have been replaced but the browser hasn't picked it up yet.
-        return url_for('Post.view_file_resource', post_id = self.id, v = self.modified, _external = True)
+        return url_for('Root.Post.view_file_resource', post_id = self.id, v = self.modified, _external = True)

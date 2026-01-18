@@ -1,3 +1,4 @@
+const ApiKey = document.getElementById('api-key').textContent;
 const CommentForm = document.getElementById('comment-form');
 
 CommentForm.addEventListener('submit', function(event) {
@@ -8,6 +9,7 @@ CommentForm.addEventListener('submit', function(event) {
     fetch('/api/comment', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${ApiKey}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({

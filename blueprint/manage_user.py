@@ -18,7 +18,7 @@ def user_list_page():
     page = request.args.get('page', default = 1, type = int)
 
     users = browse_user(page = page)
-    bar = create_pagination_bar(page, users.pages, 'Manage User.user_list_page')
+    bar = create_pagination_bar(page, users.pages, 'Root.Manage User.user_list_page')
 
     return render_template(
         'list_user.html',

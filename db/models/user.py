@@ -77,7 +77,7 @@ class User(db.Model, UserMixin, SerializerMixin):
 
     @property
     def avatar(self) -> str:
-        return url_for('Account.avatar_page', filename = self.avatar_name)
+        return url_for('Root.Account.avatar_page', filename = self.avatar_name)
 
     @property
     def is_moderator(self) -> bool:
@@ -109,7 +109,7 @@ class User(db.Model, UserMixin, SerializerMixin):
 
     @property
     def profile_url(self) -> str:
-        return url_for('Account.profile_page', user_id = self.id)
+        return url_for('Root.Account.profile_page', user_id = self.id)
 
     @property
     def role_name(self) -> str:

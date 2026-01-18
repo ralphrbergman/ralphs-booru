@@ -47,7 +47,7 @@ def edit_profile_page():
         else:
             flash('Invalid password provided')
 
-        return redirect(url_for('Account.profile_page', user_id = current_user.id))
+        return redirect(url_for('Root.Account.profile_page', user_id = current_user.id))
 
     for field in form.errors.values():
         for error in field:
@@ -67,10 +67,10 @@ def edit_password_page():
             db.session.commit()
 
             flash('Successfully changed password')
-            return redirect(url_for('Account.edit_profile_page'))
+            return redirect(url_for('Root.Account.edit_profile_page'))
         else:
             flash('Invalid password provided')
-            return redirect(url_for('Account.profile_page', user_id = current_user.id))
+            return redirect(url_for('Root.Account.profile_page', user_id = current_user.id))
 
     for field in form.errors.values():
         for error in field:
@@ -90,13 +90,13 @@ def login_page():
 
         if not current_user:
             flash('Incorrect username')
-            return redirect(url_for('Account.login_page', next = next_page))
+            return redirect(url_for('Root.Account.login_page', next = next_page))
 
         if current_user.check_password(form.pw.data):
             login_user(current_user, remember = form.remember.data)
 
             flash(f'Welcome back, {current_user.name}')
-            return redirect(next_page or url_for('Account.profile_page', user_id = current_user.id))
+            return redirect(next_page or url_for('Root.Account.profile_page', user_id = current_user.id))
         else:
             flash('Incorrect password')
 
@@ -112,7 +112,7 @@ def logout_page():
     logout_user()
 
     flash('Logged out')
-    return redirect(url_for('Index.index_page'))
+    return redirect(url_for('Root.Index.index_page'))
 
 @account_bp.route('/profile/<int:user_id>')
 def profile_page(user_id: int):
@@ -155,12 +155,12 @@ def signup_page():
         if not current_user:
             flash('Failed to create your profile.')
 
-            return redirect(url_for('Account.signup_page'))
+            return redirect(url_for('Root.Account.signup_page'))
 
         login_user(current_user, remember = True)
 
         flash(f'Welcome, {current_user.name}')
-        return redirect(url_for('Account.profile_page', user_id = current_user.id))
+        return redirect(url_for('Root.Account.profile_page', user_id = current_user.id))
 
     for field in form.errors.values():
         for error in field:

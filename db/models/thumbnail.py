@@ -16,4 +16,4 @@ class Thumbnail(db.Model, SerializerMixin):
 
     @property
     def view_uri(self) -> str:
-        return url_for('Thumbnail.thumbnail_route', post_id = self.post_id, _external = True)
+        return url_for('Root.Thumbnail.thumbnail_route', post_id = self.post_id, _external = True)
