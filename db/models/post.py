@@ -6,7 +6,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from flask import url_for
-from sqlalchemy import ForeignKey, String, func, select
+from sqlalchemy import ForeignKey, String, func
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from sqlalchemy.sql import ColumnElement
@@ -73,8 +73,8 @@ class Post(db.Model, ScoreMixin, SerializerMixin):
     def cat(self) -> str:
         return self.mime.split('/')[0] if self.mime else None
 
-    @cat.expression
-    def category(cls):
+    @cat.inplace.expression
+    def category(cls) -> ColumnElement[str]:
         return func.substr(
             cls.mime,
             1,
@@ -116,25 +116,24 @@ class Post(db.Model, ScoreMixin, SerializerMixin):
 
         return f'{size}{DISK_SIZES[index]}'
 
-    @property
+    @hybrid_property
     def name(self) -> str:
         return f'{self.md5}.{self.ext}'
+
+    @name.inplace.expression
+    def name(cls) -> ColumnElement[str]:
+        return cls.md5 + '.' + cls.ext
 
     @property
     def nsfw(self) -> bool:
         """
         Returns True if Post has NSFW tag, or is in a sensitive directory.
         """
-        directory = self.directory
-        nsfw_tag = db.session.execute(select(Post.id).filter(
-            Post.id == self.id,
-            Post.tags.any(Tag.name == NSFW_TAG_NAME)
-        )).first() is not None
+        first_part = self.directory.split('/')[0] if self.directory else None
+        in_sensitive_dir = first_part in SENSITIVE_DIRS
+        nsfw_tag_applied = any(tag.name == NSFW_TAG_NAME for tag in self.tags)
 
-        if (directory and directory.split('/')[0] in SENSITIVE_DIRS) or nsfw_tag:
-            return True
-
-        return False
+        return in_sensitive_dir or nsfw_tag_applied
 
     @property
     def path(self) -> Path:

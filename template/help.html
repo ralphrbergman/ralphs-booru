@@ -3,12 +3,12 @@
 {% set title = 'Help' %}
 
 {% block body %}
-    <h1>Help: Posts</h1>
-    <p>A post represents a uploaded file that can be commented on and searched for. Alternatively if you upload a post of your own you can give it original poster and source attributes, as well as caption and add tags that can be easily searched for as before mentioned.</p>
+    <a href="#posts"><h1 id="posts">Help: Posts</h1></a>
+    <p>A post represents a uploaded file that can be commented on and searched for. Alternatively if you upload a post of your own you can give it original poster and source attributes. More about uploading read <a href="#uploading">Uploading section</a>, as well as caption and add tags that can be easily searched for as before mentioned. More about tags read <a href="#tags">Tags section</a></p>
 
-    <h1>Help: Search</h1>
+    <a href="#search"><h1 id="search">Help: Search</h1></a>
     <p>You can search for tag <b>game gtav</b> and it will search for Grand Theft Auto V gameplay posts. Because you put two tags together, alternatively if you don't want gameplay you can add <b>-game</b> tag with a minus sign in front of tag name instead and it will search for posts that depict GTA V instead of gameplay.</p>
-    <p>When searching you might want to look at what tags are available, click <a href="{{ url_for('Tag.tag_page') }}">here</a></p>
+    <p>When searching you might want to look at what tags are available, click <a href="{{ url_for('Tag.tag_page') }}">here</a>. More about searching look in <a href="#tags">Tags in-depth section</a></p>
     <table>
         <tr>
             <th>Tag</th>
@@ -44,9 +44,99 @@
         </tr>
     </table>
 
-    <h1>Help: Uploading</h1>
+    <a href="#tags"><h1 id="tags">Help: In-depth Tags</h1></a>
+    <p>Here's a helpful table of available tags and attributes you can use to narrow down your searches.</p>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Example</th>
+            <th>Explanation</th>
+        </tr>
+        <tr>
+            <td>id</td>
+            <td>id:1</td>
+            <td>Search for post whose unique ID is 1</td>
+        </tr>
+        <tr>
+            <td>author_id</td>
+            <td>author_id:1</td>
+            <td>Post author's ID</td>
+        </tr>
+        <tr>
+            <td>op</td>
+            <td>op:http://www.esmuralfs.lv/profile/1</td>
+            <td>Match an original poster's username or URL to profile</td>
+        </tr>
+        <tr>
+            <td>src</td>
+            <td>src:http://www.esmuralfs.lv/view/1</td>
+            <td>Match original resource where post was taken from</td>
+        </tr>
+        <tr>
+            <td>directory</td>
+            <td>directory:cute</td>
+            <td>Search for posts in the "cute" directory</td>
+        </tr>
+        <tr>
+            <td>md5</td>
+            <td>md5:8aea73c6da8212327825ec017eae6a5d</td>
+            <td>Match post with MD5 hash sum of <i>8aea73c6da8212327825ec017eae6a5d</i></td>
+        </tr>
+        <tr>
+            <td>ext</td>
+            <td>ext:mp4</td>
+            <td>Match posts with file extension of <i>mp4</i></td>
+        </tr>
+        <tr>
+            <td>mime</td>
+            <td>mime:image/jpeg</td>
+            <td>Match posts with MIME type of <i>image/jpeg</i></td>
+        </tr>
+        <tr>
+            <td>size</td>
+            <td>size:74925</td>
+            <td>Match posts with disk size in bytes of <i>74925</i> <br><b>Note it is very hard to get this right so don't bother</b></td>
+        </tr>
+        <tr>
+            <td>height</td>
+            <td>height:1440</td>
+            <td>Match posts whose height is 1440 pixels</td>
+        </tr>
+        <tr>
+            <td>width</td>
+            <td>width:2560</td>
+            <td>Match posts whose width is 2560 pixels</td>
+        </tr>
+        <tr>
+            <td>category</td>
+            <td>category:image</td>
+            <td>Search for image posts</td>
+        </tr>
+        <tr>
+            <td>year</td>
+            <td>year:2026</td>
+            <td>Search for posts uploaded in Year 2026</td>
+        </tr>
+        <tr>
+            <td>month</td>
+            <td>month:10</td>
+            <td>Search for posts uploaded in October (tenth month)</td>
+        </tr>
+        <tr>
+            <td>day</td>
+            <td>day:1</td>
+            <td>Search for posts uploaded on the first day of every month</td>
+        </tr>
+        <tr>
+            <td>name</td>
+            <td>name:021718cc5e8424f0bb74643730f865ba.jpg</td>
+            <td>Match for a post with the file name of <i>021718cc5e8424f0bb74643730f865ba.jpg</i></td>
+        </tr>
+    </table>
+
+    <a href="#uploading"><h1 id="uploading">Help: Uploading</h1></a>
     <p>Great, you want to share with your own content, please be aware that we only host high quality memes/other content, if you upload a low quality meme, be warned that it may be removed. And please don't upload content with watermarks, and make sure to attribute the original poster when uploading. You have the tools to do the right thing so you should utilize them. If whenever in doubt you can reach out on our Discord server.</p>
 
-    <h1>Help: NSFW</h1>
+    <a href="#nsfw"><h1 id="nsfw">Help: NSFW</h1></a>
     <p>By default NSFW-related posts are hidden, if you wish to view NSFW and only NSFW posts then you can add <b>nsfw</b> tag. But please be aware of consequences that come with viewing NSFW posts</p>
 {% endblock %}
