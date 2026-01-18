@@ -9,6 +9,7 @@ from flask import url_for
 from sqlalchemy import ForeignKey, String, func, select
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
+from sqlalchemy.sql import ColumnElement
 
 from db import db
 from .tag import Tag
@@ -79,6 +80,30 @@ class Post(db.Model, ScoreMixin, SerializerMixin):
             1,
             func.instr(cls.mime, '/') - 1
         )
+
+    @hybrid_property
+    def year(self) -> int:
+        return self.created.year
+
+    @year.expression
+    def year(cls) -> ColumnElement[int]:
+        return func.extract('year', cls.created)
+    
+    @hybrid_property
+    def month(self) -> int:
+        return self.created.month
+
+    @month.expression
+    def month(cls) -> ColumnElement[int]:
+        return func.extract('month', cls.created)
+    
+    @hybrid_property
+    def day(self) -> int:
+        return self.created.day
+
+    @day.expression
+    def day(cls) -> ColumnElement[int]:
+        return func.extract('day', cls.created)
 
     @property
     def dimensions(self) -> str:
