@@ -1,5 +1,6 @@
 const ApiKey = document.getElementById('api-key').textContent;
 const CommentForm = document.getElementById('comment-form');
+const ContentArea = document.querySelector('textarea[name="content"]');
 
 CommentForm.addEventListener('submit', function(event) {
     event.preventDefault();
@@ -22,6 +23,11 @@ CommentForm.addEventListener('submit', function(event) {
         })
     }).then((Response) => {
         if (Response.ok) {
+            ContentArea.value = '';
+            return Response.json();
+        }
+    }).then((Json) => {
+        if (Json['created']) {
             location.reload();
         }
     });

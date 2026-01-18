@@ -1,7 +1,7 @@
 from typing import Optional
 
 from flask_sqlalchemy.pagination import SelectPagination
-from sqlalchemy import select
+from sqlalchemy import and_, select
 
 from db import Comment, Post, User, db
 from .base import browse_element
@@ -21,6 +21,15 @@ def create_comment(content: str, author: User, post: Post) -> Comment:
     content = content.strip()
 
     if len(content) == 0:
+        return
+
+    # Find already existing comment with the same content to prevent spamming.
+    comment = db.session.scalars(
+        select(Comment)
+        .where(and_(Comment.content == content, Comment.author == author))
+    ).first()
+
+    if comment:
         return
 
     comment = Comment()
