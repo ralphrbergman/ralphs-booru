@@ -5,6 +5,9 @@ CommentForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const Data = new FormData(event.target);
+    if (Data.get('content').length === 0) {
+        return;
+    }
 
     fetch('/api/comment', {
         method: 'POST',

@@ -2,25 +2,40 @@
 
 {% block meta %}
     {% if post.caption %}
-        <meta name="og:description" content="{{ post.caption }}">
+        {% set display_title = post.caption | truncate(60, True, '...') %}
+        <meta property="og:title" content="{{ display_title | e }}">
+        <meta name="twitter:title" content="{{ display_title | e }}">
     {% endif %}
 
-    <meta name="og:type" content="article">
-    <meta name="og:url" content="{{ request.url }}">
-    <meta name="og:image" content="{{ post.view_uri }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ request.url }}">
 
     {% if post.cat == 'image' %}
         <meta name="twitter:card" content="summary_large_image">
+        <meta property="og:image" content="{{ post.view_uri }}">
         <meta name="twitter:image" content="{{ post.view_uri }}">
-    {% elif post.cat == 'video' %}
-        <meta name="og:video" content="{{ post.view_uri }}">
-        <meta name="og:video:height" content="{{ post.height }}">
-        <meta name="og:video:width" content="{{ post.width }}">
-        <meta name="og:video:type" content="{{ post.mime }}">
 
+    {% elif post.cat == 'video' and post.size < 15728640 %}
         <meta name="twitter:card" content="player">
-        <meta name="twitter:player:stream", content="{{ post.view_uri }}">
+        
+        <meta property="og:image" content="{{ post.thumbnail.view_uri }}">
+        <meta name="twitter:image" content="{{ post.thumbnail.view_uri }}">
+
+        <meta property="og:video" content="{{ post.view_uri }}">
+        <meta property="og:video:type" content="{{ post.mime }}">
+        <meta property="og:video:width" content="{{ post.width }}">
+        <meta property="og:video:height" content="{{ post.height }}">
+
+        <meta name="twitter:player" content="{{ post.view_uri }}">
+        <meta name="twitter:player:width" content="{{ post.width }}">
+        <meta name="twitter:player:height" content="{{ post.height }}">
+        <meta name="twitter:player:stream" content="{{ post.view_uri }}">
         <meta name="twitter:player:stream:content_type" content="{{ post.mime }}">
+
+    {% else %}
+        <meta name="twitter:card" content="summary_large_image">
+        <meta property="og:image" content="{{ post.thumbnail.view_uri }}">
+        <meta name="twitter:image" content="{{ post.thumbnail.view_uri }}">
     {% endif %}
 {% endblock %}
 
