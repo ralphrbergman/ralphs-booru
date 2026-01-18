@@ -5,7 +5,8 @@ CommentForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const Data = new FormData(event.target);
-    if (Data.get('content').length === 0) {
+    const Content = Data.get('content').trim();
+    if (Content.length === 0) {
         return;
     }
 
@@ -16,7 +17,7 @@ CommentForm.addEventListener('submit', function(event) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            'content': Data.get('content'),
+            'content': Content,
             'post_id': Data.get('post_id')
         })
     }).then((Response) => {

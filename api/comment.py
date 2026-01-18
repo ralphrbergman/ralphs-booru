@@ -18,6 +18,11 @@ def create_comment(content: str, author: User, post: Post) -> Comment:
         author (User)
         post (Post)
     """
+    content = content.strip()
+
+    if len(content) == 0:
+        return
+
     comment = Comment()
 
     comment.author = author
