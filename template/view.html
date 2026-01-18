@@ -53,7 +53,7 @@
             {% endif %}
 
             <div>
-                <p>Score: {{ post.total_score }}</p>
+                <p>Score: {{ post.score }}</p>
                 <a href="" onclick="vote(event, {{ post.id }}, 1, 'post')">Upvote</a>
                 <br>
                 <a href="" onclick="vote(event, {{ post.id }}, -1, 'post')">Downvote</a>

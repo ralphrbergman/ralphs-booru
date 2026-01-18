@@ -100,7 +100,7 @@ def browse_post(
             except ValueError as exc:
                 pass
 
-            if value == 0 or (isinstance(value, str) and not len(value)):
+            if (value == 0 and name != 'score') or (isinstance(value, str) and not len(value)):
                 # Look for posts that don't have the column set.
                 where = or_(col == None, col == '')
             else:

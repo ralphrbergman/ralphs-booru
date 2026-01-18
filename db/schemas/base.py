@@ -16,4 +16,4 @@ class PostMixin():
 
 class ScoreMixin():
     """ Represents a mixin that adds a total score feature. """
-    total_score = Integer(required = True)
+    score = Integer(required = True)
