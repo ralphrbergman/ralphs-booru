@@ -42,15 +42,21 @@ def create_app() -> APIFlask:
         if request.path.startswith('/static') or request.endpoint == 'static':
             return
 
+        if request.path.startswith('/api'):
+            return
+
+        if request.path.startswith('/docs') or request.path.startswith('/openapi.json'):
+            return
+
         path_parts = request.path.split('/')
         first_segment = path_parts[1] if len(path_parts) > 1 else None
 
-        if first_segment not in SUPPORTED_TRANSLATIONS:
-            lang = request.accept_languages.best_match(SUPPORTED_TRANSLATIONS) or 'en'
-            
-            new_url = f'/{lang}{request.full_path}'
-            
-            return redirect(new_url, code=302)
+        if first_segment in SUPPORTED_TRANSLATIONS:
+            g.lang_code = first_segment
+            return 
+
+        lang = request.accept_languages.best_match(SUPPORTED_TRANSLATIONS) or 'en'
+        return redirect(f'/{lang}{request.full_path}', code=302)
 
     babel.init_app(app, locale_selector = get_locale)
 

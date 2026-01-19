@@ -25,8 +25,8 @@
             <li><a class="navbar-anchor" href="{{ url_for('Root.Account.logout_page') }}">{{ gettext('Logout') }}</a></li>
         {% endif %}
 
-        <li><a class="navbar-anchor" href="{{ url_for(request.endpoint, lang_code = 'en', **request.view_args) }}">🇬🇧</a></li>
-        <li><a class="navbar-anchor" href="{{ url_for(request.endpoint, lang_code = 'lv', **request.view_args) }}">🇱🇻</a></li>
+        <li><a class="navbar-anchor" href="{{ url_for(request.endpoint or 'Root.Index.index_page', lang_code='en', **(request.view_args or {})) }}">🇬🇧</a></li>
+        <li><a class="navbar-anchor" href="{{ url_for(request.endpoint or 'Root.Index.index_page', lang_code='lv', **(request.view_args or {})) }}">🇱🇻</a></li>
     </ul>
 
     <button id="menu-toggler">Menu</button>

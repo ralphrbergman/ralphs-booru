@@ -1,6 +1,6 @@
 from typing import Any
 
-from flask import Blueprint, g
+from flask import Blueprint, current_app, g, request
 from flask_login import current_user
 
 from .account import account_bp
@@ -22,15 +22,26 @@ root_bp = Blueprint(
 
 @root_bp.url_value_preprocessor
 def pull_lang_code(endpoint: str | None, values: dict[str, Any] | None):
-    g.lang_code = values.pop('lang_code', None)
+    if values is not None:
+        g.lang_code = values.pop('lang_code', None)
+    else:
+        g.lang_code = g.get('lang_code') or 'en'
 
 @root_bp.url_defaults
-def add_lang_code(endpoint: str | None, values: dict[str, Any]):
+def add_lang_code(endpoint: str, values: dict[str, Any]) -> None:
     if 'lang_code' in values:
         return
 
-    if g.lang_code:
-        values.setdefault('lang_code', g.lang_code)
+    lang_code = g.get('lang_code')
+    if not lang_code:
+        path_parts = request.path.split('/')
+        if len(path_parts) > 1 and path_parts[1] in ['en', 'lv']:
+            lang_code = path_parts[1]
+        else:
+            lang_code = 'en'
+
+    if current_app.url_map.is_endpoint_expecting(endpoint, 'lang_code'):
+        values.setdefault('lang_code', lang_code)
 
 # Injects currently logged in user to the template.
 # This is so we can access the API key for JavaScript within the template.
