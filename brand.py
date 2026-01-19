@@ -5,7 +5,8 @@ brand = {
         'media': {
             'Discord': 'ralphwuu',
             'GitHub': 'https://github.com/ralphrbergman',
-            'Instagram': 'https://instagram.com/ralphrbergman/'
+            'Instagram': 'https://instagram.com/ralphrbergman/',
+            'X': 'https://x.com/ralphrbergman'
         },
         'name': 'Ralph Rainer Bergman',
     },
