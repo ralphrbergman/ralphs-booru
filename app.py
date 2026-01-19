@@ -1,7 +1,7 @@
 from os import getenv
 
 from apiflask import APIFlask
-from flask import g, request
+from flask import g, request, redirect
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 
@@ -11,7 +11,7 @@ from blueprint import api_bp, root_bp
 from db import db, User
 from encryption import bcrypt
 from login import login_manager
-from translation import babel
+from translation import SUPPORTED_TRANSLATIONS, babel
 
 load_dotenv()
 
@@ -34,7 +34,23 @@ def create_app() -> APIFlask:
 
     # Initialize translations
     def get_locale() -> str:
-        return g.get('lang_code', request.accept_languages.best_match(('en', 'lv')))
+        return g.get('lang_code', request.accept_languages.best_match(SUPPORTED_TRANSLATIONS))
+    
+    @app.before_request
+    def ensure_lang_prefix():
+        """ Redirect users to /en URL prefix if there's no languages prefixed. """
+        if request.path.startswith('/static') or request.endpoint == 'static':
+            return
+
+        path_parts = request.path.split('/')
+        first_segment = path_parts[1] if len(path_parts) > 1 else None
+
+        if first_segment not in SUPPORTED_TRANSLATIONS:
+            lang = request.accept_languages.best_match(SUPPORTED_TRANSLATIONS) or 'en'
+            
+            new_url = f'/{lang}{request.full_path}'
+            
+            return redirect(new_url, code=302)
 
     babel.init_app(app, locale_selector = get_locale)
 
