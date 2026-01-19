@@ -16,7 +16,7 @@ class ScoreMixin:
             .where(
                 and_(
                     ScoreAssociation.target_id == cls.id,
-                    ScoreAssociation.target_type == 'post'
+                    ScoreAssociation.target_type == cls.__name__.lower()
                 )
             )
             .correlate(cls) # This tells SQL exactly which "id" to use
