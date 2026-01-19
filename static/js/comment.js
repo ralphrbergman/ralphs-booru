@@ -22,12 +22,13 @@ CommentForm.addEventListener('submit', function(event) {
             'post_id': Data.get('post_id')
         })
     }).then((Response) => {
+        ContentArea.value = '';
+
         if (Response.ok) {
-            ContentArea.value = '';
             return Response.json();
         }
     }).then((Json) => {
-        if (Json['created']) {
+        if (Json && Json['created']) {
             location.reload();
         }
     });
