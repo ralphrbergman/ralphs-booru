@@ -1,6 +1,7 @@
 from os import getenv
 
 from apiflask import APIFlask
+from flask import g, request
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 
@@ -10,6 +11,7 @@ from blueprint import api_bp, root_bp
 from db import db, User
 from encryption import bcrypt
 from login import login_manager
+from translation import babel
 
 load_dotenv()
 
@@ -29,6 +31,12 @@ def create_app() -> APIFlask:
     app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URI')
 
     db.init_app(app)
+
+    # Initialize translations
+    def get_locale() -> str:
+        return g.get('lang_code', request.accept_languages.best_match(('en', 'lv')))
+
+    babel.init_app(app, locale_selector = get_locale)
 
     # Initialize encrypting
     bcrypt.init_app(app)

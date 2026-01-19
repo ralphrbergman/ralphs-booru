@@ -8,30 +8,30 @@
             {{ form.hidden_tag() }}
 
             <div class="input-group">
-                <label for="avatar">Avatar:</label>
+                <label for="avatar">{{ gettext('Avatar') }}:</label>
                 <input type="file" name="avatar">
             </div>
 
             <div class="input-group">
-                <label for="username">Username:</label>
+                <label for="username">{{ gettext('Username') }}:</label>
                 <input type="text" name="username" value="{{ user.name }}" disabled>
             </div>
 
             <div class="input-group">
-                <label for="email">E-mail:</label>
+                <label for="email">{{ gettext('E-mail') }}:</label>
                 <input type="email" name="email" value="{% if user.mail is not none %}{{ user.mail }}{% endif %}">
             </div>
 
             <div class="input-group">
-                <label for="pw">Password:</label>
+                <label for="pw">{{ gettext('Password') }}:</label>
                 <input type="password" name="pw">
             </div>
 
-            <a href="{{ url_for('Root.Account.edit_password_page') }}">Edit Password</a>
+            <a href="{{ url_for('Root.Account.edit_password_page') }}">{{ gettext('Edit Password') }}</a>
 
             <input type="submit" value="Submit">
 
-            <p>Your unique API key: {{ user.api_key }}<br><b>(Do not share it with anyone)</b></p>
+            <p>{% trans api_key = user.api_key %}Your unique API key: {{ api_key }}<br><b>(Do not share it with anyone)</b>{% endtrans %}</p>
         </form>
     </div>
 {% endblock %}

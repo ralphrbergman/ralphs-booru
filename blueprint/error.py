@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from flask_babel import gettext
 
 err_bp = Blueprint(
     name = 'Error Handler',
@@ -10,5 +11,5 @@ def _404_handler(exc):
     return render_template(
         'error.html',
         code = 404,
-        message = 'The resource you we\'re looking for does not exist.'
+        message = gettext('The resource you we\'re looking for does not exist.')
     ), 404

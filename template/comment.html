@@ -3,7 +3,7 @@
 {% set title = 'Comments ' ~ comments.items | length %}
 
 {% block body %}
-    <p>This page displays comments site-wide across all {{ post_count }} posts.</p>
+    <p>{% trans post_count = post_count %}This page displays comments site-wide across all {{ post_count }} posts.{% endtrans %}</p>
 
     {% include 'frag/comment-section.html' %}
     {% include 'frag/pagination.html' %}

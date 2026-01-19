@@ -1,4 +1,5 @@
 from flask import Blueprint, request, flash, render_template
+from flask_babel import gettext
 
 from api import browse_user, get_user
 from api.decorators import moderator_only
@@ -55,6 +56,6 @@ def manage_user_page(user_id: int):
         user.name = username
 
         db.session.commit()
-        flash(f'Updated user {user.name} successfully!')
+        flash(gettext('Updated user %(name)s successfully!', name = user.name))
 
     return render_template('manage_user.html', form = form, user = user)

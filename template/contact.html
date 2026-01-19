@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="table-container">
-        <p>You can get in touch with me</p>
+        <p>{{ gettext('You can get in touch with me') }}</p>
 
         <table class="center-table">
             <tr>
@@ -13,7 +13,7 @@
             </tr>
             <tr>
                 {% if brand['contact']['mail'] %}
-                    <td>E-mail</td>
+                    <td>{{ gettext('E-mail') }}</td>
                     <td><a href="mailto:{{ brand['contact']['mail'] }}">{{ brand['contact']['mail'] }}</a></td>
                 {% endif %}
             </tr>

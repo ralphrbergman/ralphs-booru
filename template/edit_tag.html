@@ -8,12 +8,12 @@
             {{ form.hidden_tag() }}
 
             <div class="input-group">
-                <label for="name">Name:</label>
+                <label for="name">{{ gettext('Name') }}:</label>
                 <input type="text" name="name" value="{{ tag.name }}">
             </div>
 
             <div class="input-group">
-                <label for="type">Type:</label>
+                <label for="type">{{ gettext('Type') }}:</label>
                 <select name="type">
                     {% for tag_type in tag_types %}
                         <option value="{{ tag_type }}" {% if tag_type == tag.type %}selected{% endif %}>{{ tag_type | title }}</option>
@@ -22,16 +22,16 @@
             </div>
 
             <div class="input-group">
-                <label for="desc">Description:</label>
+                <label for="desc">{{ gettext('Description') }}:</label>
                 <textarea name="desc">{% if tag.desc is not none %}{{ tag.desc }}{% endif %}</textarea>
             </div>
 
             <div class="input-group">
-                <label for="deleted">Delete:</label>
+                <label for="deleted">{{ gettext('Delete') }}:</label>
                 <input type="checkbox" name="deleted">
             </div>
 
-            <input type="submit" value="Update">
+            <input type="submit" value="{{ gettext('Update') }}">
         </form>
     </div>
 {% endblock %}

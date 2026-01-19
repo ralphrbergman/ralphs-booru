@@ -12,7 +12,7 @@
             {{ form.hidden_tag() }}
 
             <input class="search-box" type="text" name="search" placeholder="tag1 tag2">
-            <input class="search-btn" type="submit" value="Search">
+            <input class="search-btn" type="submit" value="{{ gettext('Search') }}">
         </form>
 
         <div class="digits">
@@ -26,7 +26,7 @@
                 </div>
             {% endfor %}
 
-            <p class="digit">Posts</p>
+            <p class="digit">{{ gettext('Posts') }}</p>
         </div>
     </div>
 {% endblock %}

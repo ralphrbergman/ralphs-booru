@@ -1,4 +1,5 @@
 from flask import Blueprint, request, abort, flash, redirect, render_template, url_for
+from flask_babel import gettext
 from flask_login import current_user, login_required
 
 from api import browse_tag, delete_tag, get_tag
@@ -31,7 +32,7 @@ def edit_page(tag_id: int):
         if form.deleted.data and current_user.is_authenticated and current_user.is_moderator:
             delete_tag(tag)
 
-            flash(f'Permanently deleted tag #{tag.id}')
+            flash(gettext('Permanently deleted tag #%(tag_name)s', tag_name = tag.name))
             return redirect(url_for('Root.Tag.tag_page'))
 
         tag.name = form.name.data
@@ -40,7 +41,7 @@ def edit_page(tag_id: int):
 
         db.session.commit()
 
-        flash(f'Updated tag {tag.id} successfully!')
+        flash(gettext('Updated tag %(tag_name)s successfully!', tag_name = tag.name))
         return redirect(url_for('Root.Tag.edit_page', tag_id = tag_id))
 
 @tag_bp.route('')

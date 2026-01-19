@@ -12,37 +12,37 @@
             {{ form.hidden_tag() }}
 
             <div class="input-group">
-                <label for="files">File(s):</label>
+                <label for="files">{{ gettext('File(s)') }}:</label>
                 <input type="file" name="files" accept=".gif, .jpg, .jpeg, .mp3, .mp4, .png, .webm, .webp" multiple required>
             </div>
 
             <div class="input-group">
-                <label for="directory">Directory:</label>
+                <label for="directory">{{ gettext('Directory') }}:</label>
                 <input type="text" name="directory">
             </div>
 
             <div class="input-group">
-                <label for="op">Original Poster:</label>
+                <label for="op">{{ gettext('Original Poster') }}:</label>
                 <input type="text" name="op">
             </div>
 
             <div class="input-group">
-                <label for="src">Source:</label>
+                <label for="src">{{ gettext('Source') }}:</label>
                 <input type="text" name="src">
             </div>
 
             <div class="input-group">
-                <label for="caption">Caption:</label>
+                <label for="caption">{{ gettext('Caption') }}:</label>
                 <textarea name="caption"></textarea>
             </div>
 
             <div class="input-group">
-                <label for="tags">Tags:</label>
+                <label for="tags">{{ gettext('Tags') }}:</label>
                 <textarea name="tags"></textarea>
             </div>
 
             <div class="input-group">
-                <input type="submit" name="submit" value="Upload">
+                <input type="submit" name="submit" value="{{ gettext('Upload') }}">
             </div>
         </form>
     </div>

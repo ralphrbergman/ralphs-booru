@@ -1,0 +1,387 @@
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-01-19 14:27+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: blueprint/account.py:47
+msgid "Updated profile successfully"
+msgstr ""
+
+#: blueprint/account.py:49 blueprint/account.py:73
+msgid "Invalid password provided"
+msgstr ""
+
+#: blueprint/account.py:70
+msgid "Successfully changed password"
+msgstr ""
+
+#: blueprint/account.py:93
+msgid "Incorrect username"
+msgstr ""
+
+#: blueprint/account.py:99
+#, python-format
+msgid "Welcome back, %(name)s"
+msgstr ""
+
+#: blueprint/account.py:102
+msgid "Incorrect password"
+msgstr ""
+
+#: blueprint/account.py:115
+msgid "Logged out"
+msgstr ""
+
+#: blueprint/account.py:157
+msgid "Failed to create your profile."
+msgstr ""
+
+#: blueprint/account.py:163
+#, python-format
+msgid "Welcome, %(name)s"
+msgstr ""
+
+#: blueprint/error.py:14
+msgid "The resource you we're looking for does not exist."
+msgstr ""
+
+#: blueprint/manage_user.py:59
+#, python-format
+msgid "Updated user %(name)s successfully!"
+msgstr ""
+
+#: blueprint/post.py:80
+#, python-format
+msgid "Permanently deleted post #%(post_id)s"
+msgstr ""
+
+#: blueprint/post.py:89
+#, python-format
+msgid "Successfully exchanged post #%(post_id)s for a new file!"
+msgstr ""
+
+#: blueprint/post.py:91
+msgid "Failed to exchange post."
+msgstr ""
+
+#: blueprint/post.py:148
+#, python-format
+msgid "Successfully uploaded post #%(post_id)s"
+msgstr ""
+
+#: blueprint/post.py:150
+#, python-format
+msgid "Uploading file %(filename)s failed"
+msgstr ""
+
+#: blueprint/tag.py:35
+#, python-format
+msgid "Permanently deleted tag #%(tag_name)s"
+msgstr ""
+
+#: blueprint/tag.py:44
+#, python-format
+msgid "Updated tag %(tag_name)s successfully!"
+msgstr ""
+
+#: template/comment.html:6
+#, python-format
+msgid "This page displays comments site-wide across all %(post_count)s posts."
+msgstr ""
+
+#: template/contact.html:7
+msgid "You can get in touch with me"
+msgstr ""
+
+#: template/contact.html:16 template/edit_profile.html:21
+#: template/list_user.html:11 template/manage_user.html:25
+msgid "E-mail"
+msgstr ""
+
+#: template/edit.html:15
+msgid "Select this usually when you found a better quality file."
+msgstr ""
+
+#: template/edit.html:15
+msgid "Replace with"
+msgstr ""
+
+#: template/edit.html:20 template/upload.html:20
+msgid "Directory"
+msgstr ""
+
+#: template/edit.html:25 template/upload.html:25
+msgid "Original Poster"
+msgstr ""
+
+#: template/edit.html:29 template/edit.html:38
+msgid "Open"
+msgstr ""
+
+#: template/edit.html:34 template/upload.html:30 template/view.html:85
+msgid "Source"
+msgstr ""
+
+#: template/edit.html:43 template/upload.html:35 template/view.html:109
+msgid "Caption"
+msgstr ""
+
+#: template/edit.html:48 template/frag/nav.html:10 template/upload.html:40
+#: template/view.html:63
+msgid "Tags"
+msgstr ""
+
+#: template/edit.html:53 template/edit_tag.html:30
+msgid "Delete"
+msgstr ""
+
+#: template/edit.html:57
+msgid "Submit"
+msgstr ""
+
+#: template/edit_password.html:11
+msgid "Old Password"
+msgstr ""
+
+#: template/edit_password.html:16 template/manage_user.html:30
+msgid "New Password"
+msgstr ""
+
+#: template/edit_password.html:21 template/signup.html:22
+msgid "Confirm Password"
+msgstr ""
+
+#: template/edit_password.html:25 template/manage_user.html:34
+msgid "Change"
+msgstr ""
+
+#: template/edit_profile.html:11
+msgid "Avatar"
+msgstr ""
+
+#: template/edit_profile.html:16 template/list_user.html:8
+#: template/login.html:10 template/manage_user.html:9 template/signup.html:13
+msgid "Username"
+msgstr ""
+
+#: template/edit_profile.html:26 template/login.html:13 template/signup.html:19
+msgid "Password"
+msgstr ""
+
+#: template/edit_profile.html:30
+msgid "Edit Password"
+msgstr ""
+
+#: template/edit_profile.html:34
+#, python-format
+msgid "Your unique API key: %(api_key)s<br><b>(Do not share it with anyone)</b>"
+msgstr ""
+
+#: template/edit_tag.html:11 template/tag.html:14 template/view.html:104
+msgid "Name"
+msgstr ""
+
+#: template/edit_tag.html:16 template/tag.html:17 template/view.html:105
+msgid "Type"
+msgstr ""
+
+#: template/edit_tag.html:25 template/tag.html:18
+msgid "Description"
+msgstr ""
+
+#: template/edit_tag.html:34
+msgid "Update"
+msgstr ""
+
+#: template/error.html:7
+#, python-format
+msgid "Oops! You encountered HTTP %(code)s error!"
+msgstr ""
+
+#: template/index.html:15
+msgid "Search"
+msgstr ""
+
+#: template/index.html:29
+msgid "Posts"
+msgstr ""
+
+#: template/layout.html:9
+msgid "Ralph's kind of Booru"
+msgstr ""
+
+#: template/list_user.html:10 template/manage_user.html:14
+msgid "Role"
+msgstr ""
+
+#: template/list_user.html:12
+msgid "Created"
+msgstr ""
+
+#: template/list_user.html:19 template/profile.html:20 template/tag.html:26
+#: template/view.html:52
+msgid "Edit"
+msgstr ""
+
+#: template/login.html:17
+msgid "Remember Me"
+msgstr ""
+
+#: template/frag/nav.html:14 template/login.html:21
+msgid "Login"
+msgstr ""
+
+#: template/signup.html:10
+msgid "Upload your own avatar"
+msgstr ""
+
+#: template/signup.html:16
+msgid "E-mail (Not Required) "
+msgstr ""
+
+#: template/frag/nav.html:15 template/signup.html:25
+msgid "Sign-Up"
+msgstr ""
+
+#: template/tag.html:15
+msgid "Count"
+msgstr ""
+
+#: template/upload.html:15
+msgid "File(s)"
+msgstr ""
+
+#: template/frag/nav.html:23 template/upload.html:45
+msgid "Upload"
+msgstr ""
+
+#: template/view.html:57
+msgid "Upvote"
+msgstr ""
+
+#: template/view.html:59
+msgid "Downvote"
+msgstr ""
+
+#: template/view.html:74
+msgid "Statistics"
+msgstr ""
+
+#: template/view.html:77
+msgid "Posted"
+msgstr ""
+
+#: template/view.html:78
+msgid "Uploader"
+msgstr ""
+
+#: template/view.html:81
+msgid "Size"
+msgstr ""
+
+#: template/view.html:95
+msgid "OP"
+msgstr ""
+
+#: template/view.html:106
+msgid "Disk Size"
+msgstr ""
+
+#: template/view.html:121
+msgid "Your comment goes here."
+msgstr ""
+
+#: template/view.html:122
+msgid "Comment"
+msgstr ""
+
+#: template/frag/comment-section.html:14
+msgid "at"
+msgstr ""
+
+#: template/frag/footer.html:8
+msgid "Links"
+msgstr ""
+
+#: template/frag/footer.html:9
+msgid "Help"
+msgstr ""
+
+#: template/frag/footer.html:10
+msgid "Contact Me"
+msgstr ""
+
+#: template/frag/footer.html:11
+msgid "Source Code"
+msgstr ""
+
+#: template/frag/footer.html:14
+msgid "For Developers"
+msgstr ""
+
+#: template/frag/nav.html:8
+msgid "Index"
+msgstr ""
+
+#: template/frag/nav.html:9
+msgid "Browse"
+msgstr ""
+
+#: template/frag/nav.html:11
+msgid "Comments"
+msgstr ""
+
+#: template/frag/nav.html:19
+msgid "Users"
+msgstr ""
+
+#: template/frag/nav.html:24
+msgid "My Profile"
+msgstr ""
+
+#: template/frag/nav.html:25
+msgid "Logout"
+msgstr ""
+
+#: template/frag/posts.html:15
+msgid "Caption flair"
+msgstr ""
+
+#: template/frag/posts.html:20
+msgid "Original Poster flair"
+msgstr ""
+
+#: template/frag/posts.html:24
+msgid "Source flair"
+msgstr ""
+
+#: template/frag/posts.html:27
+msgid "Original Poster & Source flair"
+msgstr ""
+
+#: template/frag/posts.html:31
+msgid "Audio flair"
+msgstr ""
+
+#: template/frag/posts.html:33
+msgid "Image flair"
+msgstr ""
+
+#: template/frag/posts.html:35
+msgid "Video flair"
+msgstr ""
+

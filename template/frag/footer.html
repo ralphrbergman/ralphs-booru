@@ -5,13 +5,13 @@
 <footer class="bg main-footer">
     <div class="footer-content">
         <ul class="footer-anchors">
-            <li><p class="notable">Links</p></li>
-            <li><a href="{{ url_for('Root.Help.help_page') }}">Help</a></li>
-            <li><a href="{{ url_for('Root.Contact.contact_page') }}">Contact Me</a></li>
-            <li><a href="{{ brand['source-url'] }}">Source Code</a></li>
+            <li><p class="notable">{{ gettext('Links') }}</p></li>
+            <li><a href="{{ url_for('Root.Help.help_page') }}">{{ gettext('Help') }}</a></li>
+            <li><a href="{{ url_for('Root.Contact.contact_page') }}">{{ gettext('Contact Me') }}</a></li>
+            <li><a href="{{ brand['source-url'] }}">{{ gettext('Source Code') }}</a></li>
         </ul>
         <ul class="footer-anchors">
-            <li><p class="notable">For Developers</p></li>
+            <li><p class="notable">{{ gettext('For Developers') }}</p></li>
             <li><a href="/docs">REST API</a></li>
         </ul>
     </div>

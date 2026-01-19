@@ -1,0 +1,394 @@
+# Latvian translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-01-19 14:27+0200\n"
+"PO-Revision-Date: 2026-01-19 00:40+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: lv\n"
+"Language-Team: lv <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 :"
+" 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: blueprint/account.py:47
+msgid "Updated profile successfully"
+msgstr "Profils tika nomainīts"
+
+#: blueprint/account.py:49 blueprint/account.py:73
+msgid "Invalid password provided"
+msgstr "Nepareiza parole"
+
+#: blueprint/account.py:70
+msgid "Successfully changed password"
+msgstr "Parole tika nomainīta"
+
+#: blueprint/account.py:93
+#, fuzzy
+msgid "Incorrect username"
+msgstr "Lietotājvārds"
+
+#: blueprint/account.py:99
+#, python-format
+msgid "Welcome back, %(name)s"
+msgstr "Laipni lūgti atpakaļ, %(name)s"
+
+#: blueprint/account.py:102
+#, fuzzy
+msgid "Incorrect password"
+msgstr "Nepareiza parole"
+
+#: blueprint/account.py:115
+#, fuzzy
+msgid "Logged out"
+msgstr "Iziet"
+
+#: blueprint/account.py:157
+msgid "Failed to create your profile."
+msgstr "Neizdevās izveidot jūsu profilu"
+
+#: blueprint/account.py:163
+#, python-format
+msgid "Welcome, %(name)s"
+msgstr "Sveiki, %(name)s"
+
+#: blueprint/error.py:14
+msgid "The resource you we're looking for does not exist."
+msgstr "Resurss ko meklējāt neeksistē"
+
+#: blueprint/manage_user.py:59
+#, python-format
+msgid "Updated user %(name)s successfully!"
+msgstr "Atjaunināja lietotāju %(name)s!"
+
+#: blueprint/post.py:80
+#, python-format
+msgid "Permanently deleted post #%(post_id)s"
+msgstr "Neatgriezeniski izdzēsi ierakstu #%(post_id)s"
+
+#: blueprint/post.py:89
+#, python-format
+msgid "Successfully exchanged post #%(post_id)s for a new file!"
+msgstr "Veiksmīgi izmainīja ierakstu #%(post_id)s ar jaunu failu!"
+
+#: blueprint/post.py:91
+msgid "Failed to exchange post."
+msgstr "Neizdevās izmainīt ierakstu."
+
+#: blueprint/post.py:148
+#, python-format
+msgid "Successfully uploaded post #%(post_id)s"
+msgstr "Veiksmīgi publicēja ierakstu #%(post_id)s"
+
+#: blueprint/post.py:150
+#, python-format
+msgid "Uploading file %(filename)s failed"
+msgstr "Augšupielādējot failu %(filename)s neizdevās"
+
+#: blueprint/tag.py:35
+msgid "Permanently deleted tag #%(tag_name)s"
+msgstr "Neatgriezeniski izdzēsi birku #%(tag_name)s"
+
+#: blueprint/tag.py:44
+msgid "Updated tag %(tag_name)s successfully!"
+msgstr "Atjaunināja birku %(tag_name)s!"
+
+#: template/comment.html:6
+#, python-format
+msgid "This page displays comments site-wide across all %(post_count)s posts."
+msgstr "Šī lapa parāda visas vietnes komentārus visos %(post_count)s ierakstos."
+
+#: template/contact.html:7
+msgid "You can get in touch with me"
+msgstr "Šeit būs dati lai jūs varētu mani sasniegt"
+
+#: template/contact.html:16 template/edit_profile.html:21
+#: template/list_user.html:11 template/manage_user.html:25
+msgid "E-mail"
+msgstr "E-pasts"
+
+#: template/edit.html:15
+msgid "Select this usually when you found a better quality file."
+msgstr "Izvēlaties šo kad atrodat augstākas kvalitātes failu šim ierakstam."
+
+#: template/edit.html:15
+msgid "Replace with"
+msgstr "Aizstāt ar"
+
+#: template/edit.html:20 template/upload.html:20
+msgid "Directory"
+msgstr "Mape"
+
+#: template/edit.html:25 template/upload.html:25
+msgid "Original Poster"
+msgstr "Sākotnējais publicētājs"
+
+#: template/edit.html:29 template/edit.html:38
+msgid "Open"
+msgstr "Atvērt"
+
+#: template/edit.html:34 template/upload.html:30 template/view.html:85
+msgid "Source"
+msgstr "Resurss"
+
+#: template/edit.html:43 template/upload.html:35 template/view.html:109
+msgid "Caption"
+msgstr "Saturs"
+
+#: template/edit.html:48 template/frag/nav.html:10 template/upload.html:40
+#: template/view.html:63
+msgid "Tags"
+msgstr "Birkas"
+
+#: template/edit.html:53 template/edit_tag.html:30
+msgid "Delete"
+msgstr "Izdzēst"
+
+#: template/edit.html:57
+msgid "Submit"
+msgstr ""
+
+#: template/edit_password.html:11
+msgid "Old Password"
+msgstr "Vecā parole"
+
+#: template/edit_password.html:16 template/manage_user.html:30
+msgid "New Password"
+msgstr "Jaunā parole"
+
+#: template/edit_password.html:21 template/signup.html:22
+msgid "Confirm Password"
+msgstr "Apstiprināt paroli"
+
+#: template/edit_password.html:25 template/manage_user.html:34
+msgid "Change"
+msgstr "Mainīt"
+
+#: template/edit_profile.html:11
+msgid "Avatar"
+msgstr "Bilde"
+
+#: template/edit_profile.html:16 template/list_user.html:8
+#: template/login.html:10 template/manage_user.html:9 template/signup.html:13
+msgid "Username"
+msgstr "Lietotājvārds"
+
+#: template/edit_profile.html:26 template/login.html:13 template/signup.html:19
+msgid "Password"
+msgstr "Parole"
+
+#: template/edit_profile.html:30
+#, fuzzy
+msgid "Edit Password"
+msgstr "Vecā parole"
+
+#: template/edit_profile.html:34
+#, python-format
+msgid "Your unique API key: %(api_key)s<br><b>(Do not share it with anyone)</b>"
+msgstr ""
+"Tava atslēga pieejai REST API: %(api_key)s <br><b>(Nedali to ar "
+"nevienu)</b>"
+
+#: template/edit_tag.html:11 template/tag.html:14 template/view.html:104
+msgid "Name"
+msgstr "Vārds"
+
+#: template/edit_tag.html:16 template/tag.html:17 template/view.html:105
+msgid "Type"
+msgstr "Tips"
+
+#: template/edit_tag.html:25 template/tag.html:18
+msgid "Description"
+msgstr "Apraksts"
+
+#: template/edit_tag.html:34
+msgid "Update"
+msgstr "Atjaunināt"
+
+#: template/error.html:7
+#, python-format
+msgid "Oops! You encountered HTTP %(code)s error!"
+msgstr "Ak vai! Jūs satikāties ar HTTP kļūmi %(code)s!"
+
+#: template/index.html:15
+msgid "Search"
+msgstr "Meklēt"
+
+#: template/index.html:29
+msgid "Posts"
+msgstr "Ieraksti"
+
+#: template/layout.html:9
+msgid "Ralph's kind of Booru"
+msgstr "Ralfa Būru"
+
+#: template/list_user.html:10 template/manage_user.html:14
+msgid "Role"
+msgstr "Loma"
+
+#: template/list_user.html:12
+msgid "Created"
+msgstr "Izveidots"
+
+#: template/list_user.html:19 template/profile.html:20 template/tag.html:26
+#: template/view.html:52
+msgid "Edit"
+msgstr "Mainīt"
+
+#: template/login.html:17
+msgid "Remember Me"
+msgstr "Atcerēties mani"
+
+#: template/frag/nav.html:14 template/login.html:21
+msgid "Login"
+msgstr "Pieslēgties"
+
+#: template/signup.html:10
+msgid "Upload your own avatar"
+msgstr "Augšupielādē savu bildi"
+
+#: template/signup.html:16
+msgid "E-mail (Not Required) "
+msgstr "E-pasts (Nav obligāts)"
+
+#: template/frag/nav.html:15 template/signup.html:25
+msgid "Sign-Up"
+msgstr "Izveidot profilu"
+
+#: template/tag.html:15
+msgid "Count"
+msgstr "Skaits"
+
+#: template/upload.html:15
+msgid "File(s)"
+msgstr "Failu(s)"
+
+#: template/frag/nav.html:23 template/upload.html:45
+msgid "Upload"
+msgstr "Augšupielādē"
+
+#: template/view.html:57
+msgid "Upvote"
+msgstr "Augšupbalss"
+
+#: template/view.html:59
+msgid "Downvote"
+msgstr "Lejupbalss"
+
+#: template/view.html:74
+msgid "Statistics"
+msgstr "Statistika"
+
+#: template/view.html:77
+msgid "Posted"
+msgstr "Izveidots"
+
+#: template/view.html:78
+msgid "Uploader"
+msgstr "Īpašnieks"
+
+#: template/view.html:81
+msgid "Size"
+msgstr "Izmērs"
+
+#: template/view.html:95
+msgid "OP"
+msgstr "Sākotnējais publicētājs"
+
+#: template/view.html:106
+msgid "Disk Size"
+msgstr "Glabāšanas Izmērs"
+
+#: template/view.html:121
+msgid "Your comment goes here."
+msgstr "Tavs komentārs šeit."
+
+#: template/view.html:122
+msgid "Comment"
+msgstr "Komentēt"
+
+#: template/frag/comment-section.html:14
+msgid "at"
+msgstr "komentē"
+
+#: template/frag/footer.html:8
+#, fuzzy
+msgid "Links"
+msgstr "Pieslēgties"
+
+#: template/frag/footer.html:9
+msgid "Help"
+msgstr "Palīdzība"
+
+#: template/frag/footer.html:10
+msgid "Contact Me"
+msgstr "Sazinies ar mani"
+
+#: template/frag/footer.html:11
+msgid "Source Code"
+msgstr "Mājaslapas kods"
+
+#: template/frag/footer.html:14
+msgid "For Developers"
+msgstr "Priekš Izstrādātājiem"
+
+#: template/frag/nav.html:8
+msgid "Index"
+msgstr "Mājas"
+
+#: template/frag/nav.html:9
+msgid "Browse"
+msgstr "Pārlūkot"
+
+#: template/frag/nav.html:11
+msgid "Comments"
+msgstr "Komentāri"
+
+#: template/frag/nav.html:19
+msgid "Users"
+msgstr "Lietotāji"
+
+#: template/frag/nav.html:24
+msgid "My Profile"
+msgstr "Profils"
+
+#: template/frag/nav.html:25
+msgid "Logout"
+msgstr "Iziet"
+
+#: template/frag/posts.html:15
+msgid "Caption flair"
+msgstr "Teksta satura marķējums"
+
+#: template/frag/posts.html:20
+msgid "Original Poster flair"
+msgstr "Sākotnējā publicētāja marķējums"
+
+#: template/frag/posts.html:24
+msgid "Source flair"
+msgstr "Resursa marķējums"
+
+#: template/frag/posts.html:27
+msgid "Original Poster & Source flair"
+msgstr "Sākotnējā publicētāja un resursa marķējums"
+
+#: template/frag/posts.html:31
+msgid "Audio flair"
+msgstr "Audio marķējums"
+
+#: template/frag/posts.html:33
+msgid "Image flair"
+msgstr "Attēla marķējums"
+
+#: template/frag/posts.html:35
+msgid "Video flair"
+msgstr "Video marķējums"
+

@@ -7,18 +7,18 @@
         <form class="form" method="post">
             {{ form.hidden_tag() }}
 
-            <label for="username">Username:</label>
+            <label for="username">{{ gettext('Username') }}:</label>
             <input type="text" name="username">
 
-            <label for="pw">Password:</label>
+            <label for="pw">{{ gettext('Password') }}:</label>
             <input type="password" name="pw">
 
             <div class="input-group">
-                <label for="remember">Remember Me:</label>
+                <label for="remember">{{ gettext('Remember Me') }}:</label>
                 <input type="checkbox" name="remember">
             </div>
 
-            <input type="submit" name="submit" value="Login">
+            <input type="submit" name="submit" value="{{ gettext('Login') }}">
         </form>
     </div>
 {% endblock %}

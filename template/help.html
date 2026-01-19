@@ -3,145 +3,145 @@
 {% set title = 'Help' %}
 
 {% block body %}
-    <a href="#posts"><h1 id="posts">Help: Posts</h1></a>
-    <p>A post represents a uploaded file that can be commented on and searched for. Alternatively if you upload a post of your own you can give it original poster and source attributes. More about uploading read <a href="#uploading">Uploading section</a>, as well as caption and add tags that can be easily searched for as before mentioned. More about tags read <a href="#tags">Tags section</a></p>
+    <a href="#posts"><h1 id="posts">{{ gettext('Help: Posts') }}</h1></a>
+    <p>{% trans upload_href = '#uploading', tag_href = '#tags' %}A post represents a uploaded file that can be commented on and searched for. Alternatively if you upload a post of your own you can give it original poster and source attributes. More about uploading read <a href="{{ upload_href }}">Uploading section</a>, as well as caption and add tags that can be easily searched for as before mentioned. More about tags read <a href="{{ tag_href }}">Tags section</a>{% endtrans %}</p>
 
-    <a href="#search"><h1 id="search">Help: Search</h1></a>
-    <p>You can search for tag <b>game gtav</b> and it will search for Grand Theft Auto V gameplay posts. Because you put two tags together, alternatively if you don't want gameplay you can add <b>-game</b> tag with a minus sign in front of tag name instead and it will search for posts that depict GTA V instead of gameplay.</p>
-    <p>When searching you might want to look at what tags are available, click <a href="{{ url_for('Root.Tag.tag_page') }}">here</a>. More about searching look in <a href="#tags">Tags in-depth section</a></p>
+    <a href="#search"><h1 id="search">{{ gettext('Help: Search') }}</h1></a>
+    <p>{% trans tag_example = 'game gtav', minus_tag = '-game' %}You can search for tag <b>{{ tag_example }}</b> and it will search for Grand Theft Auto V gameplay posts. Because you put two tags together, alternatively if you don't want gameplay you can add <b>{{ minus_tag }}</b> tag with a minus sign in front of tag name instead and it will search for posts that depict GTA V instead of gameplay.{% endtrans %}</p>
+    <p>{% trans tag_url = url_for('Root.Tag.tag_page'), tag_href = #tags %}When searching you might want to look at what tags are available, click <a href="{{ tag_url }}">here</a>. More about searching look in <a href="{{ tag_href }}">Tags in-depth section</a>{% endtrans %}</p>
     <table>
         <tr>
-            <th>Tag</th>
-            <th>Explanation</th>
+            <th>{{ gettext('Tag') }}</th>
+            <th>{{ gettext('Explanation') }}</th>
         </tr>
         <tr>
             <td>purple_sky</td>
-            <td>Search for posts with <b>purple_sky</b> tag</td>
+            <td>{% trans tag = 'purple_sky' %}Search for posts with <b>{{ tag }}</b> tag{% endtrans %}</td>
         </tr>
         <tr>
             <td>-winter</td>
-            <td>Search for posts that don't have the <b>winter</b> tag</td>
+            <td>{% trans tag = 'winter' %}Search for posts that don't have the <b>{{ tag }}</b> tag{% endtrans %}</td>
         </tr>
         <tr>
             <td>no_tags</td>
-            <td>Search for posts that have no tags assigned</td>
+            <td>{{ gettext('Search for posts that have no tags assigned') }}</td>
         </tr>
         <tr>
             <td>width:1920</td>
-            <td>Search for posts whose width is 1920 pixels</td>
+            <td>{{ gettext('Search for posts whose width is 1920 pixels') }}</td>
         </tr>
         <tr>
             <td>width:&gt;1919</td>
-            <td>Search for posts whose width is above 1919 pixels</td>
+            <td>{{ gettext('Search for posts whose width is above 1919 pixels') }}</td>
         </tr>
         <tr>
             <td>height:&lt;1081</td>
-            <td>Search for posts whose height is below 1081 pixels</td>
+            <td>{{ gettext('Search for posts whose height is below 1081 pixels') }}</td>
         </tr>
         <tr>
             <td>"hello world"</td>
-            <td>Search for posts that have the words <i>hello</i> and <i>world</i> in text, order doesn't matter</td>
+            <td>{% trans word_1 = 'hello', word_2 = 'world' %}Search for posts that have the words <i>{{ word_1 }}</i> and <i>{{ word_2 }}</i> in text, order doesn't matter{% endtrans %}</td>
         </tr>
     </table>
 
-    <a href="#tags"><h1 id="tags">Help: In-depth Tags</h1></a>
-    <p>Here's a helpful table of available tags and attributes you can use to narrow down your searches.</p>
+    <a href="#tags"><h1 id="tags">{{ gettext('Help: In-depth Tags') }}</h1></a>
+    <p>{{ gettext('Here's a helpful table of available tags and attributes you can use to narrow down your searches.') }}</p>
     <table>
         <tr>
-            <th>Name</th>
-            <th>Example</th>
-            <th>Explanation</th>
+            <th>{{ gettext('Name') }}</th>
+            <th>{{ gettext('Example') }}</th>
+            <th>{{ gettext('Explanation') }}</th>
         </tr>
         <tr>
             <td>id</td>
             <td>id:1</td>
-            <td>Search for post whose unique ID is 1</td>
+            <td>{{ gettext('Search for post whose unique ID is 1') }}</td>
         </tr>
         <tr>
             <td>author_id</td>
             <td>author_id:1</td>
-            <td>Post author's ID</td>
+            <td>{{ gettext('Match post author's ID') }}</td>
         </tr>
         <tr>
             <td>op</td>
             <td>op:http://www.esmuralfs.lv/profile/1</td>
-            <td>Match an original poster's username or URL to profile</td>
+            <td>{{ gettext('Match an original poster's username or URL to profile') }}</td>
         </tr>
         <tr>
             <td>src</td>
             <td>src:http://www.esmuralfs.lv/view/1</td>
-            <td>Match original resource where post was taken from</td>
+            <td>{{ gettext('Match original resource where post was taken from') }}</td>
         </tr>
         <tr>
             <td>directory</td>
             <td>directory:cute</td>
-            <td>Search for posts in the "cute" directory</td>
+            <td>{{ gettext('Search for posts in the "cute" directory') }}</td>
         </tr>
         <tr>
             <td>md5</td>
             <td>md5:8aea73c6da8212327825ec017eae6a5d</td>
-            <td>Match post with MD5 hash sum of <i>8aea73c6da8212327825ec017eae6a5d</i></td>
+            <td>{% trans example_hash = '8aea73c6da8212327825ec017eae6a5d' %}Match post with MD5 hash sum of <i>{{ example_hash }}</i>{% endtrans %}</td>
         </tr>
         <tr>
             <td>ext</td>
             <td>ext:mp4</td>
-            <td>Match posts with file extension of <i>mp4</i></td>
+            <td>{% trans example_format = 'mp4' %}Match posts with file extension of <i>{{ example_format }}</i>{% endtrans %}</td>
         </tr>
         <tr>
             <td>mime</td>
             <td>mime:image/jpeg</td>
-            <td>Match posts with MIME type of <i>image/jpeg</i></td>
+            <td>{% trans example_format = 'image/jpeg' %}Match posts with MIME type of <i>{{ example_format }}</i>{% endtrans %}</td>
         </tr>
         <tr>
             <td>size</td>
             <td>size:74925</td>
-            <td>Match posts with disk size in bytes of <i>74925</i> <br><b>Note it is very hard to get this right so don't bother</b></td>
+            <td>{% trans example_id = 74925 %}Match posts with disk size in bytes of <i>{{ example_id }}</i> <br><b>Note it is very hard to get this right so don't bother</b>{% endtrans %}</td>
         </tr>
         <tr>
             <td>height</td>
             <td>height:1440</td>
-            <td>Match posts whose height is 1440 pixels</td>
+            <td>{{ gettext('Match posts whose height is 1440 pixels') }}</td>
         </tr>
         <tr>
             <td>width</td>
             <td>width:2560</td>
-            <td>Match posts whose width is 2560 pixels</td>
+            <td>{{ gettext('Match posts whose width is 2560 pixels') }}</td>
         </tr>
         <tr>
             <td>category</td>
             <td>category:image</td>
-            <td>Search for image posts</td>
+            <td>{{ gettext('Search for image posts') }}</td>
         </tr>
         <tr>
             <td>year</td>
             <td>year:2026</td>
-            <td>Search for posts uploaded in Year 2026</td>
+            <td>{{ gettext('Search for posts uploaded in Year 2026') }}</td>
         </tr>
         <tr>
             <td>month</td>
             <td>month:10</td>
-            <td>Search for posts uploaded in October (tenth month)</td>
+            <td>{{ gettext('Search for posts uploaded in October (tenth month)') }}</td>
         </tr>
         <tr>
             <td>day</td>
             <td>day:1</td>
-            <td>Search for posts uploaded on the first day of every month</td>
+            <td>{{ gettext('Search for posts uploaded on the first day of every month') }}</td>
         </tr>
         <tr>
             <td>score</td>
             <td>score:1</td>
-            <td>Look for posts whose score is 1 point</td>
+            <td>{{ gettext('Look for posts whose score is 1 point') }}</td>
         </tr>
         <tr>
             <td>name</td>
             <td>name:021718cc5e8424f0bb74643730f865ba.jpg</td>
-            <td>Match for a post with the file name of <i>021718cc5e8424f0bb74643730f865ba.jpg</i></td>
+            <td>{% trans example_name = '021718cc5e8424f0bb74643730f865ba.jpg' %}Match for a post with the file name of <i>{{ example_name }}</i>{% endtrans %}</td>
         </tr>
     </table>
 
-    <a href="#uploading"><h1 id="uploading">Help: Uploading</h1></a>
-    <p>Great, you want to share with your own content, please be aware that we only host high quality memes/other content, if you upload a low quality meme, be warned that it may be removed. And please don't upload content with watermarks, and make sure to attribute the original poster when uploading. You have the tools to do the right thing so you should utilize them. If whenever in doubt you can reach out on our Discord server.</p>
+    <a href="#uploading"><h1 id="uploading">{{ gettext('Help: Uploading') }}</h1></a>
+    <p>{{ gettext('Great, you want to share with your own content, please be aware that we only host high quality memes/other content, if you upload a low quality meme, be warned that it may be removed. And please don't upload content with watermarks, and make sure to attribute the original poster when uploading. You have the tools to do the right thing so you should utilize them. If whenever in doubt you can reach out on our Discord server.') }}</p>
 
-    <a href="#nsfw"><h1 id="nsfw">Help: NSFW</h1></a>
-    <p>By default NSFW-related posts are hidden, if you wish to view NSFW and only NSFW posts then you can add <b>nsfw</b> tag. But please be aware of consequences that come with viewing NSFW posts</p>
+    <a href="#nsfw"><h1 id="nsfw">{{ gettext('Help: NSFW') }}</h1></a>
+    <p>{% trans nsfw_tag = 'nsfw' %}By default NSFW-related posts are hidden, if you wish to view NSFW and only NSFW posts then you can add <b>{{ nsfw_tag }}</b> tag. But please be aware of consequences that come with viewing NSFW posts{% endtrans %}</p>
 {% endblock %}

@@ -11,11 +11,11 @@
         <table class="center-table tag-table">
             <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Count</th>
+                <th>{{ gettext('Name') }}</th>
+                <th>{{ gettext('Count') }}</th>
                 <th></th>
-                <th>Type</th>
-                <th>Description</th>
+                <th>{{ gettext('Type') }}</th>
+                <th>{{ gettext('Description') }}</th>
             </tr>
 
             {% for tag in tags %}
@@ -23,7 +23,7 @@
                     <td>{{ tag.id }}</td>
                     <td><a href="{{ url_for('Root.Post.browse_paged', page = 1, terms = tag.name) }}">{{ tag.name }}</a></td>
                     <td>{{ tag.posts | length }}</td>
-                    <td><a class="no-select" href="{{ url_for('Root.Tag.edit_page', tag_id = tag.id) }}">Edit</a></td>
+                    <td><a class="no-select" href="{{ url_for('Root.Tag.edit_page', tag_id = tag.id) }}">{{ gettext('Edit') }}</a></td>
                     <td>{{ tag.type }}</td>
                     {% if tag.desc %}
                         <td>{{ tag.desc }}</td>

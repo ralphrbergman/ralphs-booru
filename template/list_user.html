@@ -5,18 +5,18 @@
         <table class="center-table">
             <tr>
                 <th>ID</th>
-                <th>Username</th>
+                <th>{{ gettext('Username') }}</th>
                 <th></th>
-                <th>Role</th>
-                <th>E-mail</th>
-                <th>Created</th>
+                <th>{{ gettext('Role') }}</th>
+                <th>{{ gettext('E-mail') }}</th>
+                <th>{{ gettext('Created') }}</th>
             </tr>
 
             {% for user in users %}
                 <tr>
                     <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
-                    <td><a class="no-select" href="{{ url_for('Root.Manage User.manage_user_page', user_id = user.id) }}">Edit</a></td>
+                    <td><a class="no-select" href="{{ url_for('Root.Manage User.manage_user_page', user_id = user.id) }}">{{ gettext('Edit') }}</a></td>
                     <td>{{ enum(user.role).name.title() }}</td>
                     <td>{{ user.mail }}</td>
                     <td>{{ user.created }}</td>

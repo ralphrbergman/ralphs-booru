@@ -12,27 +12,27 @@
 
                 <div class="post-flairs no-select">
                     {% if post.caption %}
-                        <img class="flair" src="{{ url_for('static', filename = 'svg/caption.svg') }}" alt="Caption flair">
+                        <img class="flair" src="{{ url_for('static', filename = 'svg/caption.svg') }}" alt="{{ gettext('Caption flair') }}">
                     {% endif %}
 
                     {% if not post.op or not post.src %}
                         {% if post.op %}
-                            <img class="flair" src="{{ url_for('static', filename = 'svg/pencil.svg') }}" alt="Original Poster flair">
+                            <img class="flair" src="{{ url_for('static', filename = 'svg/pencil.svg') }}" alt="{{ gettext('Original Poster flair') }}">
                         {% endif %}
 
                         {% if post.src %}
-                            <img class="flair" src="{{ url_for('static', filename = 'svg/globe.svg') }}" alt="Source flair">
+                            <img class="flair" src="{{ url_for('static', filename = 'svg/globe.svg') }}" alt="{{ gettext('Source flair') }}">
                         {% endif %}
                     {% else %}
-                        <img class="flair" src="{{ url_for('static', filename = 'svg/external.svg') }}" alt="Original Poster & Source flair">
+                        <img class="flair" src="{{ url_for('static', filename = 'svg/external.svg') }}" alt="{{ gettext('Original Poster & Source flair') }}">
                     {% endif %}
 
                     {% if post.cat == 'audio' %}
-                        <img class="flair" src="{{ url_for('static', filename = 'svg/audio.svg') }}" alt="Audio flair">
+                        <img class="flair" src="{{ url_for('static', filename = 'svg/audio.svg') }}" alt="{{ gettext('Audio flair') }}">
                     {% elif post.cat == 'image' %}
-                        <img class="flair" src="{{ url_for('static', filename = 'svg/image.svg') }}" alt="Image flair">
+                        <img class="flair" src="{{ url_for('static', filename = 'svg/image.svg') }}" alt="{{ gettext('Image flair') }}">
                     {% elif post.cat == 'video' %}
-                        <img class="flair" src="{{ url_for('static', filename = 'svg/video.svg') }}" alt="Video flair">
+                        <img class="flair" src="{{ url_for('static', filename = 'svg/video.svg') }}" alt="{{ gettext('Video flair') }}">
                     {% endif %}
                 </div>
             </a>

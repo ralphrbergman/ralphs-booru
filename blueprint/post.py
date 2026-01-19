@@ -1,4 +1,5 @@
 from flask import Blueprint, request, abort, flash, redirect, render_template, send_file, url_for
+from flask_babel import gettext
 from flask_login import current_user, login_required
 
 from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, add_tags, browse_post, create_post, delete_post, get_post, move_post, replace_post, save_file
@@ -76,7 +77,7 @@ def edit_page(post_id: int):
                 if form.deleted.data:
                     delete_post(post)
 
-                    flash(f'Permanently deleted post #{post.id}')
+                    flash(gettext('Permanently deleted post #%(post_id)s', post_id = post.id))
                     return redirect(url_for('Root.Post.browse_page'))
 
                 file = form.new_file.data
@@ -85,9 +86,9 @@ def edit_page(post_id: int):
                     post = replace_post(post, file)
 
                     if post:
-                        flash(f'Successfully exchanged post #{post.id} for a new file!')
+                        flash(gettext('Successfully exchanged post #%(post_id)s for a new file!', post_id = post.id))
                     else:
-                        flash('Failed to exchange post.')
+                        flash(gettext('Failed to exchange post.'))
                         return redirect(url_for('Root.Post.edit_page', post_id = post_id))
 
             post.op = form.op.data.strip()
@@ -144,9 +145,9 @@ def upload_page():
             )
 
             if post is not None:
-                flash(f'Successfully uploaded post #{post.id}')
+                flash(gettext('Successfully uploaded post #%(post_id)s', post_id = post.id))
             else:
-                flash(f'Uploading file {file.filename} failed')
+                flash(gettext('Uploading file %(filename)s failed', filename = file.filename))
 
         return redirect(url_for('Root.Post.browse_page'))
 

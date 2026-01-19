@@ -7,22 +7,22 @@
         <form class="form" enctype="multipart/form-data" method="post">
             {{ form.hidden_tag() }}
 
-            <label for="avatar">Upload your own avatar:</label>
+            <label for="avatar">{{ gettext('Upload your own avatar') }}:</label>
             <input type="file" name="avatar">
 
-            <label for="username">Username:</label>
+            <label for="username">{{ gettext('Username') }}:</label>
             <input type="text" name="username">
 
-            <label for="email">E-mail (Not Required):</label>
+            <label for="email">{{ gettext('E-mail (Not Required) ')}}:</label>
             <input type="email" name="email">
 
-            <label for="pw">Password:</label>
+            <label for="pw">{{ gettext('Password') }}:</label>
             <input type="password" name="pw">
 
-            <label for="confirm_pw">Confirm Password:</label>
+            <label for="confirm_pw">{{ gettext('Confirm Password') }}:</label>
             <input type="password" name="confirm_pw">
 
-            <input type="submit" name="submit" value="Sign-Up">
+            <input type="submit" name="submit" value="{{ gettext('Sign-Up') }}">
         </form>
     </div>
 {% endblock %}

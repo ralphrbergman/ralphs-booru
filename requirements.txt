@@ -1,5 +1,6 @@
 apiflask
 Flask
+Flask-Babel
 Flask-Bcrypt
 flask-login
 Flask-Migrate

@@ -6,12 +6,12 @@
             {{ form.hidden_tag() }}
 
             <div class="input-group">
-                <label for="username">Username:</label>
+                <label for="username">{{ gettext('Username') }}:</label>
                 <input type="text" name="username" value="{{ user.name }}">
             </div>
 
             <div class="input-group">
-                <label for="role">Role</label>
+                <label for="role">{{ gettext('Role') }}</label>
 
                 {% for subfield in form.role %}
                     <div class="input-group">
@@ -22,16 +22,16 @@
             </div>
 
             <div class="input-group">
-                <label for="email">E-mail:</label>
+                <label for="email">{{ gettext('E-mail') }}:</label>
                 <input type="email" name="email" value="{% if user.mail is not none %}{{ user.mail }}{% endif %}">
             </div>
 
             <div class="input-group">
-                <label for="pw">New Password:</label>
+                <label for="pw">{{ gettext('New Password') }}:</label>
                 <input type="password" name="pw">
             </div>
 
-            <input type="submit" name="submit" value="Change">
+            <input type="submit" name="submit" value="{{ gettext('Change') }}">
         </form>
     </div>
 {% endblock %}
