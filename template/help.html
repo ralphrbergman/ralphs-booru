@@ -8,7 +8,7 @@
 
     <a href="#search"><h1 id="search">{{ gettext('Help: Search') }}</h1></a>
     <p>{% trans tag_example = 'game gtav', minus_tag = '-game' %}You can search for tag <b>{{ tag_example }}</b> and it will search for Grand Theft Auto V gameplay posts. Because you put two tags together, alternatively if you don't want gameplay you can add <b>{{ minus_tag }}</b> tag with a minus sign in front of tag name instead and it will search for posts that depict GTA V instead of gameplay.{% endtrans %}</p>
-    <p>{% trans tag_url = url_for('Root.Tag.tag_page'), tag_href = #tags %}When searching you might want to look at what tags are available, click <a href="{{ tag_url }}">here</a>. More about searching look in <a href="{{ tag_href }}">Tags in-depth section</a>{% endtrans %}</p>
+    <p>{% trans tag_url = url_for('Root.Tag.tag_page'), tag_href = '#tags' %}When searching you might want to look at what tags are available, click <a href="{{ tag_url }}">here</a>. More about searching look in <a href="{{ tag_href }}">Tags in-depth section</a>{% endtrans %}</p>
     <table>
         <tr>
             <th>{{ gettext('Tag') }}</th>
@@ -45,7 +45,7 @@
     </table>
 
     <a href="#tags"><h1 id="tags">{{ gettext('Help: In-depth Tags') }}</h1></a>
-    <p>{{ gettext('Here's a helpful table of available tags and attributes you can use to narrow down your searches.') }}</p>
+    <p>{{ gettext('Here\'s a helpful table of available tags and attributes you can use to narrow down your searches.') }}</p>
     <table>
         <tr>
             <th>{{ gettext('Name') }}</th>
@@ -60,12 +60,12 @@
         <tr>
             <td>author_id</td>
             <td>author_id:1</td>
-            <td>{{ gettext('Match post author's ID') }}</td>
+            <td>{{ gettext('Match post author\'s ID') }}</td>
         </tr>
         <tr>
             <td>op</td>
             <td>op:http://www.esmuralfs.lv/profile/1</td>
-            <td>{{ gettext('Match an original poster's username or URL to profile') }}</td>
+            <td>{{ gettext('Match an original poster\'s username or URL to profile') }}</td>
         </tr>
         <tr>
             <td>src</td>
@@ -140,7 +140,7 @@
     </table>
 
     <a href="#uploading"><h1 id="uploading">{{ gettext('Help: Uploading') }}</h1></a>
-    <p>{{ gettext('Great, you want to share with your own content, please be aware that we only host high quality memes/other content, if you upload a low quality meme, be warned that it may be removed. And please don't upload content with watermarks, and make sure to attribute the original poster when uploading. You have the tools to do the right thing so you should utilize them. If whenever in doubt you can reach out on our Discord server.') }}</p>
+    <p>{{ gettext('Great, you want to share with your own content, please be aware that we only host high quality memes/other content, if you upload a low quality meme, be warned that it may be removed. And please don\'t upload content with watermarks, and make sure to attribute the original poster when uploading. You have the tools to do the right thing so you should utilize them. If whenever in doubt you can reach out on our Discord server.') }}</p>
 
     <a href="#nsfw"><h1 id="nsfw">{{ gettext('Help: NSFW') }}</h1></a>
     <p>{% trans nsfw_tag = 'nsfw' %}By default NSFW-related posts are hidden, if you wish to view NSFW and only NSFW posts then you can add <b>{{ nsfw_tag }}</b> tag. But please be aware of consequences that come with viewing NSFW posts{% endtrans %}</p>
