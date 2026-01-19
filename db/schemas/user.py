@@ -7,7 +7,7 @@ class UserOut(BaseSchema):
     avatar_name = String()
     name = String(required = True)
     comments = List(Nested('CommentIn'))
-    posts = List(Nested('PostOut', exclude = ('author',)))
+    posts = List(Nested('PostOut', exclude = ('author',)), attribute = 'recent_posts')
     role = String(required = True)
 
     # @properties.

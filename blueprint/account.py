@@ -122,13 +122,10 @@ def profile_page(user_id: int):
     if not user:
         return abort(404)
 
-    # Return 10 posts the current_user has recently uploaded.
-    posts = list(reversed(user.posts))[:10]
-
     return render_template(
         'profile.html',
         blur = request.args.get('blur', 'true') == 'true',
-        posts = posts,
+        posts = user.recent_posts,
         user = user
     )
 

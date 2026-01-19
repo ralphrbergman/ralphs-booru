@@ -6,8 +6,8 @@ from typing import Optional
 from flask import url_for
 from flask_login import UserMixin
 from secrets import token_urlsafe
-from sqlalchemy import Integer, String, func, case, select
-from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
+from sqlalchemy import Integer, String, func, select
+from sqlalchemy.orm import Mapped, column_property, mapped_column, relationship, validates
 from sqlalchemy.sql import ColumnElement
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -84,19 +84,12 @@ class User(db.Model, UserMixin, SerializerMixin):
 
     @hybrid_property
     def level(self) -> int:
-        raw_level = int(self.score // User.LEVEL_HARDNESS)
-
-        return max(0, min(raw_level, 100))
+        s = self.score or 0
+        return int(max(0, min(s // self.LEVEL_HARDNESS, 100)))
 
     @level.expression
-    def level(cls) -> ColumnElement[int]:
-        raw_level = func.cast(cls.score / User.LEVEL_HARDNESS, Integer)
-
-        return case(
-            (raw_level > 100, 100),
-            (raw_level < 0, 0),
-            else_ = raw_level
-        )
+    def level(cls):
+        return func.cast(cls.score / cls.LEVEL_HARDNESS, Integer)
 
     @hybrid_property
     def points_until_levelup(self) -> int:
@@ -106,37 +99,23 @@ class User(db.Model, UserMixin, SerializerMixin):
     def points_until_levelup(cls) -> ColumnElement[int]:
         return User.LEVEL_HARDNESS - (cls.score % User.LEVEL_HARDNESS)
 
-    @hybrid_property
-    def score(self) -> int:
-        """ Returns the total score of user's comments and posts combined. """
-        l = [ comment.score for comment in self.comments ]
-        l += [ post.score for post in self.posts ]
-
-        return sum(l)
-
-    @score.expression
-    def score(cls) -> ColumnElement[int]:
-        comment_score = (
+    score: Mapped[int] = column_property(
+        (
             select(func.coalesce(func.sum(Comment.score), 0))
-            .where(Comment.user_id == cls.id)
+            .where(Comment.author_id == id)
+            .correlate_except(Comment)
             .scalar_subquery()
-        )
-        
-        post_score = (
+        ) + (
             select(func.coalesce(func.sum(Post.score), 0))
-            .where(Post.user_id == cls.id)
+            .where(Post.author_id == id)
+            .correlate_except(Post)
             .scalar_subquery()
         )
-
-        return comment_score + post_score
+    )
 
     @property
     def avatar(self) -> str:
         return url_for('Root.Account.avatar_page', filename = self.avatar_name)
-
-    @property
-    def is_moderator(self) -> bool:
-        return self.role == RoleEnum.ADMIN.value or self.role == RoleEnum.MODERATOR.value
 
     @property
     def api_key(self) -> str:
@@ -145,6 +124,10 @@ class User(db.Model, UserMixin, SerializerMixin):
     @api_key.setter
     def api_key(self, new_key: str):
         self._key = User.generate_key(new_key)
+
+    @property
+    def is_moderator(self) -> bool:
+        return self.role == RoleEnum.ADMIN.value or self.role == RoleEnum.MODERATOR.value
 
     @property
     def password(self) -> None:
@@ -169,6 +152,10 @@ class User(db.Model, UserMixin, SerializerMixin):
     @property
     def role_name(self) -> str:
         return RoleEnum(self.role).name.title()
+
+    @property
+    def recent_posts(self) -> list[Post]:
+        return tuple(reversed(self.posts))[:10]
 
     @property
     def username(self) -> str:
