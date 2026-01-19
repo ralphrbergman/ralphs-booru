@@ -1,14 +1,17 @@
+from os import getenv
+
 from flask import Blueprint, request, abort, flash, redirect, render_template, send_file, url_for
 from flask_babel import gettext
 from flask_login import current_user, login_required
 
 from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, add_tags, browse_post, create_post, delete_post, get_post, move_post, replace_post, save_file
-from api.decorators import post_protect
+from api.decorators import level_required, post_protect
 from db import db
 from form import PostForm, UploadForm
 from .utils import create_pagination_bar, flash_errors
 
-DEFAULT_BLUR = 'true'
+DEFAULT_BLUR = getenv('DEFAULT_BLUR') == 'true'
+POSTING_LEVEL = int(getenv('POSTING_LEVEL'))
 
 post_bp = Blueprint(
     name = 'Post',
@@ -64,6 +67,7 @@ def browse_paged(page: int):
 @post_bp.route('/edit/<int:post_id>', methods = ['GET', 'POST'])
 @login_required
 @post_protect
+@level_required(POSTING_LEVEL)
 def edit_page(post_id: int):
     form = PostForm()
     post = get_post(post_id)
@@ -127,6 +131,7 @@ def view_file_resource(post_id: int):
 @post_bp.route('/upload', methods = ['GET', 'POST'])
 @login_required
 @post_protect
+@level_required(POSTING_LEVEL)
 def upload_page():
     form = UploadForm()
 

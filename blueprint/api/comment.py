@@ -1,11 +1,15 @@
+from os import getenv
+
 from apiflask import APIBlueprint, abort
 from flask_login import current_user
 
 from api import create_comment, delete_comment, get_comment, get_post
-from api.decorators import owner_only, post_protect
+from api.decorators import api_level_required, owner_only, post_protect
 from api_auth import auth
 from db import Comment, db
 from db.schemas import CommentIn, CommentOut
+
+COMMENT_LEVEL = int(getenv('COMMENT_LEVEL'))
 
 comment_bp = APIBlueprint(
     name = 'Comment API',
@@ -35,6 +39,7 @@ def remove_comment(comment_id: int, comment: Comment):
 @comment_bp.output(CommentOut)
 @comment_bp.auth_required(auth)
 @post_protect
+@api_level_required(COMMENT_LEVEL)
 @owner_only(Comment)
 def update_comment(comment_id: int, data: CommentIn, comment: Comment):
     post = get_post(data['post_id'])
@@ -56,6 +61,7 @@ def update_comment(comment_id: int, data: CommentIn, comment: Comment):
 @comment_bp.output(CommentOut)
 @comment_bp.auth_required(auth)
 @post_protect
+@api_level_required(COMMENT_LEVEL)
 def upload_comment(data: CommentIn):
     post = get_post(data['post_id'])
 

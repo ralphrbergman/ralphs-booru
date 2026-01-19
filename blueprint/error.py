@@ -13,3 +13,11 @@ def _404_handler(exc):
         code = 404,
         message = gettext('The resource you we\'re looking for does not exist.')
     ), 404
+
+@err_bp.app_errorhandler(401)
+def _401_handler(exc):
+    return render_template(
+        'error.html',
+        code = 401,
+        message = gettext('You need to level up first before you can access this part of the site')
+    )

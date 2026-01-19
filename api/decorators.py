@@ -1,8 +1,10 @@
 from functools import wraps
 from os import getenv
+from typing import Callable
 
-from apiflask import abort
-from flask import request
+from apiflask import abort as api_abort
+from flask import request, abort
+from flask_babel import gettext
 from flask_login import current_user
 from sqlalchemy import select
 
@@ -10,6 +12,22 @@ from db import db
 
 ALLOW_USERS = getenv('ALLOW_USERS') == 'true'
 ALLOW_POSTS = getenv('ALLOW_POSTS') == 'true'
+
+def _level_required(LEVEL: int, abort_fn: Callable, *abort_args):
+    def decorator(callback):
+        @wraps(callback)
+        def wrapper(*args, **kwargs):
+            if current_user.level >= LEVEL:
+                return callback(*args, **kwargs)
+            
+            return abort_fn(*abort_args)
+
+        return wrapper
+
+    return decorator
+
+def api_level_required(LEVEL: int):
+    return _level_required(LEVEL, api_abort, 401, gettext('Can\'t access this party yet boss.'))
 
 def anonymous_only(callback):
     """
@@ -21,6 +39,25 @@ def anonymous_only(callback):
     @wraps(callback)
     def wrapper(*args, **kwargs):
         if current_user.is_anonymous:
+            return callback(*args, **kwargs)
+        else:
+            return abort(401)
+
+    return wrapper
+
+def level_required(LEVEL: int):
+    return _level_required(LEVEL, abort, 401)
+
+def moderator_only(callback):
+    """
+    Restricts view for users marked as moderator and up.
+
+    Args:
+        callback: Route to restrict
+    """
+    @wraps(callback)
+    def wrapper(*args, **kwargs):
+        if current_user.is_authenticated and current_user.is_moderator:
             return callback(*args, **kwargs)
         else:
             return abort(401)
@@ -60,35 +97,6 @@ def owner_only(model_class):
 
         return wrapper
     return decorator
-    """
-    Restricts view to only be accessed by an API key.
-    """
-    @wraps(callback)
-    def wrapper(*args, **kwargs):
-        auth_header = request.headers.get('Authorization')
-
-        if not current_user.is_authenticated or not auth_header:
-            abort(401, message = 'Valid API key is necessary. Pass it to Authorization header.')
-
-        return callback(*args, **kwargs)
-
-    return wrapper
-
-def moderator_only(callback):
-    """
-    Restricts view for users marked as moderator and up.
-
-    Args:
-        callback: Route to restrict
-    """
-    @wraps(callback)
-    def wrapper(*args, **kwargs):
-        if current_user.is_authenticated and current_user.is_moderator:
-            return callback(*args, **kwargs)
-        else:
-            return abort(401)
-
-    return wrapper
 
 def post_protect(callback):
     """

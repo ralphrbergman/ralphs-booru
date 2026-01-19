@@ -12,6 +12,19 @@ AVATAR_PATH=<path/to/user/avatars>
 ALLOW_POSTS=true|false
 # Allow user creation/logging in?
 ALLOW_USERS=true|false
+
+# All about leveling
+# How many levels to level up
+HARDNESS=5
+
+MULTIPLIER=1
+# From what level users can comment
+COMMENT_LEVEL=0
+# From what level users can post
+POSTING_LEVEL=1
+# From what level users can tag
+TAGGING_LEVEL=1
+
 # Path where post files are stored.
 CONTENT_PATH=<path/to/media>
 # Name of SQLite3 database file.

@@ -1,16 +1,27 @@
 from datetime import datetime
 from enum import Enum
+from os import getenv
 from typing import Optional
 
 from flask import url_for
 from flask_login import UserMixin
 from secrets import token_urlsafe
-from sqlalchemy import String, func, select
+from sqlalchemy import Integer, String, func, case, select
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
+from sqlalchemy.sql import ColumnElement
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from db import db
 from encryption import bcrypt
+from .comment import Comment
 from .mixins.serializer import SerializerMixin
+from .post import Post
+
+class RoleEnum(Enum):
+    ADMIN = 'adm'
+    MODERATOR = 'mod'
+    REGULAR = 'reg'
+    TERMINATED = 'ter'
 
 def find_user_by_key(key: str) -> Optional[User]:
     """
@@ -22,18 +33,8 @@ def find_user_by_key(key: str) -> Optional[User]:
         select(User).where(User._key == key)
     ).first()
 
-class RoleEnum(Enum):
-    ADMIN = 'adm'
-    MODERATOR = 'mod'
-    REGULAR = 'reg'
-    TERMINATED = 'ter'
-
 class User(db.Model, UserMixin, SerializerMixin):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        if not self.api_key:
-            self.api_key = User.generate_key()
+    LEVEL_HARDNESS = int(getenv('HARDNESS'))
 
     @classmethod
     def generate_key(cls, candidate: Optional[str] = None) -> str:
@@ -50,6 +51,12 @@ class User(db.Model, UserMixin, SerializerMixin):
             candidate = token_urlsafe(32)
 
         return candidate
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        if not self.api_key:
+            self.api_key = User.generate_key()
 
     id: Mapped[int] = mapped_column(primary_key = True)
     created: Mapped[datetime] = mapped_column(default = func.now())
@@ -74,6 +81,54 @@ class User(db.Model, UserMixin, SerializerMixin):
             return None
 
         return value
+
+    @hybrid_property
+    def level(self) -> int:
+        raw_level = int(self.score // User.LEVEL_HARDNESS)
+
+        return max(0, min(raw_level, 100))
+
+    @level.expression
+    def level(cls) -> ColumnElement[int]:
+        raw_level = func.cast(cls.score / User.LEVEL_HARDNESS, Integer)
+
+        return case(
+            (raw_level > 100, 100),
+            (raw_level < 0, 0),
+            else_ = raw_level
+        )
+
+    @hybrid_property
+    def points_until_levelup(self) -> int:
+        return User.LEVEL_HARDNESS - (self.score % User.LEVEL_HARDNESS)
+
+    @points_until_levelup.expression
+    def points_until_levelup(cls) -> ColumnElement[int]:
+        return User.LEVEL_HARDNESS - (cls.score % User.LEVEL_HARDNESS)
+
+    @hybrid_property
+    def score(self) -> int:
+        """ Returns the total score of user's comments and posts combined. """
+        l = [ comment.score for comment in self.comments ]
+        l += [ post.score for post in self.posts ]
+
+        return sum(l)
+
+    @score.expression
+    def score(cls) -> ColumnElement[int]:
+        comment_score = (
+            select(func.coalesce(func.sum(Comment.score), 0))
+            .where(Comment.user_id == cls.id)
+            .scalar_subquery()
+        )
+        
+        post_score = (
+            select(func.coalesce(func.sum(Post.score), 0))
+            .where(Post.user_id == cls.id)
+            .scalar_subquery()
+        )
+
+        return comment_score + post_score
 
     @property
     def avatar(self) -> str:

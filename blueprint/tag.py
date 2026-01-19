@@ -1,12 +1,16 @@
+from os import getenv
+
 from flask import Blueprint, request, abort, flash, redirect, render_template, url_for
 from flask_babel import gettext
 from flask_login import current_user, login_required
 
 from api import browse_tag, delete_tag, get_tag
-from api.decorators import post_protect
+from api.decorators import level_required, post_protect
 from db import db
 from form import TagForm
 from .utils import create_pagination_bar
+
+TAGGING_LEVEL = int(getenv('TAGGING_LEVEL'))
 
 tag_bp = Blueprint(
     name = 'Tag',
@@ -19,6 +23,7 @@ TAG_TYPES = ('artist', 'character', 'copyright', 'general', 'meta')
 @tag_bp.route('/edit/<int:tag_id>', methods = ['GET', 'POST'])
 @login_required
 @post_protect
+@level_required(TAGGING_LEVEL)
 def edit_page(tag_id: int):
     form = TagForm()
     tag = get_tag(tag_id)

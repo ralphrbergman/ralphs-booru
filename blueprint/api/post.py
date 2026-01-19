@@ -1,12 +1,16 @@
+from os import getenv
+
 from apiflask import APIBlueprint, abort
 from flask_login import current_user
 from werkzeug.datastructures import FileStorage
 
 from api import create_post, delete_post, get_post, save_file
-from api.decorators import owner_only, post_protect
+from api.decorators import api_level_required, owner_only, post_protect
 from api_auth import auth
 from db import Post, db
 from db.schemas import PostFormIn, PostIn, PostOut
+
+POSTING_LEVEL = int(getenv('POSTING_LEVEL'))
 
 post_bp = APIBlueprint(
     name = 'Post API',
@@ -36,6 +40,7 @@ def remove_post(post_id: int, post: Post):
 @post_bp.output(PostOut)
 @post_bp.auth_required(auth)
 @post_protect
+@api_level_required(POSTING_LEVEL)
 @owner_only(Post)
 def update_post(post_id: int, data: PostIn, post: Post):
     if not post:
@@ -52,6 +57,7 @@ def update_post(post_id: int, data: PostIn, post: Post):
 @post_bp.output(PostOut(many = True))
 @post_bp.auth_required(auth)
 @post_protect
+@api_level_required(POSTING_LEVEL)
 def upload_post(data: PostFormIn):
     files: list[FileStorage] = data['files']
     posts = list()
