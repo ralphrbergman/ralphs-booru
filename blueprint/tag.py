@@ -49,7 +49,7 @@ def edit_page(tag_id: int):
         flash(gettext('Updated tag %(tag_name)s successfully!', tag_name = tag.name))
         return redirect(url_for('Root.Tag.edit_page', tag_id = tag_id))
 
-@tag_bp.route('/history', methods = ['GET', 'POST'])
+@tag_bp.route('/history')
 def history_page():
     form = SnapshotForm()
 

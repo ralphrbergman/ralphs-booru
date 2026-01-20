@@ -37,7 +37,10 @@ class SignupForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, StrongPassword
             raise ValidationError('Username is already taken.')
 
 class SnapshotForm(FlaskForm, SubmitMixin):
-    post_id = IntegerField('post_id')
+    post_id = IntegerField('post_id', validators = (DataRequired(message = 'Please specify which post to search.'),))
+
+    class Meta:
+        csrf = False
 
 class TagForm(FlaskForm, DeletedMixin, SubmitMixin):
     name = StringField('name', validators = [DataRequired()])
