@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import BooleanField, FileField, MultipleFileField, PasswordField, StringField, SelectField, TextAreaField
+from wtforms import BooleanField, FileField, IntegerField, MultipleFileField, PasswordField, StringField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 
 from api import get_user_by_username
@@ -35,6 +35,9 @@ class SignupForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, StrongPassword
 
         if user:
             raise ValidationError('Username is already taken.')
+
+class SnapshotForm(FlaskForm, SubmitMixin):
+    post_id = IntegerField('post_id')
 
 class TagForm(FlaskForm, DeletedMixin, SubmitMixin):
     name = StringField('name', validators = [DataRequired()])

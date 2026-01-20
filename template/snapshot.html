@@ -26,6 +26,8 @@
     </table>
 
     <form class="form">
+        {{ form.hidden_tag() }}
+
         <label for="post_id">{{ gettext('Post ID') }}:</label>
         <input type="text" name="post_id">
 
