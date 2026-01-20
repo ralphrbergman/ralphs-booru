@@ -17,7 +17,7 @@ def _level_required(LEVEL: int, abort_fn: Callable, *abort_args):
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
-            if current_user.level >= LEVEL:
+            if current_user.level >= LEVEL or current_user.is_moderator:
                 return callback(*args, **kwargs)
             
             return abort_fn(*abort_args)
