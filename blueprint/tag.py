@@ -53,10 +53,8 @@ def edit_page(tag_id: int):
 def history_page():
     form = SnapshotForm()
 
-    if form.validate_on_submit():
-        post_id = form.post_id.data
+    post_id = form.post_id.data or request.args.get('post_id')
 
-    post_id = request.args.get('post_id')
     snapshots = browse_snapshots(post_id = post_id)
 
     return render_template('snapshot.html', form = form, snapshots = snapshots)
