@@ -1,4 +1,3 @@
-from datetime import datetime
 from enum import Enum
 from os import getenv
 from typing import Optional
@@ -7,13 +6,15 @@ from flask import url_for
 from flask_login import UserMixin
 from secrets import token_urlsafe
 from sqlalchemy import Integer, String, func, select
-from sqlalchemy.orm import Mapped, column_property, mapped_column, relationship, validates
+from sqlalchemy.orm import declared_attr, Mapped, column_property, mapped_column, relationship, validates
 from sqlalchemy.sql import ColumnElement
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from db import db
 from encryption import bcrypt
 from .comment import Comment
+from .mixins.created import CreatedMixin
+from .mixins.id import IdMixin
 from .mixins.serializer import SerializerMixin
 from .post import Post
 
@@ -33,7 +34,7 @@ def find_user_by_key(key: str) -> Optional[User]:
         select(User).where(User._key == key)
     ).first()
 
-class User(db.Model, UserMixin, SerializerMixin):
+class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
     LEVEL_HARDNESS = int(getenv('HARDNESS'))
 
     @classmethod
@@ -58,8 +59,6 @@ class User(db.Model, UserMixin, SerializerMixin):
         if not self.api_key:
             self.api_key = User.generate_key()
 
-    id: Mapped[int] = mapped_column(primary_key = True)
-    created: Mapped[datetime] = mapped_column(default = func.now())
     avatar_name: Mapped[str] = mapped_column(default = 'avatar.png')
 
     name: Mapped[str] = mapped_column(String(length = 20), nullable = False, unique = True)
@@ -67,7 +66,8 @@ class User(db.Model, UserMixin, SerializerMixin):
     pw_hash: Mapped[str] = mapped_column(String(length = 255), nullable = False)
     _key: Mapped[str] = mapped_column(String(length = 64), index = True, nullable = False, unique = True)
 
-    comments: Mapped[list['Comment']] = relationship('Comment', back_populates = 'author')
+    comments: Mapped[list['Comment']] = relationship(back_populates = 'author')
+    snapshots: Mapped[list['Snapshot']] = relationship(back_populates = 'user')
     scores: Mapped[list['ScoreAssociation']] = relationship('ScoreAssociation', back_populates = 'user')
     posts: Mapped[list['Post']] = relationship('Post', back_populates = 'author')
     # Defines user's role within the system.
@@ -99,19 +99,21 @@ class User(db.Model, UserMixin, SerializerMixin):
     def points_until_levelup(cls) -> ColumnElement[int]:
         return User.LEVEL_HARDNESS - (cls.score % User.LEVEL_HARDNESS)
 
-    score: Mapped[int] = column_property(
-        (
-            select(func.coalesce(func.sum(Comment.score), 0))
-            .where(Comment.author_id == id)
-            .correlate_except(Comment)
-            .scalar_subquery()
-        ) + (
-            select(func.coalesce(func.sum(Post.score), 0))
-            .where(Post.author_id == id)
-            .correlate_except(Post)
-            .scalar_subquery()
+    @declared_attr
+    def score(cls) -> Mapped[int]:
+        return column_property(
+            (
+                select(func.coalesce(func.sum(Comment.score), 0))
+                .where(Comment.author_id == cls.id)
+                .correlate_except(Comment)
+                .scalar_subquery()
+            ) + (
+                select(func.coalesce(func.sum(Post.score), 0))
+                .where(Post.author_id == cls.id)
+                .correlate_except(Post)
+                .scalar_subquery()
+            )
         )
-    )
 
     @property
     def avatar(self) -> str:

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-01-19 14:27+0200\n"
+"POT-Creation-Date: 2026-01-20 21:29+0200\n"
 "PO-Revision-Date: 2026-01-19 00:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: lv\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+#: api/decorators.py:30
+msgid "Can't access this party yet boss."
+msgstr "Nevarat piekļūt šai ballītei priekšniek"
 
 #: blueprint/account.py:47
 msgid "Updated profile successfully"
@@ -51,11 +55,11 @@ msgstr "Nepareiza parole"
 msgid "Logged out"
 msgstr "Iziet"
 
-#: blueprint/account.py:157
+#: blueprint/account.py:154
 msgid "Failed to create your profile."
 msgstr "Neizdevās izveidot jūsu profilu"
 
-#: blueprint/account.py:163
+#: blueprint/account.py:160
 #, python-format
 msgid "Welcome, %(name)s"
 msgstr "Sveiki, %(name)s"
@@ -64,40 +68,46 @@ msgstr "Sveiki, %(name)s"
 msgid "The resource you we're looking for does not exist."
 msgstr "Resurss ko meklējāt neeksistē"
 
+#: blueprint/error.py:22
+msgid "You need to level up first before you can access this part of the site"
+msgstr "Jums vajag pieņemties līmeņos lai piekļūtu šai lapai"
+
 #: blueprint/manage_user.py:59
 #, python-format
 msgid "Updated user %(name)s successfully!"
 msgstr "Atjaunināja lietotāju %(name)s!"
 
-#: blueprint/post.py:80
+#: blueprint/post.py:84
 #, python-format
 msgid "Permanently deleted post #%(post_id)s"
 msgstr "Neatgriezeniski izdzēsi ierakstu #%(post_id)s"
 
-#: blueprint/post.py:89
+#: blueprint/post.py:93
 #, python-format
 msgid "Successfully exchanged post #%(post_id)s for a new file!"
 msgstr "Veiksmīgi izmainīja ierakstu #%(post_id)s ar jaunu failu!"
 
-#: blueprint/post.py:91
+#: blueprint/post.py:95
 msgid "Failed to exchange post."
 msgstr "Neizdevās izmainīt ierakstu."
 
-#: blueprint/post.py:148
+#: blueprint/post.py:156
 #, python-format
 msgid "Successfully uploaded post #%(post_id)s"
 msgstr "Veiksmīgi publicēja ierakstu #%(post_id)s"
 
-#: blueprint/post.py:150
+#: blueprint/post.py:158
 #, python-format
 msgid "Uploading file %(filename)s failed"
 msgstr "Augšupielādējot failu %(filename)s neizdevās"
 
-#: blueprint/tag.py:35
+#: blueprint/tag.py:40
+#, python-format
 msgid "Permanently deleted tag #%(tag_name)s"
 msgstr "Neatgriezeniski izdzēsi birku #%(tag_name)s"
 
-#: blueprint/tag.py:44
+#: blueprint/tag.py:49
+#, python-format
 msgid "Updated tag %(tag_name)s successfully!"
 msgstr "Atjaunināja birku %(tag_name)s!"
 
@@ -135,16 +145,16 @@ msgstr "Sākotnējais publicētājs"
 msgid "Open"
 msgstr "Atvērt"
 
-#: template/edit.html:34 template/upload.html:30 template/view.html:85
+#: template/edit.html:34 template/upload.html:30 template/view.html:87
 msgid "Source"
 msgstr "Resurss"
 
-#: template/edit.html:43 template/upload.html:35 template/view.html:109
+#: template/edit.html:43 template/upload.html:35 template/view.html:111
 msgid "Caption"
 msgstr "Saturs"
 
-#: template/edit.html:48 template/frag/nav.html:10 template/upload.html:40
-#: template/view.html:63
+#: template/edit.html:48 template/frag/nav.html:10 template/tag_history.html:9
+#: template/upload.html:40 template/view.html:63
 msgid "Tags"
 msgstr "Birkas"
 
@@ -154,7 +164,7 @@ msgstr "Izdzēst"
 
 #: template/edit.html:57
 msgid "Submit"
-msgstr ""
+msgstr "Saglabāt"
 
 #: template/edit_password.html:11
 msgid "Old Password"
@@ -197,11 +207,12 @@ msgstr ""
 "Tava atslēga pieejai REST API: %(api_key)s <br><b>(Nedali to ar "
 "nevienu)</b>"
 
-#: template/edit_tag.html:11 template/tag.html:14 template/view.html:104
+#: template/edit_tag.html:11 template/help.html:51 template/tag.html:14
+#: template/view.html:106
 msgid "Name"
 msgstr "Vārds"
 
-#: template/edit_tag.html:16 template/tag.html:17 template/view.html:105
+#: template/edit_tag.html:16 template/tag.html:17 template/view.html:107
 msgid "Type"
 msgstr "Tips"
 
@@ -218,7 +229,203 @@ msgstr "Atjaunināt"
 msgid "Oops! You encountered HTTP %(code)s error!"
 msgstr "Ak vai! Jūs satikāties ar HTTP kļūmi %(code)s!"
 
-#: template/index.html:15
+#: template/help.html:6
+#, fuzzy
+msgid "Help: Posts"
+msgstr "Ieraksti"
+
+#: template/help.html:7
+#, python-format
+msgid ""
+"A post represents a uploaded file that can be commented on and searched "
+"for. Alternatively if you upload a post of your own you can give it "
+"original poster and source attributes. More about uploading read <a "
+"href=\"%(upload_href)s\">Uploading section</a>, as well as caption and "
+"add tags that can be easily searched for as before mentioned. More about "
+"tags read <a href=\"%(tag_href)s\">Tags section</a>"
+msgstr ""
+
+#: template/help.html:9
+#, fuzzy
+msgid "Help: Search"
+msgstr "Meklēt"
+
+#: template/help.html:10
+#, python-format
+msgid ""
+"You can search for tag <b>%(tag_example)s</b> and it will search for "
+"Grand Theft Auto V gameplay posts. Because you put two tags together, "
+"alternatively if you don't want gameplay you can add <b>%(minus_tag)s</b>"
+" tag with a minus sign in front of tag name instead and it will search "
+"for posts that depict GTA V instead of gameplay."
+msgstr ""
+
+#: template/help.html:11
+#, python-format
+msgid ""
+"When searching you might want to look at what tags are available, click "
+"<a href=\"%(tag_url)s\">here</a>. More about searching look in <a "
+"href=\"%(tag_href)s\">Tags in-depth section</a>"
+msgstr ""
+
+#: template/help.html:14
+#, fuzzy
+msgid "Tag"
+msgstr "Birkas"
+
+#: template/help.html:15 template/help.html:53
+msgid "Explanation"
+msgstr "Izskaidrojums"
+
+#: template/help.html:19
+#, python-format
+msgid "Search for posts with <b>%(tag)s</b> tag"
+msgstr ""
+
+#: template/help.html:23
+#, python-format
+msgid "Search for posts that don't have the <b>%(tag)s</b> tag"
+msgstr ""
+
+#: template/help.html:27
+msgid "Search for posts that have no tags assigned"
+msgstr ""
+
+#: template/help.html:31
+msgid "Search for posts whose width is 1920 pixels"
+msgstr ""
+
+#: template/help.html:35
+msgid "Search for posts whose width is above 1919 pixels"
+msgstr ""
+
+#: template/help.html:39
+msgid "Search for posts whose height is below 1081 pixels"
+msgstr ""
+
+#: template/help.html:43
+#, python-format
+msgid ""
+"Search for posts that have the words <i>%(word_1)s</i> and "
+"<i>%(word_2)s</i> in text, order doesn't matter"
+msgstr ""
+
+#: template/help.html:47
+msgid "Help: In-depth Tags"
+msgstr ""
+
+#: template/help.html:48
+msgid ""
+"Here's a helpful table of available tags and attributes you can use to "
+"narrow down your searches."
+msgstr ""
+
+#: template/help.html:52
+msgid "Example"
+msgstr ""
+
+#: template/help.html:58
+msgid "Search for post whose unique ID is 1"
+msgstr ""
+
+#: template/help.html:63
+msgid "Match post author's ID"
+msgstr ""
+
+#: template/help.html:68
+msgid "Match an original poster's username or URL to profile"
+msgstr ""
+
+#: template/help.html:73
+msgid "Match original resource where post was taken from"
+msgstr ""
+
+#: template/help.html:78
+msgid "Search for posts in the \"cute\" directory"
+msgstr ""
+
+#: template/help.html:83
+#, python-format
+msgid "Match post with MD5 hash sum of <i>%(example_hash)s</i>"
+msgstr ""
+
+#: template/help.html:88
+#, python-format
+msgid "Match posts with file extension of <i>%(example_format)s</i>"
+msgstr ""
+
+#: template/help.html:93
+#, python-format
+msgid "Match posts with MIME type of <i>%(example_format)s</i>"
+msgstr ""
+
+#: template/help.html:98
+#, python-format
+msgid ""
+"Match posts with disk size in bytes of <i>%(example_id)s</i> <br><b>Note "
+"it is very hard to get this right so don't bother</b>"
+msgstr ""
+
+#: template/help.html:103
+msgid "Match posts whose height is 1440 pixels"
+msgstr ""
+
+#: template/help.html:108
+msgid "Match posts whose width is 2560 pixels"
+msgstr ""
+
+#: template/help.html:113
+msgid "Search for image posts"
+msgstr ""
+
+#: template/help.html:118
+msgid "Search for posts uploaded in Year 2026"
+msgstr ""
+
+#: template/help.html:123
+msgid "Search for posts uploaded in October (tenth month)"
+msgstr ""
+
+#: template/help.html:128
+msgid "Search for posts uploaded on the first day of every month"
+msgstr ""
+
+#: template/help.html:133
+msgid "Look for posts whose score is 1 point"
+msgstr ""
+
+#: template/help.html:138
+#, python-format
+msgid "Match for a post with the file name of <i>%(example_name)s</i>"
+msgstr ""
+
+#: template/help.html:142
+msgid "Help: Uploading"
+msgstr ""
+
+#: template/help.html:143
+msgid ""
+"Great, you want to share with your own content, please be aware that we "
+"only host high quality memes/other content, if you upload a low quality "
+"meme, be warned that it may be removed. And please don't upload content "
+"with watermarks, and make sure to attribute the original poster when "
+"uploading. You have the tools to do the right thing so you should utilize"
+" them. If whenever in doubt you can reach out on our Discord server."
+msgstr ""
+
+#: template/help.html:145
+msgid "Help: NSFW"
+msgstr ""
+
+#: template/help.html:146
+#, python-format
+msgid ""
+"By default NSFW-related posts are hidden, if you wish to view NSFW and "
+"only NSFW posts then you can add <b>%(nsfw_tag)s</b> tag. But please be "
+"aware of consequences that come with viewing NSFW posts"
+msgstr ""
+
+#: template/index.html:15 template/tag_history.html:32
 msgid "Search"
 msgstr "Meklēt"
 
@@ -238,7 +445,7 @@ msgstr "Loma"
 msgid "Created"
 msgstr "Izveidots"
 
-#: template/list_user.html:19 template/profile.html:20 template/tag.html:26
+#: template/list_user.html:19 template/profile.html:21 template/tag.html:26
 #: template/view.html:52
 msgid "Edit"
 msgstr "Mainīt"
@@ -267,6 +474,29 @@ msgstr "Izveidot profilu"
 msgid "Count"
 msgstr "Skaits"
 
+#: template/tag_history.html:6
+#, fuzzy
+msgid "Post"
+msgstr "Ieraksti"
+
+#: template/tag_history.html:7
+msgid "Time"
+msgstr "Laiks"
+
+#: template/tag_history.html:8
+#, fuzzy
+msgid "User"
+msgstr "Lietotāji"
+
+#: template/tag_history.html:21
+msgid "Revert"
+msgstr "Atgriezt"
+
+#: template/tag_history.html:29
+#, fuzzy
+msgid "Post ID"
+msgstr "Izveidots"
+
 #: template/upload.html:15
 msgid "File(s)"
 msgstr "Failu(s)"
@@ -283,35 +513,39 @@ msgstr "Augšupbalss"
 msgid "Downvote"
 msgstr "Lejupbalss"
 
-#: template/view.html:74
+#: template/view.html:73
+msgid "Tag History"
+msgstr "Birku Vēsture"
+
+#: template/view.html:76
 msgid "Statistics"
 msgstr "Statistika"
 
-#: template/view.html:77
+#: template/view.html:79
 msgid "Posted"
 msgstr "Izveidots"
 
-#: template/view.html:78
+#: template/view.html:80
 msgid "Uploader"
 msgstr "Īpašnieks"
 
-#: template/view.html:81
+#: template/view.html:83
 msgid "Size"
 msgstr "Izmērs"
 
-#: template/view.html:95
+#: template/view.html:97
 msgid "OP"
 msgstr "Sākotnējais publicētājs"
 
-#: template/view.html:106
+#: template/view.html:108
 msgid "Disk Size"
 msgstr "Glabāšanas Izmērs"
 
-#: template/view.html:121
+#: template/view.html:123
 msgid "Your comment goes here."
 msgstr "Tavs komentārs šeit."
 
-#: template/view.html:122
+#: template/view.html:124
 msgid "Comment"
 msgstr "Komentēt"
 

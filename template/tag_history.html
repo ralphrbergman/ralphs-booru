@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>{{ gettext('Post') }}</th>
+            <th>{{ gettext('Time') }}</th>
+            <th>{{ gettext('User') }}</th>
+            <th>{{ gettext('Tags') }}</th>
+            <th></th>
+        </tr>
+
+        {% for snapshot in snapshots %}
+            <tr>
+                <td><a href="{{ url_for('Root.Post.view_page', post_id = snapshot.post.id) }}">{{ snapshot.post.id }}</a></td>
+                <td>{{ snapshot.created }}</td>
+                <td><a href="{{ snapshot.user.profile_url }}">{{ snapshot.user.username }}</a></td>
+                <td>{{ snapshot.tags }}</td>
+                <td>
+                    {% if snapshot.previous %}
+                        <a href="{{ url_for('Root.Tag.revert_page', snapshot_id = snapshot.id) }}">{{ gettext('Revert') }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <form class="form">
+        <label for="post_id">{{ gettext('Post ID') }}:</label>
+        <input type="text" name="post_id">
+
+        <input type="submit" value="{{ gettext('Search') }}">
+    </form>
+{% endblock %}

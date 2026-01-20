@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: b460b7a1c627
+Revision ID: 35bc9f5bfddb
 Revises: 
-Create Date: 2026-01-17 22:40:07.054401
+Create Date: 2026-01-20 19:10:16.140906
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b460b7a1c627'
+revision = '35bc9f5bfddb'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,21 +21,21 @@ def upgrade():
     op.create_table('tag',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.Column('created', sa.DateTime(), nullable=False),
     sa.Column('type', sa.String(), server_default='general', nullable=False),
     sa.Column('desc', sa.String(), nullable=True),
+    sa.Column('created', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_table('user',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created', sa.DateTime(), nullable=False),
     sa.Column('avatar_name', sa.String(), nullable=False),
     sa.Column('name', sa.String(length=20), nullable=False),
     sa.Column('mail', sa.String(), nullable=True),
     sa.Column('pw_hash', sa.String(length=255), nullable=False),
     sa.Column('_key', sa.String(length=64), nullable=False),
     sa.Column('role', sa.String(), nullable=False),
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('mail'),
     sa.UniqueConstraint('name')
@@ -44,10 +44,7 @@ def upgrade():
         batch_op.create_index(batch_op.f('ix_user__key'), ['_key'], unique=True)
 
     op.create_table('post',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created', sa.DateTime(), nullable=False),
     sa.Column('modified', sa.DateTime(), nullable=True),
-    sa.Column('author_id', sa.Integer(), nullable=False),
     sa.Column('op', sa.String(), nullable=True),
     sa.Column('src', sa.String(), nullable=True),
     sa.Column('caption', sa.String(), nullable=True),
@@ -58,30 +55,46 @@ def upgrade():
     sa.Column('size', sa.Integer(), nullable=False),
     sa.Column('height', sa.Integer(), nullable=True),
     sa.Column('width', sa.Integer(), nullable=True),
+    sa.Column('author_id', sa.Integer(), nullable=False),
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('md5')
     )
     op.create_table('score_association',
-    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('target_id', sa.Integer(), nullable=False),
     sa.Column('target_type', sa.String(length=10), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('value', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('target_id', 'target_type', 'user_id', name='user_target_type_uc')
     )
     op.create_table('comment',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created', sa.DateTime(), nullable=False),
-    sa.Column('author_id', sa.Integer(), nullable=False),
     sa.Column('post_id', sa.Integer(), nullable=False),
     sa.Column('content', sa.String(), nullable=False),
+    sa.Column('author_id', sa.Integer(), nullable=False),
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['post_id'], ['post.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('snapshot',
+    sa.Column('post_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('tags', sa.Text(), nullable=False),
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['post_id'], ['post.id'], ondelete='cascade'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='set null'),
+    sa.PrimaryKeyConstraint('id')
+    )
+    with op.batch_alter_table('snapshot', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_snapshot_post_id'), ['post_id'], unique=False)
+
     op.create_table('tag_association',
     sa.Column('post_id', sa.Integer(), nullable=False),
     sa.Column('tag_id', sa.Integer(), nullable=False),
@@ -92,9 +105,9 @@ def upgrade():
     )
     op.create_table('thumbnail',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created', sa.DateTime(), nullable=False),
     sa.Column('post_id', sa.Integer(), nullable=False),
     sa.Column('data', sa.LargeBinary(), nullable=False),
+    sa.Column('created', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['post_id'], ['post.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('post_id')
@@ -106,6 +119,10 @@ def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table('thumbnail')
     op.drop_table('tag_association')
+    with op.batch_alter_table('snapshot', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_snapshot_post_id'))
+
+    op.drop_table('snapshot')
     op.drop_table('comment')
     op.drop_table('score_association')
     op.drop_table('post')

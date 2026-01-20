@@ -4,7 +4,7 @@ from apiflask import APIBlueprint, abort
 from flask_login import current_user
 from werkzeug.datastructures import FileStorage
 
-from api import create_post, delete_post, get_post, save_file
+from api import create_post, create_snapshot, delete_post, get_post, save_file
 from api.decorators import api_level_required, owner_only, post_protect
 from api_auth import auth
 from db import Post, db
@@ -49,6 +49,7 @@ def update_post(post_id: int, data: PostIn, post: Post):
     for key, value in data.items():
         setattr(post, key, value)
 
+    hist = create_snapshot(post, current_user)
     db.session.commit()
     return post
 
@@ -75,5 +76,8 @@ def upload_post(data: PostFormIn):
 
         if post:
             posts.append(post)
+
+    hist = create_snapshot(post, current_user)
+    db.session.commit()
 
     return posts

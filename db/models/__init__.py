@@ -1,5 +1,6 @@
 from .comment import Comment
 from .post import Post
+from .snapshot import Snapshot
 from .score_assoc import ScoreAssociation
 from .tag import Tag
 from .thumbnail import Thumbnail

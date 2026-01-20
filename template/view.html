@@ -70,6 +70,8 @@
                 </ul>
             </div>
 
+            <a href="{{ url_for('Root.Tag.history_page', post_id = post.id) }}">{{ gettext('Tag History') }}</a>
+
             <div class="post-details">
                 <p class="notable">{{ gettext('Statistics') }}:</p>
 

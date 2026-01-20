@@ -4,4 +4,5 @@ from .post import DEFAULT_TERMS, browse_post, count_all as count_all_posts, crea
 from .score import add_vote, delete_score, get_vote, get_score, remove_vote
 from .tag import add_tags, browse_tag, create_tag, delete_tag, get_tag
 from .thumbnail import ThumbnailType, create_thumbnail, generate_thumbnail, is_alpha_used
+from .snapshot import browse_snapshots, create_snapshot, get_snapshot, revert_snapshot
 from .user import browse_user, create_user, get_user, get_user_by_username

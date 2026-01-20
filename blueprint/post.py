@@ -4,7 +4,7 @@ from flask import Blueprint, request, abort, flash, redirect, render_template, s
 from flask_babel import gettext
 from flask_login import current_user, login_required
 
-from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, add_tags, browse_post, create_post, delete_post, get_post, move_post, replace_post, save_file
+from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, add_tags, browse_post, create_post, create_snapshot, delete_post, get_post, move_post, replace_post, save_file
 from api.decorators import level_required, post_protect
 from db import db
 from form import PostForm, UploadForm
@@ -100,6 +100,7 @@ def edit_page(post_id: int):
             post.caption = form.caption.data.strip()
 
             post.tags = add_tags(form.tags.data.split(' '))
+            hist = create_snapshot(post, current_user)
             move_post(post, form.directory.data.strip())
 
             db.session.commit()
@@ -148,6 +149,8 @@ def upload_page():
                 caption = form.caption.data.strip(),
                 tags = form.tags.data
             )
+            hist = create_snapshot(post, current_user)
+            db.session.commit()
 
             if post is not None:
                 flash(gettext('Successfully uploaded post #%(post_id)s', post_id = post.id))

@@ -4,7 +4,7 @@ from flask import Blueprint, request, abort, flash, redirect, render_template, u
 from flask_babel import gettext
 from flask_login import current_user, login_required
 
-from api import browse_tag, delete_tag, get_tag
+from api import browse_tag, browse_snapshots, delete_tag, get_tag, get_snapshot, revert_snapshot
 from api.decorators import level_required, post_protect
 from db import db
 from form import TagForm
@@ -48,6 +48,24 @@ def edit_page(tag_id: int):
 
         flash(gettext('Updated tag %(tag_name)s successfully!', tag_name = tag.name))
         return redirect(url_for('Root.Tag.edit_page', tag_id = tag_id))
+
+@tag_bp.route('/history')
+def history_page():
+    post_id = request.args.get('post_id')
+    snapshots = browse_snapshots(post_id = post_id)
+
+    return render_template('tag_history.html', snapshots = snapshots)
+
+@tag_bp.route('/revert/<int:snapshot_id>')
+def revert_page(snapshot_id: int):
+    snapshot = get_snapshot(snapshot_id)
+
+    if not snapshot:
+        return abort(404)
+
+    snapshot = revert_snapshot(snapshot, current_user)
+
+    return redirect(url_for('Root.Tag.history_page', post_id = snapshot.post_id))
 
 @tag_bp.route('')
 def tag_page():

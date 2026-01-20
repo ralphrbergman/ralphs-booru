@@ -1,15 +1,14 @@
-from datetime import datetime
-
 from flask import url_for
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
+from .mixins.created import CreatedMixin
+from .mixins.id import IdMixin
 from .mixins.serializer import SerializerMixin
 
-class Thumbnail(db.Model, SerializerMixin):
+class Thumbnail(db.Model, CreatedMixin, IdMixin, SerializerMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
-    created: Mapped[datetime] = mapped_column(default = func.now())
     post_id: Mapped[int] = mapped_column(ForeignKey('post.id'), nullable = False, unique = True)
     post: Mapped['Post'] = relationship('Post', back_populates = 'thumbnail')
     data: Mapped[bytes] = mapped_column(nullable = False)

@@ -6,14 +6,16 @@ from typing import Any
 from urllib.parse import urlparse
 
 from flask import url_for
-from sqlalchemy import ForeignKey, String, func
+from sqlalchemy import String, func
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from sqlalchemy.sql import ColumnElement
 
 from db import db
-from .tag import Tag
 from .thumbnail import Thumbnail
+from .mixins.author import AuthorMixin
+from .mixins.created import CreatedMixin
+from .mixins.id import IdMixin
 from .mixins.score import ScoreMixin
 from .mixins.serializer import SerializerMixin
 
@@ -22,19 +24,21 @@ NSFW_TAG_NAME = getenv('NSFW_TAG', 'nsfw')
 SENSITIVE_DIRS = getenv('SENSITIVE_DIRS', '').split(',')
 DISK_SIZES = ('B', 'KB', 'MB', 'GB')
 
-class Post(db.Model, ScoreMixin, SerializerMixin):
-    id: Mapped[int] = mapped_column(primary_key = True)
-    created: Mapped[datetime] = mapped_column(default = func.now())
+class Post(
+    db.Model,
+    AuthorMixin,
+    CreatedMixin,
+    IdMixin,
+    ScoreMixin,
+    SerializerMixin
+):
     modified: Mapped[datetime] = mapped_column(nullable = True, onupdate = func.now())
-
-    author_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable = False)
-    author: Mapped['User'] = relationship(back_populates = 'posts')
 
     op: Mapped[str] = mapped_column(nullable = True)
     src: Mapped[str] = mapped_column(nullable = True)
 
     caption: Mapped[str] = mapped_column(nullable = True)
-    tags: Mapped[list['Tag']] = db.relationship('Tag', secondary = 'tag_association', back_populates = 'posts')
+    tags: Mapped[list['Tag']] = relationship('Tag', secondary = 'tag_association', back_populates = 'posts')
     thumbnail: Mapped[Thumbnail] = relationship('Thumbnail', back_populates = 'post')
 
     # Filesystem attributes.
@@ -50,6 +54,7 @@ class Post(db.Model, ScoreMixin, SerializerMixin):
     width: Mapped[int] = mapped_column(nullable = True)
 
     comments: Mapped[list['Comment']] = relationship(back_populates = 'post')
+    snapshots: Mapped[list['Snapshot']] = relationship(back_populates = 'post')
     scores: Mapped[list['ScoreAssociation']] = relationship(
         'ScoreAssociation',
         primaryjoin="and_(Post.id == foreign(ScoreAssociation.target_id), ScoreAssociation.target_type == 'post')",

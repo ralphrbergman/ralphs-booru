@@ -2,11 +2,11 @@ from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
+from .mixins.id import IdMixin
 
-class ScoreAssociation(db.Model):
+class ScoreAssociation(db.Model, IdMixin):
     __tablename__ = 'score_association'
 
-    id: Mapped[int] = mapped_column(primary_key = True)
     target_id: Mapped[int] = mapped_column()
     target_type: Mapped[str] = mapped_column(String(length = 10), nullable = False)
 
