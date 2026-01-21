@@ -55,7 +55,7 @@ def create_app() -> APIFlask:
             g.lang_code = first_segment
             return 
 
-        lang = request.accept_languages.best_match(SUPPORTED_TRANSLATIONS) or 'en'
+        lang = request.cookies.get('lang_code') or request.accept_languages.best_match(SUPPORTED_TRANSLATIONS) or 'en'
         return redirect(f'/{lang}{request.full_path}', code=302)
 
     babel.init_app(app, locale_selector = get_locale)
