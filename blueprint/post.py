@@ -104,12 +104,16 @@ def edit_page(post_id: int):
                         flash(gettext('Failed to exchange post.'))
                         return redirect(url_for('Root.Post.edit_page', post_id = post_id))
 
+            original_tags = post.tags
+
             post.op = form.op.data.strip()
             post.src = form.src.data.strip()
             post.caption = form.caption.data.strip()
 
             post.tags = add_tags(form.tags.data.split(' '))
-            hist = create_snapshot(post, current_user)
+            if post.tags != original_tags:
+                hist = create_snapshot(post, current_user)
+
             move_post(post, form.directory.data.strip())
 
             db.session.commit()

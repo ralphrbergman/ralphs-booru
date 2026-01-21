@@ -52,7 +52,6 @@ def update_post(post_id: int, data: PostIn, post: Post):
     for key, value in data.items():
         setattr(post, key, value)
 
-    hist = create_snapshot(post, current_user)
     db.session.commit()
     return post
 
