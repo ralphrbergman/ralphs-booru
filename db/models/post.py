@@ -54,7 +54,7 @@ class Post(
     width: Mapped[int] = mapped_column(nullable = True)
 
     comments: Mapped[list['Comment']] = relationship(back_populates = 'post')
-    snapshots: Mapped[list['Snapshot']] = relationship(back_populates = 'post')
+    snapshots: Mapped[list['Snapshot']] = relationship(back_populates = 'post', cascade = 'all, delete-orphan')
     scores: Mapped[list['ScoreAssociation']] = relationship(
         'ScoreAssociation',
         primaryjoin="and_(Post.id == foreign(ScoreAssociation.target_id), ScoreAssociation.target_type == 'post')",

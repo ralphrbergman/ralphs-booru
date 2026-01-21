@@ -371,7 +371,7 @@ def replace_post(post: Post, file: FileStorage) -> Post:
 
         db.session.commit()
 
-    return post
+    return new_post
 
 def save_file(file: FileStorage) -> Path:
     """

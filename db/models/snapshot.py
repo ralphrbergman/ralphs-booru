@@ -7,7 +7,7 @@ from .mixins.id import IdMixin
 from .user import User
 
 class Snapshot(db.Model, CreatedMixin, IdMixin):
-    post_id: Mapped[int] = mapped_column(ForeignKey('post.id', ondelete = 'cascade'), index = True, nullable = False)
+    post_id: Mapped[int] = mapped_column(ForeignKey('post.id', ondelete = 'cascade'), index = True)
     user_id: Mapped[int | None] = mapped_column(ForeignKey('user.id', ondelete = 'set null'))
     tags: Mapped[str] = mapped_column(Text, nullable = False)
 
