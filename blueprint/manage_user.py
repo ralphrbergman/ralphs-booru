@@ -54,10 +54,10 @@ def manage_user_page(user_id: int):
         if pw is not None:
             user.password = pw
         
-        if current_user.role >= RoleEnum(role):
+        if current_user.role >= RoleEnum(role) and current_user.role > user.role:
             user.role = role
         else:
-            flash(gettext('Cannot grant a role that you are below of'))
+            flash(gettext('Cannot manage the user on the same or above rank as you'))
             return redirect(url_for('Root.Manage User.manage_user_page', user_id = user_id))
 
         user.name = username
