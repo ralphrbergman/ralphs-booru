@@ -22,7 +22,7 @@
                         {% endif %}
                     </td>
                     <td>{{ user.role_name }}</td>
-                    <td>{{ user.mail }}</td>
+                    <td>{% if user.mail %}{{ user.mail }}{% endif %}</td>
                     <td>{{ user.created }}</td>
                 </tr>
             {% endfor %}
