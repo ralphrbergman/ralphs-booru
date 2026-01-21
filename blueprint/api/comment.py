@@ -40,8 +40,7 @@ def remove_comment(comment_id: int, comment: Comment):
 @comment_bp.output(CommentOut)
 @comment_bp.auth_required(auth)
 @post_protect
-@api_level_required(COMMENT_LEVEL)
-@owner_only(Comment)
+@api_level_required(COMMENT_LEVEL, Comment)
 def update_comment(comment_id: int, data: CommentIn, comment: Comment):
     post = get_post(data['post_id'])
 
@@ -62,7 +61,7 @@ def update_comment(comment_id: int, data: CommentIn, comment: Comment):
 @comment_bp.output(CommentOut)
 @comment_bp.auth_required(auth)
 @post_protect
-@api_level_required(COMMENT_LEVEL)
+@api_level_required(COMMENT_LEVEL, Comment)
 def upload_comment(data: CommentIn):
     post = get_post(data['post_id'])
 

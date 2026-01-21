@@ -43,8 +43,7 @@ def remove_post(post_id: int, post: Post):
 @post_bp.output(PostOut)
 @post_bp.auth_required(auth)
 @post_protect
-@api_level_required(POSTING_LEVEL)
-@owner_only(Post)
+@api_level_required(POSTING_LEVEL, Post)
 def update_post(post_id: int, data: PostIn, post: Post):
     if not post:
         abort(404, message = 'Post not found.')
@@ -60,7 +59,7 @@ def update_post(post_id: int, data: PostIn, post: Post):
 @post_bp.output(PostOut(many = True))
 @post_bp.auth_required(auth)
 @post_protect
-@api_level_required(POSTING_LEVEL)
+@api_level_required(POSTING_LEVEL, Post)
 def upload_post(data: PostFormIn):
     files: list[FileStorage] = data['files']
     posts = list()

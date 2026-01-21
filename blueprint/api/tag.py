@@ -5,7 +5,7 @@ from apiflask import APIBlueprint, abort
 from api import browse_tag, create_tag, delete_tag, get_tag, get_post
 from api.decorators import api_level_required, post_protect
 from api_auth import auth
-from db import db
+from db import Tag, db
 from db.schemas import TagIn, TagOut
 
 TAGGING_LEVEL = int(getenv('TAGGING_LEVEL'))
@@ -44,7 +44,7 @@ def remove_tag(tag_id: int):
 @tag_bp.output(TagOut)
 @tag_bp.auth_required(auth)
 @post_protect
-@api_level_required(TAGGING_LEVEL)
+@api_level_required(TAGGING_LEVEL, Tag)
 def upload_tag(data: TagIn):
     tag = create_tag(data['name'])
 
@@ -66,7 +66,7 @@ def upload_tag(data: TagIn):
 @tag_bp.output(TagOut)
 @tag_bp.auth_required(auth)
 @post_protect
-@api_level_required(TAGGING_LEVEL)
+@api_level_required(TAGGING_LEVEL, Tag)
 def update_tag(data: TagIn):
     tag = get_tag(data['name'])
 

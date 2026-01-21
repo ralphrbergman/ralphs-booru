@@ -6,7 +6,7 @@ from flask_login import current_user, login_required
 
 from api import browse_tag, browse_snapshots, delete_tag, get_tag, get_snapshot, revert_snapshot
 from api.decorators import level_required, post_protect
-from db import db
+from db import Tag, db
 from form import SnapshotForm, TagForm
 from .utils import create_pagination_bar
 
@@ -23,7 +23,7 @@ TAG_TYPES = ('artist', 'character', 'copyright', 'general', 'meta')
 @tag_bp.route('/edit/<int:tag_id>', methods = ['GET', 'POST'])
 @login_required
 @post_protect
-@level_required(TAGGING_LEVEL)
+@level_required(TAGGING_LEVEL, Tag)
 def edit_page(tag_id: int):
     form = TagForm()
     tag = get_tag(tag_id)

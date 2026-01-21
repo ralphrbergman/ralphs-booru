@@ -13,11 +13,27 @@ from db import db
 ALLOW_USERS = getenv('ALLOW_USERS') == 'true'
 ALLOW_POSTS = getenv('ALLOW_POSTS') == 'true'
 
-def _level_required(LEVEL: int, abort_fn: Callable, *abort_args):
+def _get_entity(model_class):
+    v_args = request.view_args
+
+    try:
+        entity_id = list(v_args.values())[-1]
+        entity_name = list(v_args.keys())[-1].strip('_id')
+    except IndexError as exc:
+        return
+
+    entity = db.session.scalars(
+        select(model_class)
+        .where(model_class.id == entity_id)
+    ).first()
+
+    return entity, entity_name
+
+def _level_required(LEVEL: int, model_class, abort_fn: Callable, *abort_args):
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
-            if current_user.level >= LEVEL or current_user.is_moderator:
+            if current_user.level >= LEVEL or current_user.is_moderator or _get_entity(model_class):
                 return callback(*args, **kwargs)
             
             return abort_fn(*abort_args)
@@ -26,8 +42,8 @@ def _level_required(LEVEL: int, abort_fn: Callable, *abort_args):
 
     return decorator
 
-def api_level_required(LEVEL: int):
-    return _level_required(LEVEL, api_abort, 401, gettext('Can\'t access this party yet boss.'))
+def api_level_required(LEVEL: int, model_class):
+    return _level_required(LEVEL, model_class, api_abort, 401, gettext('Can\'t access this party yet boss.'))
 
 def anonymous_only(callback):
     """
@@ -45,8 +61,8 @@ def anonymous_only(callback):
 
     return wrapper
 
-def level_required(LEVEL: int):
-    return _level_required(LEVEL, abort, 401)
+def level_required(LEVEL: int, model_class):
+    return _level_required(LEVEL, model_class, abort, 401)
 
 def moderator_only(callback):
     """
@@ -74,15 +90,7 @@ def owner_only(model_class):
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
-            v_args = request.view_args
-
-            entity_id = list(v_args.values())[-1]
-            entity_name = list(v_args.keys())[-1].strip('_id')
-
-            entity = db.session.scalars(
-                select(model_class)
-                .where(model_class.id == entity_id)
-            ).first()
+            entity, entity_name = _get_entity(model_class)
             kwargs[entity_name] = entity
 
             try:

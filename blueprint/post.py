@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, DEFAULT_SORT_DIR, add_tags, browse_post, create_post, create_snapshot, delete_post, get_post, move_post, replace_post, save_file
 from api.decorators import level_required, post_protect
-from db import db
+from db import Post, db
 from form import PostForm, UploadForm
 from .utils import create_pagination_bar, flash_errors
 
@@ -75,7 +75,7 @@ def browse_paged(page: int):
 @post_bp.route('/edit/<int:post_id>', methods = ['GET', 'POST'])
 @login_required
 @post_protect
-@level_required(POSTING_LEVEL)
+@level_required(POSTING_LEVEL, Post)
 def edit_page(post_id: int):
     form = PostForm()
     post = get_post(post_id)
@@ -145,7 +145,7 @@ def view_file_resource(post_id: int):
 @post_bp.route('/upload', methods = ['GET', 'POST'])
 @login_required
 @post_protect
-@level_required(POSTING_LEVEL)
+@level_required(POSTING_LEVEL, Post)
 def upload_page():
     form = UploadForm()
 
