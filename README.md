@@ -29,6 +29,8 @@ TAGGING_LEVEL=1
 CONTENT_PATH=<path/to/media>
 # Name of SQLite3 database file.
 DATABASE_URI=sqlite:///<path-to-db>
+# Whether NSFW posts should have a blur by default.
+DEFAULT_BLUR=on
 # Name of Not Safe For Work tag. (Optional)
 NSFW_TAG=nsfw
 # Directories of sensitive (e.g NSFW) content.

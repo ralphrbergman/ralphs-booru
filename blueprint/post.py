@@ -6,13 +6,13 @@ from flask_babel import gettext
 from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 
-from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, add_tags, browse_post, create_post, create_snapshot, delete_post, get_post, move_post, replace_post, save_file
+from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, DEFAULT_SORT_DIR, add_tags, browse_post, create_post, create_snapshot, delete_post, get_post, move_post, replace_post, save_file
 from api.decorators import level_required, post_protect
 from db import db
 from form import PostForm, UploadForm
 from .utils import create_pagination_bar, flash_errors
 
-DEFAULT_BLUR = getenv('DEFAULT_BLUR') == 'true'
+DEFAULT_BLUR = getenv('DEFAULT_BLUR') == 'on'
 POSTING_LEVEL = int(getenv('POSTING_LEVEL'))
 
 post_bp = Blueprint(
@@ -31,7 +31,9 @@ def browse_paged(page: int):
     blur = args.get('blur', default = DEFAULT_BLUR)
     limit = args.get('limit', default = DEFAULT_LIMIT, type = int)
     terms = args.get('terms', default = DEFAULT_TERMS)
-    sort_str = args.get('sort', default = DEFAULT_SORT)
+    sort = args.get('sort', default = DEFAULT_SORT)
+    sort_direction = args.get('sort_direction', default = DEFAULT_SORT_DIR)
+    print(blur, limit, terms, sort, sort_direction)
 
     # Ensure all URI arguments are passed in the address.
     if len(args) < 2:
@@ -42,26 +44,30 @@ def browse_paged(page: int):
                 limit = limit,
                 page = page,
                 terms = terms,
-                sort = sort_str
+                sort = sort,
+                sort_direction = sort_direction
             )
         )
 
-    posts = browse_post(limit = limit, page = page, terms = terms, sort_str = sort_str)
+    posts = browse_post(
+        direction = sort_direction,
+        limit = limit,
+        page = page,
+        terms = terms,
+        sort = sort
+    )
 
     bar = create_pagination_bar(
         page,
         posts.pages,
         'Root.Post.browse_paged',
-        blur = blur,
-        limit = limit,
-        terms = terms,
-        sort = sort_str
+        **request.args
     )
 
     return render_template(
         'browse.html',
         bar = bar,
-        blur = blur.lower() == 'true',
+        blur = blur,
         current_page = page,
         posts = posts
     )
