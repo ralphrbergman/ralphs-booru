@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 from os import getenv
 from typing import Optional
 
@@ -18,11 +18,15 @@ from .mixins.id import IdMixin
 from .mixins.serializer import SerializerMixin
 from .post import Post
 
-class RoleEnum(Enum):
-    ADMIN = 'adm'
-    MODERATOR = 'mod'
-    REGULAR = 'reg'
-    TERMINATED = 'ter'
+class RoleEnum(IntEnum):
+    ADMIN = 3
+    MODERATOR = 2
+    REGULAR = 1
+    TERMINATED = 0
+
+    @property
+    def code(self) -> str:
+        return self.name.lower()[:3]
 
 def find_user_by_key(key: str) -> Optional[User]:
     """
@@ -73,7 +77,7 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
     # Defines user's role within the system.
     # Certain users can terminate accounts, delete posts and some can't
     # comment due to restrictions put in place by a moderator.
-    role: Mapped[str] = mapped_column(nullable = False, default = 'reg')
+    role: Mapped[int] = mapped_column(nullable = False, default = 1)
 
     @validates('mail')
     def validate_user(self, key: str, value: str) -> Optional[str]:
@@ -129,7 +133,7 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
 
     @property
     def is_moderator(self) -> bool:
-        return self.role == RoleEnum.ADMIN.value or self.role == RoleEnum.MODERATOR.value
+        return self.role >= RoleEnum.MODERATOR
 
     @property
     def password(self) -> None:

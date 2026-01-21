@@ -24,10 +24,10 @@ class PostMixin:
 
 class RoleMixin:
     role = RadioField('role', choices = [
-        ('ter', 'Terminated:'),
-        ('reg', 'None:'),
-        ('mod', 'Moderator:'),
-        ('adm', 'Administrator:')
+        (0, 'Terminated:'),
+        (1, 'None:'),
+        (2, 'Moderator:'),
+        (3, 'Administrator:')
     ],
     default = 'reg')
 

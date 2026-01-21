@@ -17,7 +17,7 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
                     <td><a class="no-select" href="{{ url_for('Root.Manage User.manage_user_page', user_id = user.id) }}">{{ gettext('Edit') }}</a></td>
-                    <td>{{ enum(user.role).name.title() }}</td>
+                    <td>{{ user.role_name }}</td>
                     <td>{{ user.mail }}</td>
                     <td>{{ user.created }}</td>
                 </tr>

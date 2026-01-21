@@ -1,5 +1,6 @@
-from flask import Blueprint, request, flash, render_template
+from flask import Blueprint, request, flash, redirect, render_template, url_for
 from flask_babel import gettext
+from flask_login import current_user
 
 from api import browse_user, get_user
 from api.decorators import moderator_only
@@ -46,13 +47,19 @@ def manage_user_page(user_id: int):
         if len(form.pw.data) > 0:
             pw = form.pw.data
 
-        role = form.role.data
+        role = int(form.role.data)
         username = form.username.data
 
         user.mail = mail
         if pw is not None:
             user.password = pw
-        user.role = role
+        
+        if current_user.role >= RoleEnum(role):
+            user.role = role
+        else:
+            flash(gettext('Cannot grant a role that you are below of'))
+            return redirect(url_for('Root.Manage User.manage_user_page', user_id = user_id))
+
         user.name = username
 
         db.session.commit()
