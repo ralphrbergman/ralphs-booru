@@ -9,7 +9,6 @@ import ffmpeg
 from flask_sqlalchemy.pagination import SelectPagination
 from magic import from_file
 from sqlalchemy import Select, func, or_, select
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import UnmappedInstanceError
 from werkzeug.datastructures import FileStorage
 
@@ -200,27 +199,13 @@ def create_post(
 
     db.session.add(post)
 
+    thumbnail = create_thumbnail(post)
+
     try:
-        db.session.commit()
-
-        thumbnail = create_thumbnail(post)
-
-        try:
-            thumbnail.post_id = post.id
-
-            db.session.commit()
-        except AttributeError as exc:
-            # No thumbnail was made.
-            pass
-    except IntegrityError as exc:
-        # Error likely of post that already exists.
-        db.session.rollback()
-
-        # Move back the file.
-        copy(post.path, path)
-        post.path.unlink(missing_ok = True)
-
-        return
+        thumbnail.post_id = post.id
+    except AttributeError as exc:
+        # No thumbnail was made.
+        pass
 
     return post
 
@@ -243,7 +228,6 @@ def delete_post(post: Post | int) -> None:
         pass
 
     db.session.delete(post)
-    db.session.commit()
 
 def get_dimensions(path: Path) -> tuple[int, int]:
     try:
@@ -368,8 +352,6 @@ def replace_post(post: Post, file: FileStorage) -> Post:
         if new_thumb:
             # Tie post with its new thumbnail.
             new_thumb.post_id = new_post.id
-
-        db.session.commit()
 
     return new_post
 

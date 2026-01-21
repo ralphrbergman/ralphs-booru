@@ -37,7 +37,6 @@ def add_vote(target_id: int, user_id: int, score_type: str) -> ScoreAssociation:
 
 def delete_score(score: ScoreAssociation) -> None:
     db.session.delete(score)
-    db.session.commit()
 
 def get_vote(target_id: int, user_id: int, score_type: str = None) -> Optional[ScoreAssociation]:
     score = db.session.scalars(

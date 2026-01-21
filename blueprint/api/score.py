@@ -3,7 +3,7 @@ from flask_login import current_user
 
 from api import add_vote, delete_score, get_score, remove_vote
 from api.decorators import owner_only, post_protect
-from db import ScoreAssociation
+from db import ScoreAssociation, db
 from db.schemas import ScoreIn, ScoreOut
 
 score_bp = APIBlueprint(
@@ -30,6 +30,7 @@ def remove_score(score_id: int, score: ScoreAssociation):
         abort(404, message = 'Score not found')
 
     delete_score(score)
+    db.session.commit()
 
     return {}
 

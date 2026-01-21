@@ -39,13 +39,11 @@ def create_comment(content: str, author: User, post: Post) -> Comment:
     comment.content = content
 
     db.session.add(comment)
-    db.session.commit()
 
     return comment
 
 def delete_comment(comment: Comment) -> None:
     db.session.delete(comment)
-    db.session.commit()
 
 def get_comment(comment_id: int) -> Optional[Comment]:
     comment = db.session.execute(

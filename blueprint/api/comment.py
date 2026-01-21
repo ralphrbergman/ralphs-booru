@@ -31,6 +31,7 @@ def remove_comment(comment_id: int, comment: Comment):
         abort(404, message = 'Comment not found.')
 
     delete_comment(comment)
+    db.session.commit()
 
     return {}
 
@@ -69,5 +70,6 @@ def upload_comment(data: CommentIn):
         abort(404, message = 'Post not found.')
 
     comment = create_comment(data['content'], current_user, post)
+    db.session.commit()
 
     return comment

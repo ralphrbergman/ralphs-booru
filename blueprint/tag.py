@@ -67,6 +67,7 @@ def revert_page(snapshot_id: int):
         return abort(404)
 
     snapshot = revert_snapshot(snapshot, current_user)
+    db.session.commit()
 
     return redirect(url_for('Root.Tag.history_page', post_id = snapshot.post_id))
 

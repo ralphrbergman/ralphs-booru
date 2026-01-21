@@ -18,15 +18,15 @@ def browse_snapshots(*args, post_id: Optional[int] = None, **kwargs) -> SelectPa
     return browse_element(Snapshot, extra_fn = apply_snapshot_specific_query, *args, **kwargs)
 
 def create_snapshot(post: Post, user: User) -> Snapshot:
-    hist = Snapshot()
+    snap = Snapshot()
 
-    hist.post = post
-    hist.user = user
-    hist.tags = ' '.join(sorted(( tag.name for tag in post.tags )))
+    snap.post = post
+    snap.user = user
+    snap.tags = ' '.join(sorted(( tag.name for tag in post.tags )))
 
-    db.session.add(hist)
+    db.session.add(snap)
 
-    return hist
+    return snap
 
 def get_snapshot(id: int) -> Optional[Snapshot]:
     return db.session.scalar(select(Snapshot).where(Snapshot.id == id))
@@ -45,5 +45,4 @@ def revert_snapshot(snapshot: Snapshot, user: User) -> Snapshot:
 
     new_snapshot = create_snapshot(post, user)
 
-    db.session.commit()
     return new_snapshot

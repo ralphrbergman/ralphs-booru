@@ -1,7 +1,9 @@
 from os import getenv
+from shutil import copy
 
 from apiflask import APIBlueprint, abort
 from flask_login import current_user
+from sqlalchemy.exc import IntegrityError
 from werkzeug.datastructures import FileStorage
 
 from api import create_post, create_snapshot, delete_post, get_post, save_file
@@ -32,6 +34,7 @@ def remove_post(post_id: int, post: Post):
         abort(404, message = 'Post not found.')
 
     delete_post(post)
+    db.session.commit()
 
     return {}
 
@@ -74,10 +77,21 @@ def upload_post(data: PostFormIn):
             data.get('caption')
         )
 
-        if post:
-            posts.append(post)
+        posted = False
+        snapshot = create_snapshot(post, current_user)
 
-    hist = create_snapshot(post, current_user)
-    db.session.commit()
+        try:
+            db.session.commit()
+            posted = True
+        except IntegrityError as exc:
+            # Error likely of post that already exists.
+            db.session.rollback()
+
+            # Move back the file.
+            copy(post.path, temp_path)
+            post.path.unlink(missing_ok = True)
+
+        if posted:
+            posts.append(post)
 
     return posts

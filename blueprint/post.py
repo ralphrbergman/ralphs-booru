@@ -1,8 +1,10 @@
 from os import getenv
+from shutil import copy
 
 from flask import Blueprint, request, abort, flash, redirect, render_template, send_file, url_for
 from flask_babel import gettext
 from flask_login import current_user, login_required
+from sqlalchemy.exc import IntegrityError
 
 from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, add_tags, browse_post, create_post, create_snapshot, delete_post, get_post, move_post, replace_post, save_file
 from api.decorators import level_required, post_protect
@@ -81,6 +83,7 @@ def edit_page(post_id: int):
                 if form.deleted.data:
                     delete_post(post)
 
+                    db.session.commit()
                     flash(gettext('Permanently deleted post #%(post_id)s', post_id = post.id))
                     return redirect(url_for('Root.Post.browse_page'))
 
@@ -149,10 +152,22 @@ def upload_page():
                 caption = form.caption.data.strip(),
                 tags = form.tags.data
             )
-            hist = create_snapshot(post, current_user)
-            db.session.commit()
 
-            if post is not None:
+            posted = False
+            snapshot = create_snapshot(post, current_user)
+
+            try:
+                db.session.commit()
+                posted = True
+            except IntegrityError as exc:
+                # Error likely of post that already exists.
+                db.session.rollback()
+
+                # Move back the file.
+                copy(post.path, temp_path)
+                post.path.unlink(missing_ok = True)
+
+            if posted:
                 flash(gettext('Successfully uploaded post #%(post_id)s', post_id = post.id))
             else:
                 flash(gettext('Uploading file %(filename)s failed', filename = file.filename))
