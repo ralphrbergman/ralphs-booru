@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set title = 'Error: ' ~ code %}
+{% set title = gettext('Error') ~ ': ' ~ code %}
 
 {% block body %}
     <div class="center-container">

@@ -2,13 +2,14 @@ from os import getenv
 
 from apiflask import APIFlask
 from flask import g, request, redirect
+from flask.cli import with_appcontext
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 
 from api import get_user
 from brand import brand
 from blueprint import api_bp, root_bp
-from db import db, User
+from db import db, Permission, Role, User
 from encryption import bcrypt
 from login import login_manager
 from translation import SUPPORTED_TRANSLATIONS, babel
@@ -31,6 +32,38 @@ def create_app() -> APIFlask:
     app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URI')
 
     db.init_app(app)
+
+    @app.cli.command('setup-roles')
+    @with_appcontext
+    def setup_roles_command():
+        perms = {
+            'comment': Permission(slug='post:comment'),
+            'upload': Permission(slug='post:upload'),
+            'edit': Permission(slug = 'post:edit'),
+            'delete': Permission(slug='post:delete'),
+            'tag_edit': Permission(slug='tag:edit'),
+            'user_ban': Permission(slug='user:ban'),
+        }
+
+        admin = Role(name='Admin')
+        mod = Role(name='Moderator')
+        janitor = Role(name='Janitor')
+        user = Role(name='User')
+
+        # Admins get everything
+        admin.permissions = list(perms.values())
+
+        # Moderators get most things
+        mod.permissions = [perms['comment'], perms['upload'], perms['delete'], perms['tag_edit'], perms['user_ban']]
+
+        # Janitors only help with content
+        janitor.permissions = [perms['comment'], perms['delete'], perms['tag_edit']]
+
+        # Normal users can only upload
+        user.permissions = [perms['comment'], perms['upload']]
+
+        db.session.add_all([admin, mod, user, janitor])
+        db.session.commit()
 
     # Initialize translations
     def get_locale() -> str:

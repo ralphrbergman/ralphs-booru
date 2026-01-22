@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set title = 'Page ' ~ current_page %}
+{% set title = gettext('Page ') ~ current_page %}
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'post.css') }}">

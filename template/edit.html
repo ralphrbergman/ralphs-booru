@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set title = 'Edit Post: ' ~ post.id %}
+{% set title = gettext('Edit Post: ') ~ post.id %}
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
@@ -46,12 +46,12 @@
 
             <div class="input-group">
                 <label for="tags">{{ gettext('Tags') }}:</label>
-                <textarea name="tags">{% if post.tags is not none %}{{ post.tags | map(attribute = 'name') | join(' ') }}{% endif %}</textarea>
+                <textarea name="tags"{% if not (current_user.has_permission('tag:edit') or current_user.owns(post)) %}disabled{% endif %}>{% if post.tags is not none %}{{ post.tags | map(attribute = 'name') | join(' ') }}{% endif %}</textarea>
             </div>
 
             <div class="input-group">
                 <label for="deleted">{{ gettext('Delete') }}:</label>
-                <input type="checkbox" name="deleted">
+                <input type="checkbox" name="deleted" {% if not (current_user.has_permission('post:delete') or current_user.owns(post))%}disabled{% endif %}>
             </div>
 
             <input type="submit" value="{{ gettext('Submit') }}">

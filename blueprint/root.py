@@ -68,7 +68,7 @@ def set_lang_cookie(response: Response):
 @root_bp.context_processor
 def inject_user():
     return {
-        'user': current_user
+        'current_user': current_user
     }
 
 root_bp.register_blueprint(account_bp)

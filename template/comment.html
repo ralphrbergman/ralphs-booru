@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set title = 'Comments ' ~ comments.items | length %}
+{% set title = gettext('Comments ') ~ comments.items | length %}
 
 {% block body %}
     <p>{% trans post_count = post_count %}This page displays comments site-wide across all {{ post_count }} posts.{% endtrans %}</p>

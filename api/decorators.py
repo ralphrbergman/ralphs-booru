@@ -42,6 +42,16 @@ def _level_required(LEVEL: int, model_class, abort_fn: Callable, *abort_args):
 
     return decorator
 
+def admin_only(callback):
+    @wraps(callback)
+    def wrapper(*args, **kwargs):
+        if current_user.is_authenticated and current_user.is_admin:
+            return callback(*args, **kwargs)
+        else:
+            return abort(401)
+
+    return wrapper
+
 def api_level_required(LEVEL: int, model_class):
     return _level_required(LEVEL, model_class, api_abort, 401, gettext('Can\'t access this party yet boss.'))
 
@@ -122,6 +132,19 @@ def post_protect(callback):
             abort(403)
 
     return wrapper
+
+def perm_required(slug: str):
+    def decorator(callback):
+        @wraps(callback)
+        def wrapper(*args, **kwargs):
+            if current_user.has_permission(slug):
+                return callback(*args, **kwargs)
+            else:
+                return abort(403)
+
+        return wrapper
+
+    return decorator
 
 def user_protect(callback):
     """

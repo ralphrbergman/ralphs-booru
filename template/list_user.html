@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% set title = gettext('List Users') %}
+
 {% block body %}
     <div class="table-container">
         <table class="center-table">
@@ -17,12 +19,12 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
                     <td>
-                        {% if current_user.role > user.role %}
+                        {% if current_user.is_admin %}
                             <a class="no-select" href="{{ url_for('Root.Manage User.manage_user_page', user_id = user.id) }}">{{ gettext('Edit') }}</a>
                         {% endif %}
                     </td>
                     <td>{{ user.role_name }}</td>
-                    <td>{{ user.mail }}</td>
+                    <td>{% if user.mail %}{{ user.mail }}{% endif %}</td>
                     <td>{{ user.created }}</td>
                 </tr>
             {% endfor %}

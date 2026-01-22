@@ -3,6 +3,9 @@
 {% block meta %}
     {% if post.caption %}
         {% set display_title = post.caption | truncate(60, True, '...') %}
+
+        {% set title = display_title %}
+
         <meta property="og:title" content="{{ display_title | e }}">
         <meta name="twitter:title" content="{{ display_title | e }}">
     {% endif %}
@@ -48,7 +51,7 @@
 {% block body %}
     <div class="view-container">
         <div class="form form-lg gapped-form">
-            {% if current_user.is_authenticated %}
+            {% if current_user.is_authenticated and current_user.has_permission('post:edit') %}
                 <a href="{{ url_for('Root.Post.edit_page', post_id = post.id) }}">{{ gettext('Edit') }}</a>
             {% endif %}
 

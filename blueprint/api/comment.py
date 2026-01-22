@@ -4,7 +4,7 @@ from apiflask import APIBlueprint, abort
 from flask_login import current_user
 
 from api import create_comment, delete_comment, get_comment, get_post
-from api.decorators import api_level_required, owner_only, post_protect
+from api.decorators import owner_only, post_protect, perm_required
 from api_auth import auth
 from db import Comment, db
 from db.schemas import CommentIn, CommentOut
@@ -40,8 +40,9 @@ def remove_comment(comment_id: int, comment: Comment):
 @comment_bp.output(CommentOut)
 @comment_bp.auth_required(auth)
 @post_protect
-@api_level_required(COMMENT_LEVEL, Comment)
-def update_comment(comment_id: int, data: CommentIn, comment: Comment):
+@owner_only(Comment)
+def update_comment(comment_id: int, data: CommentIn):
+    comment = get_comment(comment_id)
     post = get_post(data['post_id'])
 
     if not post:
@@ -61,7 +62,7 @@ def update_comment(comment_id: int, data: CommentIn, comment: Comment):
 @comment_bp.output(CommentOut)
 @comment_bp.auth_required(auth)
 @post_protect
-@api_level_required(COMMENT_LEVEL, Comment)
+@perm_required('post:comment')
 def upload_comment(data: CommentIn):
     post = get_post(data['post_id'])
 
