@@ -24,6 +24,7 @@ def create_user(name: str, mail: str, password: str, avatar: Optional[str] = Non
     """
     user = User()
 
+    user.role_id = 3
     user.name = name
     user.mail = mail
     user.password = password
