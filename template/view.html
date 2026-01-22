@@ -3,6 +3,9 @@
 {% block meta %}
     {% if post.caption %}
         {% set display_title = post.caption | truncate(60, True, '...') %}
+
+        {% set title = display_title %}
+
         <meta property="og:title" content="{{ display_title | e }}">
         <meta name="twitter:title" content="{{ display_title | e }}">
     {% endif %}

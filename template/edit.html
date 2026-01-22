@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set title = 'Edit Post: ' ~ post.id %}
+{% set title = gettext('Edit Post: ') ~ post.id %}
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
