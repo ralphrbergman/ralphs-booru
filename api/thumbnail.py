@@ -46,8 +46,7 @@ def create_thumbnail(post: Post) -> Thumbnail:
 
         temp_f = generate_thumbnail(post, ThumbnailType.JPEG)
 
-    thumb = Thumbnail()
-    db.session.add(thumb)
+    thumb = Thumbnail(post = post)
 
     try:
         with temp_f.open('rb') as stream:
@@ -56,15 +55,8 @@ def create_thumbnail(post: Post) -> Thumbnail:
         # No thumbnail was made.
         return
 
-    thumb.post = post
-
-    try:
-        db.session.commit()
-    except IntegrityError as exc:
-        # Post already has a thumbnail.
-        db.session.rollback()
-
     temp_f.unlink(missing_ok = True)
+    db.session.add(thumb)
 
     return thumb
 

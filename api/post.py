@@ -321,40 +321,47 @@ def replace_post(post: Post, file: FileStorage) -> Post:
         Post
     """
     path = save_file(file)
+    md5 = get_hash(path)
 
-    # We don't want to replace the same post with itself.
-    if post.md5 == get_hash(path):
+    # Ignore the same file being uploaded.
+    if md5 == post.md5:
         return
 
-    original_id = post.id
-    original_created = post.created
-    original_modified = post.modified
-    original_tags = post.tags
+    prev_path = post.path
+    dimensions = get_dimensions(path)
+    ext = get_extension(path)
+    mime = get_mime(path)
+    size = get_size(path)
 
-    new_post = create_post(
-        author = post.author,
-        path = path,
-        op = post.op,
-        src = post.src,
-        caption = post.caption
-    )
+    post.height = dimensions[1]
+    post.width = dimensions[0]
+    post.ext = ext
+    post.md5 = md5
+    post.mime = mime
+    post.size = size
 
-    if new_post:
-        new_thumb = new_post.thumbnail
-
-        delete_post(post)
+    if post.thumbnail:
+        db.session.delete(post.thumbnail)
         db.session.flush()
 
-        new_post.id = original_id
-        new_post.created = original_created
-        new_post.modified = original_modified
-        new_post.tags = original_tags
+    post.path.parent.mkdir(parents = True, exist_ok = True)
+    copy(path, post.path)
+    path.unlink(missing_ok = True)
+    prev_path.unlink(missing_ok = True)
 
-        if new_thumb:
-            # Tie post with its new thumbnail.
-            new_thumb.post_id = new_post.id
+    thumb = create_thumbnail(post)
 
-    return new_post
+    # try:
+    #     db.session.commit()
+    # except IntegrityError as exc:
+    #     # Post already has a thumbnail.
+    #     db.session.rollback()
+
+    if thumb:
+        thumb.post_id = post.id
+        thumb.post = post
+
+    return post
 
 def save_file(file: FileStorage) -> Path:
     """

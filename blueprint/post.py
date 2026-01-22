@@ -100,8 +100,10 @@ def edit_page(post_id: int):
                         flash(gettext('Successfully exchanged post #%(post_id)s for a new file!', post_id = post.id))
                     else:
                         flash(gettext('Failed to exchange post.'))
+
                         return redirect(url_for('Root.Post.edit_page', post_id = post_id))
 
+            db.session.commit()
             original_tags = post.tags
 
             post.op = form.op.data.strip()
