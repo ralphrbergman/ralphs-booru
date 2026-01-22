@@ -6,6 +6,14 @@ err_bp = Blueprint(
     import_name = __name__
 )
 
+@err_bp.app_errorhandler(401)
+def _401_handler(exc):
+    return render_template(
+        'error.html',
+        code = 401,
+        message = gettext('Unauthorized users prohibited')
+    )
+
 @err_bp.app_errorhandler(404)
 def _404_handler(exc):
     return render_template(
@@ -13,11 +21,3 @@ def _404_handler(exc):
         code = 404,
         message = gettext('The resource you we\'re looking for does not exist.')
     ), 404
-
-@err_bp.app_errorhandler(401)
-def _401_handler(exc):
-    return render_template(
-        'error.html',
-        code = 401,
-        message = gettext('You need to level up first before you can access this part of the site')
-    )

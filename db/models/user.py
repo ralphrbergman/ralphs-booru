@@ -1,4 +1,3 @@
-from enum import IntEnum
 from os import getenv
 from typing import Optional
 
@@ -17,16 +16,6 @@ from .mixins.created import CreatedMixin
 from .mixins.id import IdMixin
 from .mixins.serializer import SerializerMixin
 from .post import Post
-
-class RoleEnum(IntEnum):
-    ADMIN = 3
-    MODERATOR = 2
-    REGULAR = 1
-    TERMINATED = 0
-
-    @property
-    def code(self) -> str:
-        return self.name.lower()[:3]
 
 def find_user_by_key(key: str) -> Optional[User]:
     """
@@ -63,6 +52,8 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
         if not self.api_key:
             self.api_key = User.generate_key()
 
+    role_id: Mapped[int] = mapped_column(ForeignKey('role.id'))
+
     avatar_name: Mapped[str] = mapped_column(default = 'avatar.png')
 
     name: Mapped[str] = mapped_column(String(length = 20), nullable = False, unique = True)
@@ -73,7 +64,6 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
     # Relationships.
     comments: Mapped[list['Comment']] = relationship(back_populates = 'author')
 
-    role_id: Mapped[int] = mapped_column(ForeignKey('role.id'))
     role: Mapped['Role'] = relationship(lazy = 'joined')
 
     snapshots: Mapped[list['Snapshot']] = relationship(back_populates = 'user')
@@ -133,8 +123,12 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
         self._key = User.generate_key(new_key)
 
     @property
+    def is_admin(self) -> bool:
+        return self.role.priority >= 10
+
+    @property
     def is_moderator(self) -> bool:
-        return self.role >= RoleEnum.MODERATOR
+        return self.has_permission('user:ban')
 
     @property
     def password(self) -> None:
@@ -158,7 +152,7 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
 
     @property
     def role_name(self) -> str:
-        return RoleEnum(self.role).name.title()
+        return self.role.name.title()
 
     @property
     def recent_posts(self) -> list[Post]:
@@ -182,3 +176,15 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
 
     def has_permission(self, permission_slug: str) -> bool:
         return any( p.slug == permission_slug for p in self.role.permissions )
+
+    def owns(self, post: Post) -> bool:
+        """
+        Returns a boolean on whether the user owns a given post.
+
+        Args:
+            post: Post to check
+        """
+        if not post:
+            return False
+
+        return post.author_id == self.id

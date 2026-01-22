@@ -24,12 +24,13 @@ class PostMixin:
 
 class RoleMixin:
     role = RadioField('role', choices = [
-        (0, 'Terminated:'),
-        (1, 'None:'),
-        (2, 'Moderator:'),
-        (3, 'Administrator:')
+        (1, 'User:'),
+        (2, 'Janitor:'),
+        (8, 'Moderator:'),
+        (10, 'Administrator:')
     ],
-    default = 'reg')
+    coerce = int,
+    default = 1)
 
 class SubmitMixin:
     submit = SubmitField('submit')

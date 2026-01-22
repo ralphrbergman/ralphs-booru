@@ -2,9 +2,9 @@ from flask import Blueprint, request, flash, redirect, render_template, url_for
 from flask_babel import gettext
 from flask_login import current_user
 
-from api import browse_user, get_user
-from api.decorators import moderator_only
-from db import db, RoleEnum
+from api import browse_user, get_user, get_role_by_priority
+from api.decorators import admin_only, moderator_only
+from db import db
 from form import ManageUserForm
 from .utils import create_pagination_bar
 
@@ -27,11 +27,10 @@ def user_list_page():
         bar = bar,
         users = users,
         current_page = page,
-        enum = RoleEnum
     )
 
 @manage_user_bp.route('/<int:user_id>', methods = ['GET', 'POST'])
-@moderator_only
+@admin_only
 def manage_user_page(user_id: int):
     user = get_user(user_id)
     form = ManageUserForm(
@@ -47,14 +46,19 @@ def manage_user_page(user_id: int):
         if len(form.pw.data) > 0:
             pw = form.pw.data
 
-        role = int(form.role.data)
+        priority = int(form.role.data)
+        role = get_role_by_priority(priority)
+
+        if not role:
+            flash(gettext('Role with priority %(priority)s does not exist', priority = priority))
+
         username = form.username.data
 
         user.mail = mail
         if pw is not None:
             user.password = pw
         
-        if current_user.role >= RoleEnum(role) and current_user.role > user.role:
+        if current_user.role.priority > user.role.priority and current_user.role.priority > role.priority:
             user.role = role
         else:
             flash(gettext('Cannot manage the user on the same or above rank as you'))

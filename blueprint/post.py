@@ -7,13 +7,12 @@ from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 
 from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, DEFAULT_SORT_DIR, add_tags, browse_post, create_post, create_snapshot, delete_post, get_post, move_post, replace_post, save_file
-from api.decorators import level_required, post_protect
-from db import Post, db
+from api.decorators import post_protect, perm_required
+from db import db
 from form import PostForm, UploadForm
 from .utils import create_pagination_bar, flash_errors
 
 DEFAULT_BLUR = getenv('DEFAULT_BLUR') == 'on'
-POSTING_LEVEL = int(getenv('POSTING_LEVEL'))
 
 post_bp = Blueprint(
     name = 'Post',
@@ -75,7 +74,7 @@ def browse_paged(page: int):
 @post_bp.route('/edit/<int:post_id>', methods = ['GET', 'POST'])
 @login_required
 @post_protect
-@level_required(POSTING_LEVEL, Post)
+@perm_required('post:edit')
 def edit_page(post_id: int):
     form = PostForm()
     post = get_post(post_id)
@@ -110,7 +109,12 @@ def edit_page(post_id: int):
             post.src = form.src.data.strip()
             post.caption = form.caption.data.strip()
 
-            post.tags = add_tags(form.tags.data.split(' '))
+            try:
+                post.tags = add_tags(form.tags.data.split(' '))
+            except AttributeError as exc:
+                # Form tags is None, likely because the user can't manage tags.
+                pass
+
             if post.tags != original_tags:
                 hist = create_snapshot(post, current_user)
 
@@ -145,7 +149,7 @@ def view_file_resource(post_id: int):
 @post_bp.route('/upload', methods = ['GET', 'POST'])
 @login_required
 @post_protect
-@level_required(POSTING_LEVEL, Post)
+@perm_required('post:upload')
 def upload_page():
     form = UploadForm()
 

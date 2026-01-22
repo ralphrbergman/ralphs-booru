@@ -1,7 +1,6 @@
 from os import getenv
 
 from apiflask import APIFlask
-from click import command
 from flask import g, request, redirect
 from flask.cli import with_appcontext
 from dotenv import load_dotenv
@@ -38,28 +37,30 @@ def create_app() -> APIFlask:
     @with_appcontext
     def setup_roles_command():
         perms = {
-            "upload": Permission(slug="post:upload"),
-            "delete": Permission(slug="post:delete"),
-            "tag_edit": Permission(slug="tag:edit"),
-            "user_ban": Permission(slug="user:ban"),
+            'comment': Permission(slug='post:comment'),
+            'upload': Permission(slug='post:upload'),
+            'edit': Permission(slug = 'post:edit'),
+            'delete': Permission(slug='post:delete'),
+            'tag_edit': Permission(slug='tag:edit'),
+            'user_ban': Permission(slug='user:ban'),
         }
 
-        admin = Role(name="Admin")
-        mod = Role(name="Moderator")
-        user = Role(name="User")
-        janitor = Role(name="Janitor")
+        admin = Role(name='Admin')
+        mod = Role(name='Moderator')
+        janitor = Role(name='Janitor')
+        user = Role(name='User')
 
         # Admins get everything
         admin.permissions = list(perms.values())
 
         # Moderators get most things
-        mod.permissions = [perms["upload"], perms["delete"], perms["tag_edit"], perms["user_ban"]]
+        mod.permissions = [perms['comment'], perms['upload'], perms['delete'], perms['tag_edit'], perms['user_ban']]
 
         # Janitors only help with content
-        janitor.permissions = [perms["delete"], perms["tag_edit"]]
+        janitor.permissions = [perms['comment'], perms['delete'], perms['tag_edit']]
 
         # Normal users can only upload
-        user.permissions = [perms["upload"]]
+        user.permissions = [perms['comment'], perms['upload']]
 
         db.session.add_all([admin, mod, user, janitor])
         db.session.commit()

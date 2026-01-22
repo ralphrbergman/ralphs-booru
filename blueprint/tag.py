@@ -1,16 +1,12 @@
-from os import getenv
-
 from flask import Blueprint, request, abort, flash, redirect, render_template, url_for
 from flask_babel import gettext
 from flask_login import current_user, login_required
 
 from api import browse_tag, browse_snapshots, delete_tag, get_tag, get_snapshot, revert_snapshot
-from api.decorators import level_required, post_protect
-from db import Tag, db
+from api.decorators import post_protect, perm_required
+from db import db
 from form import SnapshotForm, TagForm
 from .utils import create_pagination_bar
-
-TAGGING_LEVEL = int(getenv('TAGGING_LEVEL'))
 
 tag_bp = Blueprint(
     name = 'Tag',
@@ -23,7 +19,7 @@ TAG_TYPES = ('artist', 'character', 'copyright', 'general', 'meta')
 @tag_bp.route('/edit/<int:tag_id>', methods = ['GET', 'POST'])
 @login_required
 @post_protect
-@level_required(TAGGING_LEVEL, Tag)
+@perm_required('tag:edit')
 def edit_page(tag_id: int):
     form = TagForm()
     tag = get_tag(tag_id)
@@ -60,6 +56,7 @@ def history_page():
     return render_template('snapshot.html', form = form, snapshots = snapshots)
 
 @tag_bp.route('/revert/<int:snapshot_id>')
+@perm_required('tag:edit')
 def revert_page(snapshot_id: int):
     snapshot = get_snapshot(snapshot_id)
 

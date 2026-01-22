@@ -19,7 +19,7 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
                     <td>
-                        {% if current_user.role > user.role %}
+                        {% if current_user.is_admin %}
                             <a class="no-select" href="{{ url_for('Root.Manage User.manage_user_page', user_id = user.id) }}">{{ gettext('Edit') }}</a>
                         {% endif %}
                     </td>
