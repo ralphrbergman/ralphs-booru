@@ -54,10 +54,10 @@ def create_app() -> APIFlask:
         admin.permissions = list(perms.values())
 
         # Moderators get most things
-        mod.permissions = [perms['comment'], perms['upload'], perms['delete'], perms['tag_edit'], perms['user_ban']]
+        mod.permissions = [perms['comment'], perms['edit'], perms['upload'], perms['delete'], perms['tag_edit'], perms['user_ban']]
 
         # Janitors only help with content
-        janitor.permissions = [perms['comment'], perms['delete'], perms['tag_edit']]
+        janitor.permissions = [perms['comment'], perms['edit'], perms['delete'], perms['tag_edit']]
 
         # Normal users can only upload
         user.permissions = [perms['comment'], perms['upload']]
