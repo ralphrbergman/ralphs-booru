@@ -45,10 +45,10 @@ def create_app() -> APIFlask:
             'user_ban': Permission(slug='user:ban'),
         }
 
-        admin = Role(name='Admin')
-        mod = Role(name='Moderator')
-        janitor = Role(name='Janitor')
-        user = Role(name='User')
+        admin = Role(name = 'Admin', priority = 10)
+        mod = Role(name = 'Moderator', priority = 8)
+        janitor = Role(name = 'Janitor', priority = 2)
+        user = Role(name = 'User', priority = 1)
 
         # Admins get everything
         admin.permissions = list(perms.values())

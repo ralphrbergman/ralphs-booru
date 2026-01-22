@@ -32,7 +32,6 @@ def browse_paged(page: int):
     terms = args.get('terms', default = DEFAULT_TERMS)
     sort = args.get('sort', default = DEFAULT_SORT)
     sort_direction = args.get('sort_direction', default = DEFAULT_SORT_DIR)
-    print(blur, limit, terms, sort, sort_direction)
 
     # Ensure all URI arguments are passed in the address.
     if len(args) < 2:
