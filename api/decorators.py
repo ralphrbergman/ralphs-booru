@@ -137,7 +137,7 @@ def perm_required(slug: str):
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
-            if current_user.has_permission(slug):
+            if current_user.is_authenticated and current_user.has_permission(slug):
                 return callback(*args, **kwargs)
             else:
                 return abort(403)

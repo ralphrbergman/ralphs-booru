@@ -51,7 +51,7 @@
 {% block body %}
     <div class="view-container">
         <div class="form form-lg gapped-form">
-            {% if (current_user.is_authenticated and current_user.has_permission('post:edit')) or current_user.owns(post) %}
+            {% if (current_user.is_authenticated and (current_user.has_permission('post:edit') or current_user.owns(post))) %}
                 <a href="{{ url_for('Root.Post.edit_page', post_id = post.id) }}">{{ gettext('Edit') }}</a>
             {% endif %}
 
