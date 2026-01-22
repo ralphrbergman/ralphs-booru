@@ -343,6 +343,7 @@ def replace_post(post: Post, file: FileStorage) -> Post:
         new_thumb = new_post.thumbnail
 
         delete_post(post)
+        db.session.flush()
 
         new_post.id = original_id
         new_post.created = original_created
