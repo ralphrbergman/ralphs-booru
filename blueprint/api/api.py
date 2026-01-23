@@ -6,6 +6,7 @@ from .comment import comment_bp
 from .post import post_bp
 from .score import score_bp
 from .tag import tag_bp
+from .tags import tags_bp
 from .user import user_bp
 
 api_bp = Blueprint(
@@ -37,4 +38,5 @@ api_bp.register_blueprint(comment_bp)
 api_bp.register_blueprint(post_bp)
 api_bp.register_blueprint(score_bp)
 api_bp.register_blueprint(tag_bp)
+api_bp.register_blueprint(tags_bp)
 api_bp.register_blueprint(user_bp)

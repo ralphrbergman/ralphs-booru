@@ -52,6 +52,10 @@ body {
     width: 80%;
 }
 
+.hidden {
+    display: none;
+}
+
 .input-group {
     align-items: center;
     display: flex;
@@ -95,6 +99,10 @@ body {
 
 .no-select {
     user-select: none;
+}
+
+.row-container {
+    display: flex;
 }
 
 #special-anchors {

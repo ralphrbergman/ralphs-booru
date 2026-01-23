@@ -2,18 +2,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
 {% endblock %}
 
-<div id="comment-section">
-    {% block input_comment_section %}{% endblock %}
+{% block body %}
+    <div id="comment-section">
+        {% block input_comment_section %}{% endblock %}
 
-    {% for comment in comments %}
-        {% set author = comment.author %}
+        {% for comment in comments %}
+            {% set author = comment.author %}
 
-        <span class="comment">
-            <img class="commenter-picture no-select" src="{{ author.avatar }}">
-            <div>
-                <span><a href="{{ author.profile_url }}">{{ author.username }}</a> {{ gettext('at') }} {{ comment.created }} &gt; <a href="{{ url_for('Root.Post.view_page', post_id = comment.post_id) }}">#{{ comment.post_id }}</a> &lt;{{ comment.total_score }}&gt; <a href="" onclick="vote(event, {{ comment.id }}, 1, 'comment')">^</a> <a href="" onclick="vote(event, {{ comment.id }}, -1, 'comment')">⌄</a></span>
-                <span class="comment-content">{{ comment.content }}</span>
-            </div>
-        </span>
-    {% endfor %}
-</div>
+            <span class="comment">
+                <img class="commenter-picture no-select" src="{{ author.avatar }}">
+                <div>
+                    <span><a href="{{ author.profile_url }}">{{ author.username }}</a> {{ gettext('at') }} {{ comment.created }} &gt; <a href="{{ url_for('Root.Post.view_page', post_id = comment.post_id) }}">#{{ comment.post_id }}</a> &lt;{{ comment.total_score }}&gt; <a href="" onclick="vote(event, {{ comment.id }}, 1, 'comment')">^</a> <a href="" onclick="vote(event, {{ comment.id }}, -1, 'comment')">⌄</a></span>
+                    <span class="comment-content">{{ comment.content }}</span>
+                </div>
+            </span>
+        {% endfor %}
+    </div>
+{% endblock %}

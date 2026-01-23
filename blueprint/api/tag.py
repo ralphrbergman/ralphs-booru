@@ -1,10 +1,10 @@
 from apiflask import APIBlueprint, abort
 
-from api import browse_tag, create_tag, delete_tag, get_tag, get_post
+from api import create_tag, delete_tag, get_tag, get_post
 from api.decorators import post_protect, perm_required
 from api_auth import auth
-from db import Tag, db
-from db.schemas import TagIn, TagOut
+from db import db
+from db.schemas import TagIn, TagsIn, TagOut, TagsOut
 
 tag_bp = APIBlueprint(
     name = 'Tag API',
@@ -40,7 +40,7 @@ def remove_tag(tag_id: int):
 @tag_bp.output(TagOut)
 @tag_bp.auth_required(auth)
 @post_protect
-@perm_required('tag:upload')
+@perm_required('tag:edit')
 def upload_tag(data: TagIn):
     tag = create_tag(data['name'])
 
@@ -76,3 +76,47 @@ def update_tag(data: TagIn):
 
     db.session.commit()
     return tag
+
+@tag_bp.patch('/add')
+@tag_bp.input(TagsIn, arg_name = 'data')
+@tag_bp.output(TagsOut)
+@tag_bp.auth_required(auth)
+@post_protect
+@perm_required('tag:edit')
+def add_tags(data: TagsIn):
+    post = get_post(data['post_id'])
+
+    for tag_name in data['tags']:
+        tag = get_tag(tag_name)
+
+        if not tag:
+            tag = create_tag(tag_name)
+
+        if tag not in post.tags:
+            post.tags.append(tag)
+
+    db.session.commit()
+    return {
+        'post_id': post.id,
+        'tags': post.tags
+    }
+
+@tag_bp.patch('/remove')
+@tag_bp.input(TagsIn, arg_name = 'data')
+@tag_bp.output(TagsOut)
+@tag_bp.auth_required(auth)
+@post_protect
+@perm_required('tag:edit')
+def remove_tags(data: TagsIn):
+    post = get_post(data['post_id'])
+
+    for tag_name in data['tags']:
+        tag = get_tag(tag_name)
+
+        if tag and tag in post.tags:
+            post.tags.remove(tag)
+
+    return {
+        'post_id': post.id,
+        'tags': post.tags
+    }

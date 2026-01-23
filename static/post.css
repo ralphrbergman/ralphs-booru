@@ -6,6 +6,14 @@
     max-height: 1.5rem;
 }
 
+.deselected {
+    border: 1px solid red;
+}
+
+.selected {
+    border: 1px solid green;
+}
+
 .posts {
     display: flex;
     flex-wrap: wrap;

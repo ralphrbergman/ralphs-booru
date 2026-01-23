@@ -7,49 +7,17 @@
 {% endblock %}
 
 {% block body %}
-    <form method="get" class="form">
-        {% set blur = request.args.get('blur') %}
-        {% set limit = request.args.get('limit', '20') %}
-        {% set sort = request.args.get('sort', 'id') %}
-        {% set direction = request.args.get('sort_direction', 'desc') %}
-        {% set terms = request.args.get('terms') %}
-
-        <label for="blur">{{ gettext('Blur') }}:</label>
-        <input type="checkbox" name="blur" {% if blur == 'on' %}checked{% endif %}>
-
-        <label for="limit">{{ gettext('Posts') }}:</label>
-        <select name="limit">
-            <option value="10" {% if limit == '10' %}selected{% endif %}>10</option>
-            <option value="20" {% if limit == '20' %}selected{% endif %}>20</option>
-            <option value="30" {% if limit == '30' %}selected{% endif %}>30</option>
-            <option value="50" {% if limit == '50' %}selected{% endif %}>50</option>
-            <option value="100" {% if limit == '100' %}selected{% endif %}>100</option>
-        </select>
-
-        <label for="sort">{{ gettext('Sort By') }}:</label>
-        <select name="sort">
-            <option value="id" {% if sort == 'id' %}selected{% endif %}>ID</option>
-            <option value="created" {% if sort == 'created' %}selected{% endif %}>{{ gettext('Created') }}</option>
-            <option value="modified" {% if sort == 'modified' %}selected{% endif %}>{{ gettext('Modified') }}</option>
-            <option value="md5" {% if sort == 'md5' %}selected{% endif %}>{{ gettext('Hash') }}</option>
-            <option value="ext" {% if sort == 'ext' %}selected{% endif %}>{{ gettext('File Extension') }}</option>
-            <option value="size" {% if sort == 'size' %}selected{% endif %}>{{ gettext('Disk Space') }}</option>
-            <option value="height" {% if sort == 'height' %}selected{% endif %}>{{ gettext('Height') }}</option>
-            <option value="width" {% if sort == 'width' %}selected{% endif %}>{{ gettext('Width') }}</option>
-            <option value="cat" {% if sort == 'cat' %}selected{% endif %}>{{ gettext('Category') }}</option>
-        </select>
-
-        <label for="sort_direction">{{ gettext('Sort') }}:</label>
-        <select name="sort_direction">
-            <option value="asc" {% if direction == 'asc' %}selected{% endif %}>{{ gettext('Ascending') }}</option>
-            <option value="desc" {% if direction == 'desc' %}selected{% endif %}>{{ gettext('Descending') }}</option>
-        </select>
-
-        <input type="text" name="terms" value="{{ terms }}" placeholder="tag1 tag2 &quot;Text&quot;">
-
-        <input type="submit" value="{{ gettext('Search') }}">
-    </form>
+    <div class="row-container">
+        {% include 'frag/post_search_form.html' %}
+        {% if current_user.is_authenticated and current_user.has_permission('tag:edit') %}
+            {% include 'frag/manage_post_form.html' %}
+        {% endif %}
+    </div>
 
     {% include 'frag/posts.html' %}
     {% include 'frag/pagination.html' %}
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename = 'js/manage_post.js') }}"></script>
 {% endblock %}

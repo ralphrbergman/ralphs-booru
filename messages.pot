@@ -8,11 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-<<<<<<< Updated upstream
-"POT-Creation-Date: 2026-01-23 13:46+0200\n"
-=======
-"POT-Creation-Date: 2026-01-23 20:04+0200\n"
->>>>>>> Stashed changes
+"POT-Creation-Date: 2026-01-24 00:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,10 +115,6 @@ msgstr ""
 msgid "Updated tag %(tag_name)s successfully!"
 msgstr ""
 
-<<<<<<< Updated upstream
-#: template/browse.html:3
-msgid "Page "
-=======
 #: form/fields.py:14
 msgid "Password is required"
 msgstr ""
@@ -186,74 +178,8 @@ msgstr ""
 msgid "Page"
 msgstr ""
 
-#: template/browse.html:17
-msgid "Blur"
-msgstr ""
-
-#: template/browse.html:20 template/index.html:29 template/profile.html:27
-msgid "Posts"
-msgstr ""
-
-#: template/browse.html:29
-msgid "Sort By"
-msgstr ""
-
-#: template/browse.html:32 template/list_user.html:14
-msgid "Created"
-msgstr ""
-
-#: template/browse.html:33
-msgid "Modified"
-msgstr ""
-
-#: template/browse.html:34
-msgid "Hash"
-msgstr ""
-
-#: template/browse.html:35
-msgid "File Extension"
-msgstr ""
-
-#: template/browse.html:36
-msgid "Disk Space"
-msgstr ""
-
-#: template/browse.html:37
-msgid "Height"
-msgstr ""
-
-#: template/browse.html:38
-msgid "Width"
-msgstr ""
-
-#: template/browse.html:39
-msgid "Category"
-msgstr ""
-
-#: template/browse.html:42
-msgid "Sort"
-msgstr ""
-
-#: template/browse.html:44
-msgid "Ascending"
-msgstr ""
-
-#: template/browse.html:45
-msgid "Descending"
->>>>>>> Stashed changes
-msgstr ""
-
-#: template/browse.html:50 template/index.html:15 template/snapshot.html:36
-msgid "Search"
-msgstr ""
-
-<<<<<<< Updated upstream
-#: template/comment.html:3
-msgid "Comments "
-=======
-#: template/comment.html:3 template/frag/nav.html:11
+#: template/comment.html:3 template/frag/nav.html:12
 msgid "Comments"
->>>>>>> Stashed changes
 msgstr ""
 
 #: template/comment.html:6
@@ -283,11 +209,7 @@ msgid "E-mail"
 msgstr ""
 
 #: template/edit.html:3
-<<<<<<< Updated upstream
-msgid "Edit Post: "
-=======
 msgid "Edit Post"
->>>>>>> Stashed changes
 msgstr ""
 
 #: template/edit.html:15
@@ -302,7 +224,7 @@ msgstr ""
 msgid "Directory"
 msgstr ""
 
-#: template/edit.html:25 template/upload.html:25 template/view.html:100
+#: template/edit.html:25 template/upload.html:25 template/view.html:104
 msgid "Poster"
 msgstr ""
 
@@ -310,20 +232,21 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: template/edit.html:34 template/upload.html:30 template/view.html:90
+#: template/edit.html:34 template/upload.html:30 template/view.html:94
 msgid "Source"
 msgstr ""
 
-#: template/edit.html:43 template/upload.html:35 template/view.html:114
+#: template/edit.html:43 template/upload.html:35 template/view.html:118
 msgid "Caption"
 msgstr ""
 
-#: template/edit.html:48 template/frag/nav.html:10 template/snapshot.html:11
-#: template/upload.html:40 template/view.html:66
+#: template/edit.html:48 template/frag/manage_post_form.html:6
+#: template/frag/nav.html:11 template/snapshot.html:11 template/upload.html:40
+#: template/view.html:70
 msgid "Tags"
 msgstr ""
 
-#: template/edit.html:53
+#: template/edit.html:53 template/edit_tag.html:30
 msgid "Delete"
 msgstr ""
 
@@ -373,17 +296,16 @@ msgstr ""
 msgid "Your unique API key: %(api_key)s<br><b>(Do not share it with anyone)</b>"
 msgstr ""
 
-<<<<<<< Updated upstream
 #: template/edit_tag.html:3
 msgid "Edit Tag"
 msgstr ""
 
 #: template/edit_tag.html:11 template/help.html:51 template/tag.html:14
-#: template/view.html:109
+#: template/view.html:113
 msgid "Name"
 msgstr ""
 
-#: template/edit_tag.html:16 template/tag.html:17 template/view.html:110
+#: template/edit_tag.html:16 template/tag.html:17 template/view.html:114
 msgid "Type"
 msgstr ""
 
@@ -393,10 +315,6 @@ msgstr ""
 
 #: template/edit_tag.html:34
 msgid "Update"
-=======
-#: template/error.html:3
-msgid "Error"
->>>>>>> Stashed changes
 msgstr ""
 
 #: template/error.html:3
@@ -408,7 +326,7 @@ msgstr ""
 msgid "Oops! You encountered HTTP %(code)s error!"
 msgstr ""
 
-#: template/frag/footer.html:9 template/help.html:3
+#: template/frag/footer.html:10 template/help.html:3
 msgid "Help"
 msgstr ""
 
@@ -498,10 +416,6 @@ msgstr ""
 msgid ""
 "Here's a helpful table of available tags and attributes you can use to "
 "narrow down your searches."
-msgstr ""
-
-#: template/help.html:51 template/tag.html:14 template/view.html:109
-msgid "Name"
 msgstr ""
 
 #: template/help.html:52
@@ -609,12 +523,18 @@ msgid ""
 "aware of consequences that come with viewing NSFW posts"
 msgstr ""
 
-#: template/frag/nav.html:8 template/index.html:3
+#: template/frag/nav.html:9 template/index.html:3
 msgid "Index"
 msgstr ""
 
-#: template/layout.html:5
-msgid "DO NOT SHARE THIS WITH ANYONE"
+#: template/frag/post_search_form.html:41 template/index.html:15
+#: template/snapshot.html:36
+msgid "Search"
+msgstr ""
+
+#: template/frag/post_search_form.html:11 template/index.html:29
+#: template/profile.html:27
+msgid "Posts"
 msgstr ""
 
 #: template/layout.html:5
@@ -633,26 +553,16 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-<<<<<<< Updated upstream
-#: template/list_user.html:14
+#: template/frag/post_search_form.html:23 template/list_user.html:14
 msgid "Created"
 msgstr ""
 
 #: template/list_user.html:23 template/profile.html:21 template/tag.html:26
-#: template/view.html:55
-msgid "Edit"
-=======
-#: template/list_user.html:23 template/profile.html:21 template/tag.html:26
-#: template/view.html:55
+#: template/view.html:59
 msgid "Edit"
 msgstr ""
 
-#: template/frag/nav.html:14 template/login.html:3 template/login.html:21
-msgid "Login"
->>>>>>> Stashed changes
-msgstr ""
-
-#: template/frag/nav.html:14 template/login.html:3 template/login.html:21
+#: template/frag/nav.html:15 template/login.html:3 template/login.html:21
 msgid "Login"
 msgstr ""
 
@@ -664,8 +574,6 @@ msgstr ""
 msgid "Manage User"
 msgstr ""
 
-<<<<<<< Updated upstream
-=======
 #: template/profile.html:18
 msgid "Level"
 msgstr ""
@@ -678,7 +586,6 @@ msgstr ""
 msgid "'s latest posts"
 msgstr ""
 
->>>>>>> Stashed changes
 #: template/signup.html:3
 msgid "Sign Up"
 msgstr ""
@@ -691,7 +598,7 @@ msgstr ""
 msgid "E-mail (Not Required) "
 msgstr ""
 
-#: template/frag/nav.html:15 template/signup.html:25
+#: template/frag/nav.html:16 template/signup.html:25
 msgid "Sign-Up"
 msgstr ""
 
@@ -707,24 +614,10 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-<<<<<<< Updated upstream
-#: template/snapshot.html:10
-msgid "User"
-msgstr ""
-
-=======
->>>>>>> Stashed changes
 #: template/snapshot.html:23
 msgid "Revert"
 msgstr ""
 
-<<<<<<< Updated upstream
-#: template/snapshot.html:33
-msgid "Post ID"
-msgstr ""
-
-=======
->>>>>>> Stashed changes
 #: template/tag.html:3
 msgid "Tags Page"
 msgstr ""
@@ -733,22 +626,11 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
-<<<<<<< Updated upstream
-=======
-#: template/tag.html:17 template/view.html:110
-msgid "Type"
-msgstr ""
-
-#: template/tag.html:18
-msgid "Description"
-msgstr ""
-
-#: template/tag.html:36 template/view.html:76
+#: template/tag.html:36 template/view.html:80
 msgid "Tag History"
 msgstr ""
 
->>>>>>> Stashed changes
-#: template/frag/nav.html:23 template/upload.html:3 template/upload.html:45
+#: template/frag/nav.html:24 template/upload.html:3 template/upload.html:45
 msgid "Upload"
 msgstr ""
 
@@ -756,124 +638,167 @@ msgstr ""
 msgid "File(s)"
 msgstr ""
 
-<<<<<<< Updated upstream
-#: template/view.html:45
+#: template/view.html:46
 msgid "View "
 msgstr ""
 
-=======
->>>>>>> Stashed changes
-#: template/view.html:60
+#: template/view.html:64
 msgid "Upvote"
 msgstr ""
 
-#: template/view.html:62
+#: template/view.html:66
 msgid "Downvote"
 msgstr ""
 
-<<<<<<< Updated upstream
-#: template/view.html:76
-msgid "Tag History"
-msgstr ""
-
-=======
->>>>>>> Stashed changes
-#: template/view.html:79
+#: template/view.html:83
 msgid "Statistics"
 msgstr ""
 
-#: template/view.html:82
+#: template/view.html:86
 msgid "Posted"
 msgstr ""
 
-#: template/view.html:83
+#: template/view.html:87
 msgid "Uploader"
 msgstr ""
 
-#: template/view.html:86
+#: template/view.html:90
 msgid "Size"
 msgstr ""
 
-<<<<<<< Updated upstream
-#: template/view.html:100
-msgid "OP"
-msgstr ""
-
-=======
->>>>>>> Stashed changes
-#: template/view.html:111
+#: template/view.html:115
 msgid "Disk Size"
 msgstr ""
 
-#: template/view.html:126
+#: template/view.html:130
 msgid "Your comment goes here."
 msgstr ""
 
-#: template/view.html:127
+#: template/view.html:131
 msgid "Comment"
 msgstr ""
 
-#: template/frag/comment-section.html:14
+#: template/frag/comment-section.html:15
 msgid "at"
 msgstr ""
 
-#: template/frag/footer.html:8
+#: template/frag/footer.html:9
 msgid "Links"
 msgstr ""
 
-#: template/frag/footer.html:10
+#: template/frag/footer.html:11
 msgid "Contact Me"
 msgstr ""
 
-#: template/frag/footer.html:11
+#: template/frag/footer.html:12
 msgid "Source Code"
 msgstr ""
 
-#: template/frag/footer.html:14
+#: template/frag/footer.html:15
 msgid "For Developers"
 msgstr ""
 
-#: template/frag/nav.html:9
+#: template/frag/manage_post_form.html:3
+msgid "Toggle"
+msgstr ""
+
+#: template/frag/manage_post_form.html:11
+msgid "Add"
+msgstr ""
+
+#: template/frag/manage_post_form.html:12
+msgid "Remove"
+msgstr ""
+
+#: template/frag/nav.html:10
 msgid "Browse"
 msgstr ""
 
-#: template/frag/nav.html:19
+#: template/frag/nav.html:20
 msgid "Users"
 msgstr ""
 
-#: template/frag/nav.html:24
+#: template/frag/nav.html:25
 msgid "My Profile"
 msgstr ""
 
-#: template/frag/nav.html:25
+#: template/frag/nav.html:26
 msgid "Logout"
 msgstr ""
 
-#: template/frag/posts.html:15
+#: template/frag/post_search_form.html:8
+msgid "Blur"
+msgstr ""
+
+#: template/frag/post_search_form.html:20
+msgid "Sort By"
+msgstr ""
+
+#: template/frag/post_search_form.html:24
+msgid "Modified"
+msgstr ""
+
+#: template/frag/post_search_form.html:25
+msgid "Hash"
+msgstr ""
+
+#: template/frag/post_search_form.html:26
+msgid "File Extension"
+msgstr ""
+
+#: template/frag/post_search_form.html:27
+msgid "Disk Space"
+msgstr ""
+
+#: template/frag/post_search_form.html:28
+msgid "Height"
+msgstr ""
+
+#: template/frag/post_search_form.html:29
+msgid "Width"
+msgstr ""
+
+#: template/frag/post_search_form.html:30
+msgid "Category"
+msgstr ""
+
+#: template/frag/post_search_form.html:33
+msgid "Sort"
+msgstr ""
+
+#: template/frag/post_search_form.html:35
+msgid "Ascending"
+msgstr ""
+
+#: template/frag/post_search_form.html:36
+msgid "Descending"
+msgstr ""
+
+#: template/frag/posts.html:16
 msgid "Caption flair"
 msgstr ""
 
-#: template/frag/posts.html:20
+#: template/frag/posts.html:21
 msgid "Original Poster flair"
 msgstr ""
 
-#: template/frag/posts.html:24
+#: template/frag/posts.html:25
 msgid "Source flair"
 msgstr ""
 
-#: template/frag/posts.html:27
+#: template/frag/posts.html:28
 msgid "Original Poster & Source flair"
 msgstr ""
 
-#: template/frag/posts.html:31
+#: template/frag/posts.html:32
 msgid "Audio flair"
 msgstr ""
 
-#: template/frag/posts.html:33
+#: template/frag/posts.html:34
 msgid "Image flair"
 msgstr ""
 
-#: template/frag/posts.html:35
+#: template/frag/posts.html:36
 msgid "Video flair"
 msgstr ""
 

@@ -2,35 +2,37 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'nav.css') }}">
 {% endblock %}
 
-<nav id="navbar">
-    <ul id="navbar-anchors">
-        <li><a class="navbar-anchor navbar-logo" href="{{ url_for('Root.Index.index_page') }}">{{ brand['full_brand'] }}</a></li>
-        <li><a class="navbar-anchor" href="{{ url_for('Root.Index.index_page') }}">{{ gettext('Index') }}</a></li>
-        <li><a class="navbar-anchor" href="{{ url_for('Root.Post.browse_page') }}">{{ gettext('Browse') }}</a></li>
-        <li><a class="navbar-anchor" href="{{ url_for('Root.Tag.tag_page') }}">{{ gettext('Tags') }}</a></li>
-        <li><a class="navbar-anchor" href="{{ url_for('Root.Comment.comment_page') }}">{{ gettext('Comments') }}</a></li>
+{% block body %}
+    <nav id="navbar">
+        <ul id="navbar-anchors">
+            <li><a class="navbar-anchor navbar-logo" href="{{ url_for('Root.Index.index_page') }}">{{ brand['full_brand'] }}</a></li>
+            <li><a class="navbar-anchor" href="{{ url_for('Root.Index.index_page') }}">{{ gettext('Index') }}</a></li>
+            <li><a class="navbar-anchor" href="{{ url_for('Root.Post.browse_page') }}">{{ gettext('Browse') }}</a></li>
+            <li><a class="navbar-anchor" href="{{ url_for('Root.Tag.tag_page') }}">{{ gettext('Tags') }}</a></li>
+            <li><a class="navbar-anchor" href="{{ url_for('Root.Comment.comment_page') }}">{{ gettext('Comments') }}</a></li>
 
-        {% if not current_user.is_authenticated %}
-            <li><a class="navbar-anchor" href="{{ url_for('Root.Account.login_page') }}">{{ gettext('Login') }}</a></li>
-            <li><a class="navbar-anchor" href="{{ url_for('Root.Account.signup_page') }}">{{ gettext('Sign-Up') }}</a></li>
-        {% else %}
-            {% if current_user.is_moderator %}
-                <div id="special-anchors">
-                    <a class="navbar-anchor" href="{{ url_for('Root.Manage User.user_list_page') }}">{{ gettext('Users') }}</a>
-                </div>
+            {% if not current_user.is_authenticated %}
+                <li><a class="navbar-anchor" href="{{ url_for('Root.Account.login_page') }}">{{ gettext('Login') }}</a></li>
+                <li><a class="navbar-anchor" href="{{ url_for('Root.Account.signup_page') }}">{{ gettext('Sign-Up') }}</a></li>
+            {% else %}
+                {% if current_user.is_moderator %}
+                    <div id="special-anchors">
+                        <a class="navbar-anchor" href="{{ url_for('Root.Manage User.user_list_page') }}">{{ gettext('Users') }}</a>
+                    </div>
+                {% endif %}
+
+                <li><a class="navbar-anchor" href="{{ url_for('Root.Post.upload_page') }}">{{ gettext('Upload') }}</a></li>
+                <li><a class="navbar-anchor" href="{{ url_for('Root.Account.profile_page', user_id = current_user.id) }}">{{ gettext('My Profile') }}</a></li>
+                <li><a class="navbar-anchor" href="{{ url_for('Root.Account.logout_page') }}">{{ gettext('Logout') }}</a></li>
             {% endif %}
 
-            <li><a class="navbar-anchor" href="{{ url_for('Root.Post.upload_page') }}">{{ gettext('Upload') }}</a></li>
-            <li><a class="navbar-anchor" href="{{ url_for('Root.Account.profile_page', user_id = current_user.id) }}">{{ gettext('My Profile') }}</a></li>
-            <li><a class="navbar-anchor" href="{{ url_for('Root.Account.logout_page') }}">{{ gettext('Logout') }}</a></li>
-        {% endif %}
+            <li><a class="navbar-anchor" href="{{ url_for(request.endpoint or 'Root.Index.index_page', lang_code='en', **(request.view_args or {})) }}">🇬🇧</a></li>
+            <li><a class="navbar-anchor" href="{{ url_for(request.endpoint or 'Root.Index.index_page', lang_code='lv', **(request.view_args or {})) }}">🇱🇻</a></li>
+        </ul>
 
-        <li><a class="navbar-anchor" href="{{ url_for(request.endpoint or 'Root.Index.index_page', lang_code='en', **(request.view_args or {})) }}">🇬🇧</a></li>
-        <li><a class="navbar-anchor" href="{{ url_for(request.endpoint or 'Root.Index.index_page', lang_code='lv', **(request.view_args or {})) }}">🇱🇻</a></li>
-    </ul>
-
-    <button id="menu-toggler">Menu</button>
-</nav>
+        <button id="menu-toggler">Menu</button>
+    </nav>
+{% endblock %}
 
 {% block script %}
     <script src="{{ url_for('static', filename = 'js/nav.js') }}"></script>

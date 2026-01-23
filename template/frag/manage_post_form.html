@@ -1,0 +1,15 @@
+{% block body %}
+    <form id="manage-post-form" class="form hidden">
+        <button id="toggle-btn" type="button">{{ gettext('Toggle') }}</button>
+
+        <div class="input-group">
+            <label for="tags">{{ gettext('Tags') }}:</label>
+            <textarea name="tags" placeholder="tag1 tag2 ..."></textarea>
+        </div>
+
+        <div class="input-group">
+            <input type="submit" formaction="{{ url_for('REST API.Tag API.add_tags') }}" value="{{ gettext('Add') }}">
+            <input type="submit" formaction="{{ url_for('REST API.Tag API.remove_tags') }}" value="{{ gettext('Remove') }}">
+        </div>
+    </form>
+{% endblock %}

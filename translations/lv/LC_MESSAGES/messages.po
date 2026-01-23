@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-01-23 20:04+0200\n"
+"POT-Creation-Date: 2026-01-24 00:20+0200\n"
 "PO-Revision-Date: 2026-01-23 18:45+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: lv\n"
@@ -186,67 +186,7 @@ msgstr ""
 msgid "Page"
 msgstr "Lapaspuse"
 
-#: template/browse.html:17
-msgid "Blur"
-msgstr "Aizmiglot"
-
-#: template/browse.html:20 template/index.html:29 template/profile.html:27
-msgid "Posts"
-msgstr "Ieraksti"
-
-#: template/browse.html:29
-msgid "Sort By"
-msgstr "Kārtot pēc"
-
-#: template/browse.html:32 template/list_user.html:14
-msgid "Created"
-msgstr "Izveidots"
-
-#: template/browse.html:33
-msgid "Modified"
-msgstr "Modificēts"
-
-#: template/browse.html:34
-msgid "Hash"
-msgstr "Hašs"
-
-#: template/browse.html:35
-msgid "File Extension"
-msgstr "Faila Paplašinājums"
-
-#: template/browse.html:36
-msgid "Disk Space"
-msgstr "Vieta uz Diska"
-
-#: template/browse.html:37
-msgid "Height"
-msgstr "Garums"
-
-#: template/browse.html:38
-msgid "Width"
-msgstr "Platums"
-
-#: template/browse.html:39
-msgid "Category"
-msgstr "Kategorija"
-
-#: template/browse.html:42
-msgid "Sort"
-msgstr "Kārtot"
-
-#: template/browse.html:44
-msgid "Ascending"
-msgstr "Augošā sec."
-
-#: template/browse.html:45
-msgid "Descending"
-msgstr "Dilstošā sec."
-
-#: template/browse.html:50 template/index.html:15 template/snapshot.html:36
-msgid "Search"
-msgstr "Meklēt"
-
-#: template/comment.html:3 template/frag/nav.html:11
+#: template/comment.html:3 template/frag/nav.html:12
 msgid "Comments"
 msgstr "Komentāri"
 
@@ -292,7 +232,7 @@ msgstr "Aizstāt ar"
 msgid "Directory"
 msgstr "Mape"
 
-#: template/edit.html:25 template/upload.html:25 template/view.html:100
+#: template/edit.html:25 template/upload.html:25 template/view.html:104
 msgid "Poster"
 msgstr "Autors"
 
@@ -300,20 +240,21 @@ msgstr "Autors"
 msgid "Open"
 msgstr "Atvērt"
 
-#: template/edit.html:34 template/upload.html:30 template/view.html:90
+#: template/edit.html:34 template/upload.html:30 template/view.html:94
 msgid "Source"
 msgstr "Resurss"
 
-#: template/edit.html:43 template/upload.html:35 template/view.html:114
+#: template/edit.html:43 template/upload.html:35 template/view.html:118
 msgid "Caption"
 msgstr "Apraksts"
 
-#: template/edit.html:48 template/frag/nav.html:10 template/snapshot.html:11
-#: template/upload.html:40 template/view.html:66
+#: template/edit.html:48 template/frag/manage_post_form.html:6
+#: template/frag/nav.html:11 template/snapshot.html:11 template/upload.html:40
+#: template/view.html:70
 msgid "Tags"
 msgstr "Birkas"
 
-#: template/edit.html:53
+#: template/edit.html:53 template/edit_tag.html:30
 msgid "Delete"
 msgstr "Izdzēst"
 
@@ -365,6 +306,29 @@ msgstr ""
 "Tava unikālā atslēga pieejai REST API: %(api_key)s<br><b>(Nedali nevienam"
 " šo atslēgu)</b>"
 
+#: template/edit_tag.html:3
+#, fuzzy
+msgid "Edit Tag"
+msgstr "Rediģēt Ierakstu"
+
+#: template/edit_tag.html:11 template/help.html:51 template/tag.html:14
+#: template/view.html:113
+msgid "Name"
+msgstr "Vārds"
+
+#: template/edit_tag.html:16 template/tag.html:17 template/view.html:114
+msgid "Type"
+msgstr "Tips"
+
+#: template/edit_tag.html:25 template/tag.html:18
+msgid "Description"
+msgstr "Apraksts"
+
+#: template/edit_tag.html:34
+#, fuzzy
+msgid "Update"
+msgstr "Augšupbalss"
+
 #: template/error.html:3
 msgid "Error"
 msgstr "Kļūme"
@@ -374,7 +338,7 @@ msgstr "Kļūme"
 msgid "Oops! You encountered HTTP %(code)s error!"
 msgstr "Ak vai! Tu satikies ar HTTP %(code)s kļūmi!"
 
-#: template/frag/footer.html:9 template/help.html:3
+#: template/frag/footer.html:10 template/help.html:3
 msgid "Help"
 msgstr "Palīdzība"
 
@@ -395,10 +359,10 @@ msgstr ""
 "Ieraksts reprezentē augšupielādētu failu kuram var likt komentārus, un "
 "kuru var atrast caur meklēšanas rīkiem. Alternatīvi ja jūs vēlaties "
 "augšupielādēt pašu ierakstu, jūs varat tam iedot publicētāja un resursa "
-"attribūtus. Vēl par augšupielādi lasiet <a href=\"%(upload_href)s\">Augšupielādes sekcijā</a>"
-", kā arī pievienot teksta saturu "
-"un pievienot birkas kurus var ērti meklēt. Par birkām dziļāk "
-"<a href=\"%(tag_href)s\">Birku sekcijā</a>"
+"attribūtus. Vēl par augšupielādi lasiet <a "
+"href=\"%(upload_href)s\">Augšupielādes sekcijā</a>, kā arī pievienot "
+"teksta saturu un pievienot birkas kurus var ērti meklēt. Par birkām "
+"dziļāk <a href=\"%(tag_href)s\">Birku sekcijā</a>"
 
 #: template/help.html:9
 msgid "Help: Search"
@@ -412,11 +376,12 @@ msgid ""
 "alternatively if you don't want gameplay you can add <b>%(minus_tag)s</b>"
 " tag with a minus sign in front of tag name instead and it will search "
 "for posts that depict GTA V instead of gameplay."
-msgstr "Jūs varat meklēt birkas <b>%(tag_example)s</b> un tas meklēs ierakstus "
+msgstr ""
+"Jūs varat meklēt birkas <b>%(tag_example)s</b> un tas meklēs ierakstus "
 "par Grand Theft Auto V datorspēles uzņemto saturu. Jo jūs salikāt divas "
 "birkas kopā, alternatīvi ja nevēlaties redzēt uzņemto saturu datorspēlē "
-"tad varat pievienot <b>%(minus_tag)s</b> ar mīnusa zīmi priekšā un tas meklēs "
-"ierakstus kas satur GTA V idejas un nevis uzņemto saturu."
+"tad varat pievienot <b>%(minus_tag)s</b> ar mīnusa zīmi priekšā un tas "
+"meklēs ierakstus kas satur GTA V idejas un nevis uzņemto saturu."
 
 #: template/help.html:11
 #, python-format
@@ -424,9 +389,10 @@ msgid ""
 "When searching you might want to look at what tags are available, click "
 "<a href=\"%(tag_url)s\">here</a>. More about searching look in <a "
 "href=\"%(tag_href)s\">Tags in-depth section</a>"
-msgstr "Kad meklējat jūs varētu vēlēties apskatīties kādas birkas ir pieejamas "
-"noklikšķiniet <a href=\"%(tag_url)s\">šeit</a>. Vairāk par meklēšanu apskatiet "
-"<a href=\"%(tag_href)s\">Paplašināti par Birkām</a>"
+msgstr ""
+"Kad meklējat jūs varētu vēlēties apskatīties kādas birkas ir pieejamas "
+"noklikšķiniet <a href=\"%(tag_url)s\">šeit</a>. Vairāk par meklēšanu "
+"apskatiet <a href=\"%(tag_href)s\">Paplašināti par Birkām</a>"
 
 #: template/help.html:14
 msgid "Tag"
@@ -480,10 +446,6 @@ msgid ""
 "Here's a helpful table of available tags and attributes you can use to "
 "narrow down your searches."
 msgstr "Šeit ir noderīga tabula ar pieejamām birkām un atribūtiem."
-
-#: template/help.html:51 template/tag.html:14 template/view.html:109
-msgid "Name"
-msgstr "Vārds"
 
 #: template/help.html:52
 msgid "Example"
@@ -597,13 +559,24 @@ msgid ""
 "By default NSFW-related posts are hidden, if you wish to view NSFW and "
 "only NSFW posts then you can add <b>%(nsfw_tag)s</b> tag. But please be "
 "aware of consequences that come with viewing NSFW posts"
-msgstr "Noklusēti Nav Drošs Darbam saturs ir paslēpts, ja vēlaties viņu "
-"redzēt, un tikai NSFW saturu redzēt tad pievienojiet birku <b>%(nsfw_tag)s</b>. "
+msgstr ""
+"Noklusēti Nav Drošs Darbam saturs ir paslēpts, ja vēlaties viņu redzēt, "
+"un tikai NSFW saturu redzēt tad pievienojiet birku <b>%(nsfw_tag)s</b>. "
 "Bet ņemiet vērā par sekām skatoties NSFW saturu"
 
-#: template/frag/nav.html:8 template/index.html:3
+#: template/frag/nav.html:9 template/index.html:3
 msgid "Index"
 msgstr "Mājas"
+
+#: template/frag/post_search_form.html:41 template/index.html:15
+#: template/snapshot.html:36
+msgid "Search"
+msgstr "Meklēt"
+
+#: template/frag/post_search_form.html:11 template/index.html:29
+#: template/profile.html:27
+msgid "Posts"
+msgstr "Ieraksti"
 
 #: template/layout.html:5
 msgid "DO NOT SHARE THIS WITH ANYONE"
@@ -621,12 +594,16 @@ msgstr "Lietotāju Katalogs"
 msgid "Role"
 msgstr "Loma"
 
+#: template/frag/post_search_form.html:23 template/list_user.html:14
+msgid "Created"
+msgstr "Izveidots"
+
 #: template/list_user.html:23 template/profile.html:21 template/tag.html:26
-#: template/view.html:55
+#: template/view.html:59
 msgid "Edit"
 msgstr "Rediģēt"
 
-#: template/frag/nav.html:14 template/login.html:3 template/login.html:21
+#: template/frag/nav.html:15 template/login.html:3 template/login.html:21
 msgid "Login"
 msgstr "Pieslēgties"
 
@@ -662,7 +639,7 @@ msgstr "Augšupielādē savu profila bildi"
 msgid "E-mail (Not Required) "
 msgstr "E-pasts (Nav Nepieciešams)"
 
-#: template/frag/nav.html:15 template/signup.html:25
+#: template/frag/nav.html:16 template/signup.html:25
 msgid "Sign-Up"
 msgstr "Reģistrēties"
 
@@ -690,19 +667,11 @@ msgstr "Birku Lapaspuse"
 msgid "Count"
 msgstr "Skaits"
 
-#: template/tag.html:17 template/view.html:110
-msgid "Type"
-msgstr "Tips"
-
-#: template/tag.html:18
-msgid "Description"
-msgstr "Apraksts"
-
-#: template/tag.html:36 template/view.html:76
+#: template/tag.html:36 template/view.html:80
 msgid "Tag History"
 msgstr "Birku Vēsture"
 
-#: template/frag/nav.html:23 template/upload.html:3 template/upload.html:45
+#: template/frag/nav.html:24 template/upload.html:3 template/upload.html:45
 msgid "Upload"
 msgstr "Augšupielādēt"
 
@@ -710,103 +679,167 @@ msgstr "Augšupielādēt"
 msgid "File(s)"
 msgstr "Failu(s)"
 
-#: template/view.html:60
+#: template/view.html:46
+msgid "View "
+msgstr ""
+
+#: template/view.html:64
 msgid "Upvote"
 msgstr "Augšupbalss"
 
-#: template/view.html:62
+#: template/view.html:66
 msgid "Downvote"
 msgstr "Lejupbalss"
 
-#: template/view.html:79
+#: template/view.html:83
 msgid "Statistics"
 msgstr "Statistika"
 
-#: template/view.html:82
+#: template/view.html:86
 msgid "Posted"
 msgstr "Publicēts"
 
-#: template/view.html:83
+#: template/view.html:87
 msgid "Uploader"
 msgstr "Īpašnieks"
 
-#: template/view.html:86
+#: template/view.html:90
 msgid "Size"
 msgstr "Izmērs"
 
-#: template/view.html:111
+#: template/view.html:115
 msgid "Disk Size"
 msgstr "Vieta uz Diska"
 
-#: template/view.html:126
+#: template/view.html:130
 msgid "Your comment goes here."
 msgstr "Tavs komentārs šeit."
 
-#: template/view.html:127
+#: template/view.html:131
 msgid "Comment"
 msgstr "Komentēt"
 
-#: template/frag/comment-section.html:14
+#: template/frag/comment-section.html:15
 msgid "at"
 msgstr "komentēja"
 
-#: template/frag/footer.html:8
+#: template/frag/footer.html:9
 msgid "Links"
 msgstr "Saites"
 
-#: template/frag/footer.html:10
+#: template/frag/footer.html:11
 msgid "Contact Me"
 msgstr "Sazinies ar mani"
 
-#: template/frag/footer.html:11
+#: template/frag/footer.html:12
 msgid "Source Code"
 msgstr "Lapas kods"
 
-#: template/frag/footer.html:14
+#: template/frag/footer.html:15
 msgid "For Developers"
 msgstr "Priekš Izstrādātājiem"
 
-#: template/frag/nav.html:9
+#: template/frag/manage_post_form.html:3
+msgid "Toggle"
+msgstr "Pārslēgt"
+
+#: template/frag/manage_post_form.html:11
+msgid "Add"
+msgstr "Pievienot"
+
+#: template/frag/manage_post_form.html:12
+msgid "Remove"
+msgstr "Atņemt"
+
+#: template/frag/nav.html:10
 msgid "Browse"
 msgstr "Pārlūkot"
 
-#: template/frag/nav.html:19
+#: template/frag/nav.html:20
 msgid "Users"
 msgstr "Lietotāji"
 
-#: template/frag/nav.html:24
+#: template/frag/nav.html:25
 msgid "My Profile"
 msgstr "Profils"
 
-#: template/frag/nav.html:25
+#: template/frag/nav.html:26
 msgid "Logout"
 msgstr "Iziet"
 
-#: template/frag/posts.html:15
+#: template/frag/post_search_form.html:8
+msgid "Blur"
+msgstr "Aizmiglot"
+
+#: template/frag/post_search_form.html:20
+msgid "Sort By"
+msgstr "Kārtot pēc"
+
+#: template/frag/post_search_form.html:24
+msgid "Modified"
+msgstr "Modificēts"
+
+#: template/frag/post_search_form.html:25
+msgid "Hash"
+msgstr "Hašs"
+
+#: template/frag/post_search_form.html:26
+msgid "File Extension"
+msgstr "Faila Paplašinājums"
+
+#: template/frag/post_search_form.html:27
+msgid "Disk Space"
+msgstr "Vieta uz Diska"
+
+#: template/frag/post_search_form.html:28
+msgid "Height"
+msgstr "Garums"
+
+#: template/frag/post_search_form.html:29
+msgid "Width"
+msgstr "Platums"
+
+#: template/frag/post_search_form.html:30
+msgid "Category"
+msgstr "Kategorija"
+
+#: template/frag/post_search_form.html:33
+msgid "Sort"
+msgstr "Kārtot"
+
+#: template/frag/post_search_form.html:35
+msgid "Ascending"
+msgstr "Augošā sec."
+
+#: template/frag/post_search_form.html:36
+msgid "Descending"
+msgstr "Dilstošā sec."
+
+#: template/frag/posts.html:16
 msgid "Caption flair"
 msgstr "Apraksta piezīme"
 
-#: template/frag/posts.html:20
+#: template/frag/posts.html:21
 msgid "Original Poster flair"
 msgstr "Autora piezīme"
 
-#: template/frag/posts.html:24
+#: template/frag/posts.html:25
 msgid "Source flair"
 msgstr "Resursa piezīme"
 
-#: template/frag/posts.html:27
+#: template/frag/posts.html:28
 msgid "Original Poster & Source flair"
 msgstr "Autora un resursa piezīme"
 
-#: template/frag/posts.html:31
+#: template/frag/posts.html:32
 msgid "Audio flair"
 msgstr "Audio piezīme"
 
-#: template/frag/posts.html:33
+#: template/frag/posts.html:34
 msgid "Image flair"
 msgstr "Attēla piezīme"
 
-#: template/frag/posts.html:35
+#: template/frag/posts.html:36
 msgid "Video flair"
 msgstr "Video piezīme"
 

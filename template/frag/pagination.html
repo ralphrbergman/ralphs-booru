@@ -2,14 +2,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'pagination.css') }}">
 {% endblock %}
 
-<ul class="pagination-bar">
-    {% for page in bar %}
-        <li class="pagination-element">
-            {% if page['page'] != current_page %}
-                <a class="no-select" href="{{ page['url'] }}">{{ page['page'] }}</a>
-            {% else %}
-                <p class="bg no-select">{{ current_page }}</p>
-            {% endif %}
-        </li>
-    {% endfor %}
-</ul>
+{% block body %}
+    <ul class="pagination-bar">
+        {% for page in bar %}
+            <li class="pagination-element">
+                {% if page['page'] != current_page %}
+                    <a class="no-select" href="{{ page['url'] }}">{{ page['page'] }}</a>
+                {% else %}
+                    <p class="bg no-select">{{ current_page }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
