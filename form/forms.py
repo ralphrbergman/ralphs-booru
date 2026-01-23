@@ -1,3 +1,4 @@
+from flask_babel import gettext
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
 from wtforms import BooleanField, FileField, IntegerField, MultipleFileField, PasswordField, StringField, SelectField, TextAreaField
@@ -26,18 +27,18 @@ class SearchForm(FlaskForm, SubmitMixin):
 
 class SignupForm(FlaskForm, AvatarMixin, EmailMixin, SubmitMixin, StrongPasswordMixin, UsernameMixin):
     confirm_pw = PasswordField('confirm_pw', validators = [
-        DataRequired(message = 'You need to confirm your password'),
-        EqualTo('pw', message = 'Mismatch between password and confirmation password')
+        DataRequired(message = gettext('You need to confirm your password')),
+        EqualTo('pw', message = gettext('Mismatch between password and confirmation password'))
     ])
 
     def validate_username(self, username: str) -> None:
         user = get_user_by_username(username.data)
 
         if user:
-            raise ValidationError('Username is already taken.')
+            raise ValidationError(gettext('Username is already taken.'))
 
 class SnapshotForm(FlaskForm, SubmitMixin):
-    post_id = IntegerField('post_id', validators = (DataRequired(message = 'Please specify which post to search.'),))
+    post_id = IntegerField('post_id', validators = (DataRequired(message = gettext('Please specify which post to search.')),))
 
     class Meta:
         csrf = False
@@ -58,5 +59,3 @@ class UploadForm(FlaskForm, PostMixin, SubmitMixin):
             validate_extension(['gif', 'jpg', 'jpeg', 'mp3', 'mp4', 'png', 'webm', 'webp'])
         ]
     )
-
-    

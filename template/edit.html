@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set title = gettext('Edit Post: ') ~ post.id %}
+{% set title = gettext('Edit Post') ~ ': ' ~ post.id %}
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
@@ -22,7 +22,7 @@
             </div>
 
             <div class="input-group">
-                <label for="op">{{ gettext('Original Poster') }}:</label>
+                <label for="op">{{ gettext('Poster') }}:</label>
                 <input type="text" name="op" value="{% if post.op is not none %}{{ post.op }}{% endif %}">
 
                 {% if post.is_hyperlink(post.op) %}

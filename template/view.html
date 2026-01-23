@@ -42,7 +42,11 @@
     {% endif %}
 {% endblock %}
 
+<<<<<<< Updated upstream
 {% set title = gettext('View ') ~ post.id %}
+=======
+{% set title = 'View' ~ ': ' ~ post.id %}
+>>>>>>> Stashed changes
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
@@ -97,7 +101,7 @@
                 {% endif %}
 
                 {% if post.op %}
-                    <p>{{ gettext('OP') }}: 
+                    <p>{{ gettext('Poster') }}: 
                         {% if post.is_hyperlink(post.op) %}
                             <a href="{{ post.op }}">{{ post.op }}</a>
                         {% else %}

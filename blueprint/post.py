@@ -169,7 +169,7 @@ def upload_page():
             )
 
             posted = False
-            snapshot = create_snapshot(post, current_user)
+            create_snapshot(post, current_user)
 
             try:
                 db.session.commit()

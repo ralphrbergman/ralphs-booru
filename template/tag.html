@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set title = gettext('Tags Page') ~ ' ' ~ current_page %}
+{% set title = gettext('Tags Page') ~ ': ' ~ current_page %}
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'tag.css') }}">
@@ -33,7 +33,7 @@
         </table>
     </div>
 
-    <a href="{{ url_for('Root.Tag.history_page') }}">Tag History</a>
+    <a href="{{ url_for('Root.Tag.history_page') }}">{{ gettext('Tag History') }}</a>
 
     {% include 'frag/pagination.html' %}
 {% endblock %}

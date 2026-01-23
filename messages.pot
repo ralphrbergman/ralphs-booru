@@ -8,7 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+<<<<<<< Updated upstream
 "POT-Creation-Date: 2026-01-23 13:46+0200\n"
+=======
+"POT-Creation-Date: 2026-01-23 20:04+0200\n"
+>>>>>>> Stashed changes
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -115,16 +119,141 @@ msgstr ""
 msgid "Updated tag %(tag_name)s successfully!"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/browse.html:3
 msgid "Page "
+=======
+#: form/fields.py:14
+msgid "Password is required"
+msgstr ""
+
+#: form/fields.py:24
+msgid "Passwords must be from 8 to 128 characters in length"
+msgstr ""
+
+#: form/forms.py:30
+msgid "You need to confirm your password"
+msgstr ""
+
+#: form/forms.py:31
+msgid "Mismatch between password and confirmation password"
+msgstr ""
+
+#: form/forms.py:38
+msgid "Username is already taken."
+msgstr ""
+
+#: form/forms.py:41
+msgid "Please specify which post to search."
+msgstr ""
+
+#: form/mixins.py:10
+msgid ""
+"You can only have a picture as your avatar. (e.g gif, jpg, jpeg, png or "
+"webp)"
+msgstr ""
+
+#: form/mixins.py:28 template/snapshot.html:10
+msgid "User"
+msgstr ""
+
+#: form/mixins.py:29
+msgid "Janitor"
+msgstr ""
+
+#: form/mixins.py:30
+msgid "Moderator"
+msgstr ""
+
+#: form/mixins.py:31
+msgid "Administrator"
+msgstr ""
+
+#: form/mixins.py:47
+msgid "A username is required"
+msgstr ""
+
+#: form/mixins.py:48
+msgid "Usernames can be up to 20 characters in length"
+msgstr ""
+
+#: form/validators.py:17
+#, python-format
+msgid "File type is not acceptable. Acceptable types are: %(extensions)s"
+msgstr ""
+
+#: template/browse.html:3
+msgid "Page"
+msgstr ""
+
+#: template/browse.html:17
+msgid "Blur"
+msgstr ""
+
+#: template/browse.html:20 template/index.html:29 template/profile.html:27
+msgid "Posts"
+msgstr ""
+
+#: template/browse.html:29
+msgid "Sort By"
+msgstr ""
+
+#: template/browse.html:32 template/list_user.html:14
+msgid "Created"
+msgstr ""
+
+#: template/browse.html:33
+msgid "Modified"
+msgstr ""
+
+#: template/browse.html:34
+msgid "Hash"
+msgstr ""
+
+#: template/browse.html:35
+msgid "File Extension"
+msgstr ""
+
+#: template/browse.html:36
+msgid "Disk Space"
+msgstr ""
+
+#: template/browse.html:37
+msgid "Height"
+msgstr ""
+
+#: template/browse.html:38
+msgid "Width"
+msgstr ""
+
+#: template/browse.html:39
+msgid "Category"
+msgstr ""
+
+#: template/browse.html:42
+msgid "Sort"
+msgstr ""
+
+#: template/browse.html:44
+msgid "Ascending"
+msgstr ""
+
+#: template/browse.html:45
+msgid "Descending"
+>>>>>>> Stashed changes
 msgstr ""
 
 #: template/browse.html:50 template/index.html:15 template/snapshot.html:36
 msgid "Search"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/comment.html:3
 msgid "Comments "
+=======
+#: template/comment.html:3 template/frag/nav.html:11
+msgid "Comments"
+>>>>>>> Stashed changes
 msgstr ""
 
 #: template/comment.html:6
@@ -140,13 +269,25 @@ msgstr ""
 msgid "You can get in touch with me"
 msgstr ""
 
+#: template/contact.html:11
+msgid "Means"
+msgstr ""
+
+#: template/contact.html:12
+msgid "Value"
+msgstr ""
+
 #: template/contact.html:16 template/edit_profile.html:21
 #: template/list_user.html:13 template/manage_user.html:27
 msgid "E-mail"
 msgstr ""
 
 #: template/edit.html:3
+<<<<<<< Updated upstream
 msgid "Edit Post: "
+=======
+msgid "Edit Post"
+>>>>>>> Stashed changes
 msgstr ""
 
 #: template/edit.html:15
@@ -161,8 +302,8 @@ msgstr ""
 msgid "Directory"
 msgstr ""
 
-#: template/edit.html:25 template/upload.html:25
-msgid "Original Poster"
+#: template/edit.html:25 template/upload.html:25 template/view.html:100
+msgid "Poster"
 msgstr ""
 
 #: template/edit.html:29 template/edit.html:38
@@ -182,7 +323,7 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: template/edit.html:53 template/edit_tag.html:30
+#: template/edit.html:53
 msgid "Delete"
 msgstr ""
 
@@ -232,6 +373,7 @@ msgstr ""
 msgid "Your unique API key: %(api_key)s<br><b>(Do not share it with anyone)</b>"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/edit_tag.html:3
 msgid "Edit Tag"
 msgstr ""
@@ -251,6 +393,10 @@ msgstr ""
 
 #: template/edit_tag.html:34
 msgid "Update"
+=======
+#: template/error.html:3
+msgid "Error"
+>>>>>>> Stashed changes
 msgstr ""
 
 #: template/error.html:3
@@ -352,6 +498,10 @@ msgstr ""
 msgid ""
 "Here's a helpful table of available tags and attributes you can use to "
 "narrow down your searches."
+msgstr ""
+
+#: template/help.html:51 template/tag.html:14 template/view.html:109
+msgid "Name"
 msgstr ""
 
 #: template/help.html:52
@@ -463,8 +613,8 @@ msgstr ""
 msgid "Index"
 msgstr ""
 
-#: template/index.html:29
-msgid "Posts"
+#: template/layout.html:5
+msgid "DO NOT SHARE THIS WITH ANYONE"
 msgstr ""
 
 #: template/layout.html:5
@@ -483,6 +633,7 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/list_user.html:14
 msgid "Created"
 msgstr ""
@@ -490,6 +641,15 @@ msgstr ""
 #: template/list_user.html:23 template/profile.html:21 template/tag.html:26
 #: template/view.html:55
 msgid "Edit"
+=======
+#: template/list_user.html:23 template/profile.html:21 template/tag.html:26
+#: template/view.html:55
+msgid "Edit"
+msgstr ""
+
+#: template/frag/nav.html:14 template/login.html:3 template/login.html:21
+msgid "Login"
+>>>>>>> Stashed changes
 msgstr ""
 
 #: template/frag/nav.html:14 template/login.html:3 template/login.html:21
@@ -504,6 +664,21 @@ msgstr ""
 msgid "Manage User"
 msgstr ""
 
+<<<<<<< Updated upstream
+=======
+#: template/profile.html:18
+msgid "Level"
+msgstr ""
+
+#: template/profile.html:28
+msgid "Join Date"
+msgstr ""
+
+#: template/profile.html:32
+msgid "'s latest posts"
+msgstr ""
+
+>>>>>>> Stashed changes
 #: template/signup.html:3
 msgid "Sign Up"
 msgstr ""
@@ -532,18 +707,24 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/snapshot.html:10
 msgid "User"
 msgstr ""
 
+=======
+>>>>>>> Stashed changes
 #: template/snapshot.html:23
 msgid "Revert"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/snapshot.html:33
 msgid "Post ID"
 msgstr ""
 
+=======
+>>>>>>> Stashed changes
 #: template/tag.html:3
 msgid "Tags Page"
 msgstr ""
@@ -552,6 +733,21 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
+<<<<<<< Updated upstream
+=======
+#: template/tag.html:17 template/view.html:110
+msgid "Type"
+msgstr ""
+
+#: template/tag.html:18
+msgid "Description"
+msgstr ""
+
+#: template/tag.html:36 template/view.html:76
+msgid "Tag History"
+msgstr ""
+
+>>>>>>> Stashed changes
 #: template/frag/nav.html:23 template/upload.html:3 template/upload.html:45
 msgid "Upload"
 msgstr ""
@@ -560,10 +756,13 @@ msgstr ""
 msgid "File(s)"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/view.html:45
 msgid "View "
 msgstr ""
 
+=======
+>>>>>>> Stashed changes
 #: template/view.html:60
 msgid "Upvote"
 msgstr ""
@@ -572,10 +771,13 @@ msgstr ""
 msgid "Downvote"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/view.html:76
 msgid "Tag History"
 msgstr ""
 
+=======
+>>>>>>> Stashed changes
 #: template/view.html:79
 msgid "Statistics"
 msgstr ""
@@ -592,10 +794,13 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
+<<<<<<< Updated upstream
 #: template/view.html:100
 msgid "OP"
 msgstr ""
 
+=======
+>>>>>>> Stashed changes
 #: template/view.html:111
 msgid "Disk Size"
 msgstr ""
@@ -630,10 +835,6 @@ msgstr ""
 
 #: template/frag/nav.html:9
 msgid "Browse"
-msgstr ""
-
-#: template/frag/nav.html:11
-msgid "Comments"
 msgstr ""
 
 #: template/frag/nav.html:19

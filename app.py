@@ -3,8 +3,8 @@ from os import getenv
 from apiflask import APIFlask
 from flask import g, request, redirect
 from flask.cli import with_appcontext
-from dotenv import load_dotenv
 from flask_migrate import Migrate
+from dotenv import load_dotenv
 
 from api import get_user
 from brand import brand
