@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-01-20 21:29+0200\n"
+"POT-Creation-Date: 2026-01-23 13:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: api/decorators.py:30
+#: api/decorators.py:56
 msgid "Can't access this party yet boss."
 msgstr ""
 
@@ -60,50 +60,71 @@ msgid "Welcome, %(name)s"
 msgstr ""
 
 #: blueprint/error.py:14
-msgid "The resource you we're looking for does not exist."
+msgid "Unauthorized users prohibited"
 msgstr ""
 
 #: blueprint/error.py:22
-msgid "You need to level up first before you can access this part of the site"
+msgid "The resource you we're looking for does not exist."
 msgstr ""
 
-#: blueprint/manage_user.py:59
+#: blueprint/manage_user.py:53
+#, python-format
+msgid "Role with priority %(priority)s does not exist"
+msgstr ""
+
+#: blueprint/manage_user.py:64
+msgid "Cannot manage the user on the same or above rank as you"
+msgstr ""
+
+#: blueprint/manage_user.py:70
 #, python-format
 msgid "Updated user %(name)s successfully!"
 msgstr ""
 
-#: blueprint/post.py:84
+#: blueprint/post.py:91
 #, python-format
 msgid "Permanently deleted post #%(post_id)s"
 msgstr ""
 
-#: blueprint/post.py:93
+#: blueprint/post.py:100
 #, python-format
 msgid "Successfully exchanged post #%(post_id)s for a new file!"
 msgstr ""
 
-#: blueprint/post.py:95
+#: blueprint/post.py:102
 msgid "Failed to exchange post."
 msgstr ""
 
-#: blueprint/post.py:156
+#: blueprint/post.py:186
 #, python-format
 msgid "Successfully uploaded post #%(post_id)s"
 msgstr ""
 
-#: blueprint/post.py:158
+#: blueprint/post.py:188
 #, python-format
 msgid "Uploading file %(filename)s failed"
 msgstr ""
 
-#: blueprint/tag.py:40
+#: blueprint/tag.py:36
 #, python-format
 msgid "Permanently deleted tag #%(tag_name)s"
 msgstr ""
 
-#: blueprint/tag.py:49
+#: blueprint/tag.py:45
 #, python-format
 msgid "Updated tag %(tag_name)s successfully!"
+msgstr ""
+
+#: template/browse.html:3
+msgid "Page "
+msgstr ""
+
+#: template/browse.html:50 template/index.html:15 template/snapshot.html:36
+msgid "Search"
+msgstr ""
+
+#: template/comment.html:3
+msgid "Comments "
 msgstr ""
 
 #: template/comment.html:6
@@ -111,13 +132,21 @@ msgstr ""
 msgid "This page displays comments site-wide across all %(post_count)s posts."
 msgstr ""
 
+#: template/contact.html:3
+msgid "Contact"
+msgstr ""
+
 #: template/contact.html:7
 msgid "You can get in touch with me"
 msgstr ""
 
 #: template/contact.html:16 template/edit_profile.html:21
-#: template/list_user.html:11 template/manage_user.html:25
+#: template/list_user.html:13 template/manage_user.html:27
 msgid "E-mail"
+msgstr ""
+
+#: template/edit.html:3
+msgid "Edit Post: "
 msgstr ""
 
 #: template/edit.html:15
@@ -140,16 +169,16 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: template/edit.html:34 template/upload.html:30 template/view.html:87
+#: template/edit.html:34 template/upload.html:30 template/view.html:90
 msgid "Source"
 msgstr ""
 
-#: template/edit.html:43 template/upload.html:35 template/view.html:111
+#: template/edit.html:43 template/upload.html:35 template/view.html:114
 msgid "Caption"
 msgstr ""
 
-#: template/edit.html:48 template/frag/nav.html:10 template/tag_history.html:9
-#: template/upload.html:40 template/view.html:63
+#: template/edit.html:48 template/frag/nav.html:10 template/snapshot.html:11
+#: template/upload.html:40 template/view.html:66
 msgid "Tags"
 msgstr ""
 
@@ -161,11 +190,15 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+#: template/edit_password.html:3 template/edit_profile.html:30
+msgid "Edit Password"
+msgstr ""
+
 #: template/edit_password.html:11
 msgid "Old Password"
 msgstr ""
 
-#: template/edit_password.html:16 template/manage_user.html:30
+#: template/edit_password.html:16 template/manage_user.html:32
 msgid "New Password"
 msgstr ""
 
@@ -173,16 +206,20 @@ msgstr ""
 msgid "Confirm Password"
 msgstr ""
 
-#: template/edit_password.html:25 template/manage_user.html:34
+#: template/edit_password.html:25 template/manage_user.html:36
 msgid "Change"
+msgstr ""
+
+#: template/edit_profile.html:3
+msgid "Edit Profile"
 msgstr ""
 
 #: template/edit_profile.html:11
 msgid "Avatar"
 msgstr ""
 
-#: template/edit_profile.html:16 template/list_user.html:8
-#: template/login.html:10 template/manage_user.html:9 template/signup.html:13
+#: template/edit_profile.html:16 template/list_user.html:10
+#: template/login.html:10 template/manage_user.html:11 template/signup.html:13
 msgid "Username"
 msgstr ""
 
@@ -190,21 +227,21 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: template/edit_profile.html:30
-msgid "Edit Password"
-msgstr ""
-
 #: template/edit_profile.html:34
 #, python-format
 msgid "Your unique API key: %(api_key)s<br><b>(Do not share it with anyone)</b>"
 msgstr ""
 
+#: template/edit_tag.html:3
+msgid "Edit Tag"
+msgstr ""
+
 #: template/edit_tag.html:11 template/help.html:51 template/tag.html:14
-#: template/view.html:106
+#: template/view.html:109
 msgid "Name"
 msgstr ""
 
-#: template/edit_tag.html:16 template/tag.html:17 template/view.html:107
+#: template/edit_tag.html:16 template/tag.html:17 template/view.html:110
 msgid "Type"
 msgstr ""
 
@@ -216,9 +253,17 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
+#: template/error.html:3
+msgid "Error"
+msgstr ""
+
 #: template/error.html:7
 #, python-format
 msgid "Oops! You encountered HTTP %(code)s error!"
+msgstr ""
+
+#: template/frag/footer.html:9 template/help.html:3
+msgid "Help"
 msgstr ""
 
 #: template/help.html:6
@@ -414,37 +459,53 @@ msgid ""
 "aware of consequences that come with viewing NSFW posts"
 msgstr ""
 
-#: template/index.html:15 template/tag_history.html:32
-msgid "Search"
+#: template/frag/nav.html:8 template/index.html:3
+msgid "Index"
 msgstr ""
 
 #: template/index.html:29
 msgid "Posts"
 msgstr ""
 
+#: template/layout.html:5
+msgid "DO NOT SHARE THIS WITH ANYONE"
+msgstr ""
+
 #: template/layout.html:9
 msgid "Ralph's kind of Booru"
 msgstr ""
 
-#: template/list_user.html:10 template/manage_user.html:14
+#: template/list_user.html:3
+msgid "List Users"
+msgstr ""
+
+#: template/list_user.html:12 template/manage_user.html:16
 msgid "Role"
 msgstr ""
 
-#: template/list_user.html:12
+#: template/list_user.html:14
 msgid "Created"
 msgstr ""
 
-#: template/list_user.html:19 template/profile.html:21 template/tag.html:26
-#: template/view.html:52
+#: template/list_user.html:23 template/profile.html:21 template/tag.html:26
+#: template/view.html:55
 msgid "Edit"
+msgstr ""
+
+#: template/frag/nav.html:14 template/login.html:3 template/login.html:21
+msgid "Login"
 msgstr ""
 
 #: template/login.html:17
 msgid "Remember Me"
 msgstr ""
 
-#: template/frag/nav.html:14 template/login.html:21
-msgid "Login"
+#: template/manage_user.html:3
+msgid "Manage User"
+msgstr ""
+
+#: template/signup.html:3
+msgid "Sign Up"
 msgstr ""
 
 #: template/signup.html:10
@@ -459,79 +520,91 @@ msgstr ""
 msgid "Sign-Up"
 msgstr ""
 
+#: template/snapshot.html:3
+msgid "List Snapshots"
+msgstr ""
+
+#: template/snapshot.html:8
+msgid "Post"
+msgstr ""
+
+#: template/snapshot.html:9
+msgid "Time"
+msgstr ""
+
+#: template/snapshot.html:10
+msgid "User"
+msgstr ""
+
+#: template/snapshot.html:23
+msgid "Revert"
+msgstr ""
+
+#: template/snapshot.html:33
+msgid "Post ID"
+msgstr ""
+
+#: template/tag.html:3
+msgid "Tags Page"
+msgstr ""
+
 #: template/tag.html:15
 msgid "Count"
 msgstr ""
 
-#: template/tag_history.html:6
-msgid "Post"
-msgstr ""
-
-#: template/tag_history.html:7
-msgid "Time"
-msgstr ""
-
-#: template/tag_history.html:8
-msgid "User"
-msgstr ""
-
-#: template/tag_history.html:21
-msgid "Revert"
-msgstr ""
-
-#: template/tag_history.html:29
-msgid "Post ID"
+#: template/frag/nav.html:23 template/upload.html:3 template/upload.html:45
+msgid "Upload"
 msgstr ""
 
 #: template/upload.html:15
 msgid "File(s)"
 msgstr ""
 
-#: template/frag/nav.html:23 template/upload.html:45
-msgid "Upload"
+#: template/view.html:45
+msgid "View "
 msgstr ""
 
-#: template/view.html:57
+#: template/view.html:60
 msgid "Upvote"
 msgstr ""
 
-#: template/view.html:59
+#: template/view.html:62
 msgid "Downvote"
 msgstr ""
 
-#: template/view.html:73
+#: template/view.html:76
 msgid "Tag History"
 msgstr ""
 
-#: template/view.html:76
+#: template/view.html:79
 msgid "Statistics"
 msgstr ""
 
-#: template/view.html:79
+#: template/view.html:82
 msgid "Posted"
 msgstr ""
 
-#: template/view.html:80
+#: template/view.html:83
 msgid "Uploader"
 msgstr ""
 
-#: template/view.html:83
+#: template/view.html:86
 msgid "Size"
 msgstr ""
 
-#: template/view.html:97
+#: template/view.html:100
 msgid "OP"
 msgstr ""
 
-#: template/view.html:108
+#: template/view.html:111
 msgid "Disk Size"
 msgstr ""
 
-#: template/view.html:123
+#: template/view.html:126
 msgid "Your comment goes here."
 msgstr ""
 
-#: template/view.html:124
+#: template/view.html:127
 msgid "Comment"
 msgstr ""
 
@@ -541,10 +614,6 @@ msgstr ""
 
 #: template/frag/footer.html:8
 msgid "Links"
-msgstr ""
-
-#: template/frag/footer.html:9
-msgid "Help"
 msgstr ""
 
 #: template/frag/footer.html:10
@@ -557,10 +626,6 @@ msgstr ""
 
 #: template/frag/footer.html:14
 msgid "For Developers"
-msgstr ""
-
-#: template/frag/nav.html:8
-msgid "Index"
 msgstr ""
 
 #: template/frag/nav.html:9

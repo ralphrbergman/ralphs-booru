@@ -31,7 +31,7 @@
                 <input type="checkbox" name="deleted">
             </div>
 
-            <input type="submit" value="{{ gettext('Update') }}" {% if not current_user.has_permission('tag:edit')disabled{% endif %} %}>
+            <input type="submit" value="{{ gettext('Update') }}" {% if not current_user.has_permission('tag:edit')%}disabled{% endif %}>
         </form>
     </div>
 {% endblock %}

@@ -42,7 +42,7 @@
     {% endif %}
 {% endblock %}
 
-{% set title = 'View ' ~ post.id %}
+{% set title = gettext('View ') ~ post.id %}
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">

@@ -333,8 +333,12 @@ def replace_post(post: Post, file: FileStorage) -> Post:
     mime = get_mime(path)
     size = get_size(path)
 
-    post.height = dimensions[1]
-    post.width = dimensions[0]
+    try:
+        post.height = dimensions[1]
+        post.width = dimensions[0]
+    except TypeError as exc:
+        pass
+
     post.ext = ext
     post.md5 = md5
     post.mime = mime
@@ -350,12 +354,6 @@ def replace_post(post: Post, file: FileStorage) -> Post:
     prev_path.unlink(missing_ok = True)
 
     thumb = create_thumbnail(post)
-
-    # try:
-    #     db.session.commit()
-    # except IntegrityError as exc:
-    #     # Post already has a thumbnail.
-    #     db.session.rollback()
 
     if thumb:
         thumb.post_id = post.id
