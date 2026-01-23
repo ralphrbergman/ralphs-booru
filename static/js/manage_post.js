@@ -93,7 +93,7 @@ PostForm.addEventListener('submit', function(event) {
 
     let endpoint = event.submitter.value === 'Add' ? '/add' : '/remove';
 
-    fetch(`http://localhost:5001/api/tags${endpoint}`, {
+    fetch(`/api/tags${endpoint}`, {
         headers: {
             'Authorization': `Bearer ${ApiKey}`,
             'Content-Type': 'application/json'
