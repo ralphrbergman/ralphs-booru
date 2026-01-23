@@ -1,6 +1,7 @@
 from apiflask import APIBlueprint, abort
+from flask_login import current_user
 
-from api import create_tag, delete_tag, get_tag, get_post
+from api import create_snapshot, create_tag, delete_tag, get_tag, get_post
 from api.decorators import post_protect, perm_required
 from api_auth import auth
 from db import db
@@ -53,6 +54,7 @@ def upload_tag(data: TagIn):
         if not post: continue
 
         tag.posts.append(post)
+        hist = create_snapshot(post, current_user)
 
     db.session.commit()
     return tag
@@ -94,6 +96,7 @@ def add_tags(data: TagsIn):
 
         if tag not in post.tags:
             post.tags.append(tag)
+            hist = create_snapshot(post, current_user)
 
     db.session.commit()
     return {
@@ -115,6 +118,7 @@ def remove_tags(data: TagsIn):
 
         if tag and tag in post.tags:
             post.tags.remove(tag)
+            hist = create_snapshot(post, current_user)
 
     return {
         'post_id': post.id,

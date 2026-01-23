@@ -1,6 +1,7 @@
 from apiflask import APIBlueprint
+from flask_login import current_user
 
-from api import browse_tag, create_tag, get_tag, get_post
+from api import browse_tag, create_snapshot, create_tag, get_tag, get_post
 from api.decorators import post_protect, perm_required
 from api_auth import auth
 from db import db
@@ -41,6 +42,7 @@ def add_tags(data: TagBulkIn):
         for post in posts:
             if tag not in post.tags:
                 post.tags.append(tag)
+                hist = create_snapshot(post, current_user)
 
     db.session.commit()
     return {
@@ -75,6 +77,7 @@ def remove_tags(data: TagBulkIn):
         for post in posts:
             if tag in post.tags:
                 post.tags.remove(tag)
+                hist = create_snapshot(post, current_user)
 
     db.session.commit()
     return {
