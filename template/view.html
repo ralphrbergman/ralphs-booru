@@ -42,11 +42,7 @@
     {% endif %}
 {% endblock %}
 
-<<<<<<< Updated upstream
-{% set title = gettext('View ') ~ post.id %}
-=======
 {% set title = 'View' ~ ': ' ~ post.id %}
->>>>>>> Stashed changes
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
