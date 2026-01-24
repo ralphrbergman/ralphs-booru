@@ -47,6 +47,7 @@
 
 div[name='tags'] {
     background-color: Field;
+    flex-wrap: wrap;
     gap: var(--small-gap);
 }
 
