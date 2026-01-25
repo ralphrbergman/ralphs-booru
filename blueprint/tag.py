@@ -1,8 +1,23 @@
-from flask import Blueprint, request, abort, flash, redirect, render_template, url_for
+from flask import (
+    Blueprint,
+    request,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    url_for
+)
 from flask_babel import gettext
 from flask_login import current_user, login_required
 
-from api import browse_tag, browse_snapshots, delete_tag, get_tag, get_snapshot, revert_snapshot
+from api import (
+    browse_tag,
+    browse_snapshots,
+    delete_tag,
+    get_tag,
+    get_snapshot,
+    revert_snapshot
+)
 from api.decorators import post_protect, perm_required
 from db import db
 from form import SnapshotForm, TagForm
@@ -28,12 +43,24 @@ def edit_page(tag_id: int):
         return abort(404)
 
     if request.method == 'GET':
-        return render_template('edit_tag.html', form = form, tag = tag, tag_types = TAG_TYPES)
+        return render_template(
+            'edit_tag.html',
+            form = form,
+            tag = tag,
+            tag_types = TAG_TYPES
+        )
     else:
-        if form.deleted.data and current_user.is_authenticated and current_user.is_moderator:
+        if (form.deleted.data and
+            current_user.is_authenticated and
+            current_user.is_moderator):
             delete_tag(tag)
 
-            flash(gettext('Permanently deleted tag #%(tag_name)s', tag_name = tag.name))
+            flash(
+                gettext(
+                    'Permanently deleted tag #%(tag_name)s',
+                    tag_name = tag.name
+                )
+            )
             return redirect(url_for('Root.Tag.tag_page'))
 
         tag.name = form.name.data
@@ -42,7 +69,12 @@ def edit_page(tag_id: int):
 
         db.session.commit()
 
-        flash(gettext('Updated tag %(tag_name)s successfully!', tag_name = tag.name))
+        flash(
+            gettext(
+                'Updated tag %(tag_name)s successfully!',
+                tag_name = tag.name
+            )
+        )
         return redirect(url_for('Root.Tag.edit_page', tag_id = tag_id))
 
 @tag_bp.route('/history')
@@ -66,7 +98,12 @@ def revert_page(snapshot_id: int):
     snapshot = revert_snapshot(snapshot, current_user)
     db.session.commit()
 
-    return redirect(url_for('Root.Tag.history_page', post_id = snapshot.post_id))
+    return redirect(
+        url_for(
+            'Root.Tag.history_page',
+            post_id = snapshot.post_id
+        )
+    )
 
 @tag_bp.route('')
 def tag_page():

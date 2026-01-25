@@ -3,6 +3,7 @@ from .post import Post
 from .permission import Permission
 from .role import Role
 from .role_perms import RolePerms
+from .removed import RemovedLog
 from .snapshot import Snapshot
 from .score_assoc import ScoreAssociation
 from .tag import Tag

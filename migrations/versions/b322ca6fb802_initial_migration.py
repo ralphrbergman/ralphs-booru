@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 2065872492fc
+Revision ID: b322ca6fb802
 Revises: 
-Create Date: 2026-01-22 21:29:26.023146
+Create Date: 2026-01-24 23:48:23.803047
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2065872492fc'
+revision = 'b322ca6fb802'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -65,8 +65,30 @@ def upgrade():
     with op.batch_alter_table('user', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_user__key'), ['_key'], unique=True)
 
+    op.create_table('removed_log',
+    sa.Column('entity_id', sa.Integer(), nullable=False),
+    sa.Column('entity_type', sa.String(length=15), nullable=False),
+    sa.Column('by_id', sa.Integer(), nullable=False),
+    sa.Column('date', sa.DateTime(), nullable=False),
+    sa.Column('reason', sa.String(length=150), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['by_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['by_id'], ['user.id'], name='fk_removed_log_user'),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('score_association',
+    sa.Column('target_id', sa.Integer(), nullable=False),
+    sa.Column('target_type', sa.String(length=10), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('value', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('target_id', 'target_type', 'user_id', name='user_target_type_uc')
+    )
     op.create_table('post',
     sa.Column('modified', sa.DateTime(), nullable=True),
+    sa.Column('log_id', sa.Integer(), nullable=True),
     sa.Column('op', sa.String(), nullable=True),
     sa.Column('src', sa.String(), nullable=True),
     sa.Column('caption', sa.String(), nullable=True),
@@ -80,19 +102,11 @@ def upgrade():
     sa.Column('author_id', sa.Integer(), nullable=False),
     sa.Column('created', sa.DateTime(), nullable=False),
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('removed', sa.Boolean(), server_default=sa.text('0'), nullable=False),
     sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['log_id'], ['removed_log.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('md5')
-    )
-    op.create_table('score_association',
-    sa.Column('target_id', sa.Integer(), nullable=False),
-    sa.Column('target_type', sa.String(length=10), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('value', sa.Integer(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('target_id', 'target_type', 'user_id', name='user_target_type_uc')
     )
     op.create_table('comment',
     sa.Column('post_id', sa.Integer(), nullable=False),
@@ -146,8 +160,9 @@ def downgrade():
 
     op.drop_table('snapshot')
     op.drop_table('comment')
-    op.drop_table('score_association')
     op.drop_table('post')
+    op.drop_table('score_association')
+    op.drop_table('removed_log')
     with op.batch_alter_table('user', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_user__key'))
 

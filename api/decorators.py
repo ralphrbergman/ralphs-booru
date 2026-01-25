@@ -33,7 +33,11 @@ def _level_required(LEVEL: int, model_class, abort_fn: Callable, *abort_args):
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
-            if current_user.level >= LEVEL or current_user.is_moderator or _get_entity(model_class):
+            if (current_user.level >= LEVEL
+            or
+            current_user.is_moderator
+            or
+            _get_entity(model_class)):
                 return callback(*args, **kwargs)
             
             return abort_fn(*abort_args)
@@ -48,12 +52,18 @@ def admin_only(callback):
         if current_user.is_authenticated and current_user.is_admin:
             return callback(*args, **kwargs)
         else:
-            return abort(401)
+            return abort(403)
 
     return wrapper
 
 def api_level_required(LEVEL: int, model_class):
-    return _level_required(LEVEL, model_class, api_abort, 401, gettext('Can\'t access this party yet boss.'))
+    return _level_required(
+        LEVEL,
+        model_class,
+        api_abort,
+        401,
+        gettext('Can\'t access this party yet boss.')
+    )
 
 def anonymous_only(callback):
     """
@@ -67,12 +77,12 @@ def anonymous_only(callback):
         if current_user.is_anonymous:
             return callback(*args, **kwargs)
         else:
-            return abort(401)
+            return abort(403)
 
     return wrapper
 
 def level_required(LEVEL: int, model_class):
-    return _level_required(LEVEL, model_class, abort, 401)
+    return _level_required(LEVEL, model_class, abort, 403)
 
 def moderator_only(callback):
     """
@@ -86,7 +96,7 @@ def moderator_only(callback):
         if current_user.is_authenticated and current_user.is_moderator:
             return callback(*args, **kwargs)
         else:
-            return abort(401)
+            return abort(403)
 
     return wrapper
 
@@ -107,13 +117,42 @@ def owner_only(model_class):
                 if entity.author == current_user:
                     return callback(*args, **kwargs)
             except AttributeError as exc:
-                # Entity doesn't have 'author'.
+                # "Entity" doesn't have 'author'.
                 if entity.user_id == current_user.id:
                     return callback(*args, **kwargs)
 
-            return abort(401)
+            return abort(403)
 
         return wrapper
+    return decorator
+
+def owner_or_perm_required(model_class, slug: str):
+    def decorator(callback):
+        @wraps(callback)
+        def wrapper(*args, **kwargs):
+            entity, entity_name = _get_entity(model_class)
+            if current_user.is_authenticated:
+                uid = current_user.id
+
+            kwargs[entity_name] = entity
+
+            if (
+                hasattr(current_user, 'id')
+                and
+                (hasattr(entity, 'user_id') and entity.user_id == uid
+                or
+                hasattr(entity, 'author_id') and entity.author_id == uid
+                or
+                current_user.has_permission(slug)
+                or
+                current_user.is_moderator)
+                ):
+                return callback(*args, **kwargs)
+
+            return abort(403)
+
+        return wrapper
+
     return decorator
 
 def post_protect(callback):
@@ -126,7 +165,8 @@ def post_protect(callback):
     """
     @wraps(callback)
     def wrapper(*args, **kwargs):
-        if ALLOW_POSTS or current_user.is_authenticated and current_user.is_moderator:
+        if (ALLOW_POSTS or
+            current_user.is_authenticated and current_user.is_moderator):
             return callback(*args, **kwargs)
         else:
             abort(403)
@@ -137,7 +177,8 @@ def perm_required(slug: str):
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
-            if current_user.is_authenticated and current_user.has_permission(slug):
+            if (current_user.is_authenticated and
+            current_user.has_permission(slug)):
                 return callback(*args, **kwargs)
             else:
                 return abort(403)

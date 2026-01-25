@@ -2,7 +2,7 @@ from datetime import datetime
 from math import floor, log, pow
 from os import getenv
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 from urllib.parse import urlparse
 
 from flask import url_for
@@ -16,6 +16,7 @@ from .thumbnail import Thumbnail
 from .mixins.author import AuthorMixin
 from .mixins.created import CreatedMixin
 from .mixins.id import IdMixin
+from .mixins.removed import RemovedMixin
 from .mixins.score import ScoreMixin
 from .mixins.serializer import SerializerMixin
 
@@ -29,17 +30,28 @@ class Post(
     AuthorMixin,
     CreatedMixin,
     IdMixin,
+    RemovedMixin,
     ScoreMixin,
     SerializerMixin
 ):
-    modified: Mapped[datetime] = mapped_column(nullable = True, onupdate = func.now())
+    modified: Mapped[datetime] = mapped_column(
+        nullable = True,
+        onupdate = func.now()
+    )
 
     op: Mapped[str] = mapped_column(nullable = True)
     src: Mapped[str] = mapped_column(nullable = True)
 
     caption: Mapped[str] = mapped_column(nullable = True)
-    tags: Mapped[list['Tag']] = relationship('Tag', secondary = 'tag_association', back_populates = 'posts')
-    thumbnail: Mapped[Thumbnail] = relationship('Thumbnail', back_populates = 'post')
+    tags: Mapped[list['Tag']] = relationship(
+        'Tag',
+        secondary = 'tag_association',
+        back_populates = 'posts'
+    )
+    thumbnail: Mapped[Thumbnail] = relationship(
+        'Thumbnail',
+        back_populates = 'post'
+    )
 
     # Filesystem attributes.
     directory: Mapped[str] = mapped_column(nullable = True)
@@ -54,10 +66,15 @@ class Post(
     width: Mapped[int] = mapped_column(nullable = True)
 
     comments: Mapped[list['Comment']] = relationship(back_populates = 'post')
-    snapshots: Mapped[list['Snapshot']] = relationship(back_populates = 'post', cascade = 'all, delete-orphan')
+    snapshots: Mapped[list['Snapshot']] = relationship(
+        back_populates = 'post',
+        cascade = 'all, delete-orphan'
+    )
     scores: Mapped[list['ScoreAssociation']] = relationship(
         'ScoreAssociation',
-        primaryjoin="and_(Post.id == foreign(ScoreAssociation.target_id), ScoreAssociation.target_type == 'post')",
+        primaryjoin="and_"
+        "(Post.id == foreign(ScoreAssociation.target_id)," \
+        "ScoreAssociation.target_type == 'post')",
         viewonly=True,
         overlaps="scores"
     )
@@ -67,7 +84,16 @@ class Post(
         url = urlparse(value)
         return any(( url.netloc, url.scheme ))
 
-    @validates('caption', 'directory', 'ext', 'md5', 'mime', 'op', 'src', 'tags')
+    @validates(
+        'caption',
+        'directory',
+        'ext',
+        'md5',
+        'mime',
+        'op',
+        'src',
+        'tags'
+    )
     def validate_post(self, key: str, value: Any) -> Any:
         if not value:
             return None
@@ -141,15 +167,26 @@ class Post(
         return in_sensitive_dir or nsfw_tag_applied
 
     @property
-    def path(self) -> Path:
-        return CONTENT_PATH / (self.directory or '') / self.name
+    def path(self) -> Optional[Path]:
+        if not self.removed:
+            return CONTENT_PATH / (self.directory or '') / self.name
 
     @property
     def uri(self) -> str:
-        return url_for('Root.Post.view_page', post_id = self.id, v = self.modified, _external = True)
+        return url_for(
+            'Root.Post.view_page',
+            post_id = self.id,
+            v = self.modified,
+            _external = True
+        )
 
     @property
     def view_uri(self) -> str:
         # 2025.10.31 - Added 'v' parameter to trick around caching posts who
         # might have been replaced but the browser hasn't picked it up yet.
-        return url_for('Root.Post.view_file_resource', post_id = self.id, v = self.modified, _external = True)
+        return url_for(
+            'Root.Post.view_file_resource',
+            post_id = self.id,
+            v = self.modified,
+            _external = True
+        )

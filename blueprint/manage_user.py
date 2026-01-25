@@ -20,7 +20,11 @@ def user_list_page():
     page = request.args.get('page', default = 1, type = int)
 
     users = browse_user(page = page)
-    bar = create_pagination_bar(page, users.pages, 'Root.Manage User.user_list_page')
+    bar = create_pagination_bar(
+        page,
+        users.pages,
+        'Root.Manage User.user_list_page'
+    )
 
     return render_template(
         'list_user.html',
@@ -50,7 +54,12 @@ def manage_user_page(user_id: int):
         role = get_role_by_priority(priority)
 
         if not role:
-            flash(gettext('Role with priority %(priority)s does not exist', priority = priority))
+            flash(
+                gettext(
+                    'Role with priority %(priority)s does not exist',
+                    priority = priority
+                )
+            )
 
         username = form.username.data
 
@@ -58,11 +67,21 @@ def manage_user_page(user_id: int):
         if pw is not None:
             user.password = pw
         
-        if current_user.role.priority > user.role.priority and current_user.role.priority > role.priority:
+        if (current_user.role.priority > user.role.priority and
+            current_user.role.priority > role.priority):
             user.role = role
         else:
-            flash(gettext('Cannot manage the user on the same or above rank as you'))
-            return redirect(url_for('Root.Manage User.manage_user_page', user_id = user_id))
+            flash(
+                gettext(
+                    'Cannot manage the user on the same or above rank as you'
+                )
+            )
+            return redirect(
+                url_for(
+                    'Root.Manage User.manage_user_page',
+                    user_id = user_id
+                )
+            )
 
         user.name = username
 

@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ g.lang_code }}">
     <head>
         {% if current_user %}
-            <p hidden><b>{{ gettext('DO NOT SHARE THIS WITH ANYONE') }}:</b> <span id="api-key">{{ current_user.api_key }}</span></p>
+            <p hidden>
+                <b>{{ gettext('DO NOT SHARE THIS WITH ANYONE') }}:</b>
+                <span id="api-key">{{ current_user.api_key }}</span>
+            </p>
         {% endif %}
 
         <meta charset="UTF-8">

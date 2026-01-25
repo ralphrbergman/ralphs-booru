@@ -6,12 +6,19 @@ from flask_wtf import FlaskForm
 
 PAGINATION_DEPTH = 5
 
-def create_pagination_bar(current_page: int, total_pages: int, endpoint: str, USE_DISPLAY_VALUE: Optional[bool] = True, **kwargs) -> list[dict]:
+def create_pagination_bar(
+        current_page: int,
+        total_pages: int,
+        endpoint: str,
+        USE_DISPLAY_VALUE: Optional[bool] = True,
+        **kwargs
+    ) -> list[dict]:
     bar = list()
 
     def add_item(page: int, display_value: Optional[str] = None) -> None:
         bar.append({
-            'page': display_value if display_value and USE_DISPLAY_VALUE else page,
+            'page': display_value if\
+                display_value and USE_DISPLAY_VALUE else page,
             'url': url_for(endpoint, page = page, **kwargs)
         })
 
@@ -22,7 +29,12 @@ def create_pagination_bar(current_page: int, total_pages: int, endpoint: str, US
         add_item(current_page - 1, '<')
 
         # Count pages backwards.
-        for index, page in enumerate(range(max(current_page - PAGINATION_DEPTH, 1), current_page)):
+        for index, page in enumerate(
+            range(
+                max(current_page - PAGINATION_DEPTH, 1),
+                current_page
+            )
+        ):
             add_item(page)
 
     add_item(current_page)

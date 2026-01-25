@@ -19,7 +19,11 @@
 
             <div class="input-group">
                 <label for="email">{{ gettext('E-mail') }}:</label>
-                <input type="email" name="email" value="{% if user.mail is not none %}{{ user.mail }}{% endif %}">
+                <input
+                    type="email"
+                    name="email"
+                    value="{% if user.mail is not none %}{{ user.mail }}{% endif %}"
+                >
             </div>
 
             <div class="input-group">
@@ -27,11 +31,18 @@
                 <input type="password" name="pw">
             </div>
 
-            <a href="{{ url_for('Root.Account.edit_password_page') }}">{{ gettext('Edit Password') }}</a>
+            <a
+                href="{{ url_for('Root.Account.edit_password_page') }}">
+                {{ gettext('Edit Password') }}
+            </a>
 
             <input type="submit" value="Submit">
 
-            <p>{% trans api_key = user.api_key %}Your unique API key: {{ api_key }}<br><b>(Do not share it with anyone)</b>{% endtrans %}</p>
+            <p>
+                {%- trans api_key = user.api_key -%}
+                    Your unique API key: {{ api_key }}<br><b>(Do not share it with anyone)</b>
+                {%- endtrans -%}
+            </p>
         </form>
     </div>
 {% endblock %}

@@ -2,7 +2,16 @@ from os import getenv
 from pathlib import Path
 from typing import Optional
 
-from flask import Blueprint, request, abort, flash, redirect, render_template, send_from_directory, url_for
+from flask import (
+    Blueprint,
+    request,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    send_from_directory,
+    url_for
+)
 from flask_babel import gettext
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.datastructures import FileStorage
@@ -48,13 +57,22 @@ def edit_profile_page():
         else:
             flash(gettext('Invalid password provided'))
 
-        return redirect(url_for('Root.Account.profile_page', user_id = current_user.id))
+        return redirect(
+            url_for(
+                'Root.Account.profile_page',
+                user_id = current_user.id
+                )
+            )
 
     for field in form.errors.values():
         for error in field:
             flash(error)
 
-    return render_template('edit_profile.html', form = form, user = current_user)
+    return render_template(
+        'edit_profile.html',
+        form = form,
+        user = current_user
+    )
 
 @account_bp.route('/edit_password', methods = ['GET', 'POST'])
 @login_required
@@ -71,7 +89,12 @@ def edit_password_page():
             return redirect(url_for('Root.Account.edit_profile_page'))
         else:
             flash(gettext('Invalid password provided'))
-            return redirect(url_for('Root.Account.profile_page', user_id = current_user.id))
+            return redirect(
+                url_for(
+                    'Root.Account.profile_page',
+                    user_id = current_user.id
+                )
+            )
 
     for field in form.errors.values():
         for error in field:
@@ -91,13 +114,23 @@ def login_page():
 
         if not current_user:
             flash(gettext('Incorrect username'))
-            return redirect(url_for('Root.Account.login_page', next = next_page))
+            return redirect(
+                url_for(
+                    'Root.Account.login_page',
+                    next = next_page
+                )
+            )
 
         if current_user.check_password(form.pw.data):
             login_user(current_user, remember = form.remember.data)
 
             flash(gettext('Welcome back, %(name)s', name = current_user.name))
-            return redirect(next_page or url_for('Root.Account.profile_page', user_id = current_user.id))
+            return redirect(
+                next_page or url_for(
+                    'Root.Account.profile_page',
+                    user_id = current_user.id
+                )
+            )
         else:
             flash(gettext('Incorrect password'))
 
@@ -158,7 +191,12 @@ def signup_page():
         login_user(current_user, remember = True)
 
         flash(gettext('Welcome, %(name)s', name = current_user.name))
-        return redirect(url_for('Root.Account.profile_page', user_id = current_user.id))
+        return redirect(
+            url_for(
+                'Root.Account.profile_page',
+                user_id = current_user.id
+            )
+        )
 
     for field in form.errors.values():
         for error in field:

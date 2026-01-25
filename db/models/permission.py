@@ -5,4 +5,8 @@ from db import db
 from .mixins.id import IdMixin
 
 class Permission(db.Model, IdMixin):
-    slug: Mapped[str] = mapped_column(String(25), nullable = False, unique = True)
+    slug: Mapped[str] = mapped_column(
+        String(25),
+        nullable = False,
+        unique = True
+    )

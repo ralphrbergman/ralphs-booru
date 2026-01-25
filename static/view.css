@@ -37,20 +37,6 @@
     gap: var(--small-gap);
 }
 
-.tag {
-    border: 1px solid gray;
-    border-radius: 4px;
-    background-color: Field;
-    color: FieldText;
-    padding: 2px 2px;
-}
-
-div[name='tags'] {
-    background-color: Field;
-    flex-wrap: wrap;
-    gap: var(--small-gap);
-}
-
 .tag-list {
     list-style-type: none;
 }

@@ -1,0 +1,10 @@
+{% block body %}
+    <div id="interactive-tags" class="hidden" name="tags"{% if not (current_user.has_permission('tag:edit') or current_user.owns(post)) %}disabled{% endif %}>
+        {%- if post and post.tags is not none -%}
+            {%- for tag in post.tags -%}
+                <span class="tag" contenteditable="true">{{ tag.name }}</span>
+            {%- endfor -%}
+        {%- endif -%}
+        <input class="tag" type="text">
+    </div>
+{% endblock %}

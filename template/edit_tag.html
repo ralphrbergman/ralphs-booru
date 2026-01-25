@@ -16,14 +16,25 @@
                 <label for="type">{{ gettext('Type') }}:</label>
                 <select name="type">
                     {% for tag_type in tag_types %}
-                        <option value="{{ tag_type }}" {% if tag_type == tag.type %}selected{% endif %}>{{ tag_type | title }}</option>
+                        <option
+                            value="{{ tag_type }}"
+                            {%- if tag_type == tag.type -%}
+                                selected
+                            {%- endif -%}
+                            >
+                            {{ tag_type | title }}</option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="input-group">
                 <label for="desc">{{ gettext('Description') }}:</label>
-                <textarea name="desc">{% if tag.desc is not none %}{{ tag.desc }}{% endif %}</textarea>
+                <textarea
+                    name="desc">
+                    {%- if tag.desc is not none -%}
+                    {{ tag.desc }}
+                    {%- endif -%}
+                </textarea>
             </div>
 
             <div class="input-group">
@@ -31,7 +42,13 @@
                 <input type="checkbox" name="deleted">
             </div>
 
-            <input type="submit" value="{{ gettext('Update') }}" {% if not current_user.has_permission('tag:edit')%}disabled{% endif %}>
+            <input
+                type="submit"
+                value="{{ gettext('Update') }}"
+                {% if not current_user.has_permission('tag:edit')%}
+                    disabled
+                {% endif %}
+            >
         </form>
     </div>
 {% endblock %}

@@ -4,6 +4,7 @@
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'tag_editor.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -14,18 +15,31 @@
             <span id="post-id" class="hidden">{{ post.id }}</span>
 
             <div class="input-group">
-                <label for="new_file" title="{{ gettext('Select this usually when you found a better quality file.') }}">{{ gettext('Replace with') }}:</label>
+                <label
+                    for="new_file"
+                    title="{{ gettext('Select this usually when you found a better quality file.') }}"
+                >
+                    {{ gettext('Replace with') }}:
+                </label>
                 <input type="file" name="new_file">
             </div>
 
             <div class="input-group">
                 <label for="directory">{{ gettext('Directory') }}:</label>
-                <input type="text" name="directory" value="{% if post.directory is not none %}{{ post.directory }}{% endif %}">
+                <input
+                    type="text"
+                    name="directory"
+                    value="{% if post.directory is not none %}{{ post.directory }}{% endif %}"
+                >
             </div>
 
             <div class="input-group">
                 <label for="op">{{ gettext('Poster') }}:</label>
-                <input type="text" name="op" value="{% if post.op is not none %}{{ post.op }}{% endif %}">
+                <input
+                    type="text"
+                    name="op"
+                    value="{% if post.op is not none %}{{ post.op }}{% endif %}"
+                >
 
                 {% if post.is_hyperlink(post.op) %}
                     <a href="{{ post.op }}">{{ gettext('Open') }}</a>
@@ -34,7 +48,11 @@
 
             <div class="input-group">
                 <label for="src">{{ gettext('Source') }}:</label>
-                <input type="text" name="src" value="{% if post.src is not none %}{{ post.src }}{% endif %}">
+                <input
+                    type="text"
+                    name="src"
+                    value="{% if post.src is not none %}{{ post.src }}{% endif %}"
+                >
 
                 {% if post.is_hyperlink(post.src) %}
                     <a href="{{ post.src }}">{{ gettext('Open') }}</a>
@@ -43,7 +61,13 @@
 
             <div class="input-group">
                 <label for="caption">{{ gettext('Caption') }}:</label>
-                <textarea name="caption">{% if post.caption is not none %}{{ post.caption }}{% endif %}</textarea>
+                <textarea
+                    name="caption"
+                >
+                    {%- if post.caption is not none -%}
+                    {{ post.caption }}
+                    {%- endif -%}
+                </textarea>
             </div>
 
             <div class="input-group">
@@ -60,19 +84,17 @@
                     </textarea>
                 </noscript>
 
-                <div id="interactive-tags" class="hidden" name="tags"{% if not (current_user.has_permission('tag:edit') or current_user.owns(post)) %}disabled{% endif %}>
-                    {%- if post.tags is not none -%}
-                        {%- for tag in post.tags -%}
-                            <span class="tag" contenteditable="true">{{ tag.name }}</span>
-                        {%- endfor -%}
-                    {%- endif -%}
-                    <input class="tag" type="text">
-                </div>
+                {% include 'frag/tag.html' %}
             </div>
 
             <div class="input-group">
                 <label for="deleted">{{ gettext('Delete') }}:</label>
-                <input type="checkbox" name="deleted" {% if not (current_user.has_permission('post:delete') or current_user.owns(post))%}disabled{% endif %}>
+                <input type="checkbox" name="deleted" 
+                {%-
+                    if not (current_user.has_permission('post:delete') or current_user.owns(post))
+                -%}
+                    disabled
+                {% endif %}>
             </div>
 
             <input type="submit" value="{{ gettext('Submit') }}">
@@ -83,5 +105,7 @@
 {% endblock %}
 
 {% block script %}
+    <script src="{{ url_for('static', filename = 'js/show_tags.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/tag_handler.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/upload.js') }}"></script>
 {% endblock %}

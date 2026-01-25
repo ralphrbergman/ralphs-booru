@@ -25,7 +25,11 @@
 
             <div class="input-group">
                 <label for="email">{{ gettext('E-mail') }}:</label>
-                <input type="email" name="email" value="{% if user.mail is not none %}{{ user.mail }}{% endif %}">
+                <input
+                    type="email"
+                    name="email"
+                    value="{% if user.mail is not none %}{{ user.mail }}{% endif %}"
+                >
             </div>
 
             <div class="input-group">

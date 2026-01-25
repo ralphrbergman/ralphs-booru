@@ -18,7 +18,13 @@ def index_page():
         if 'nsfw' not in raw_query:
             raw_query = f'{raw_query} -nsfw' if len(raw_query) > 0 else '-nsfw'
 
-        return redirect(url_for('Root.Post.browse_paged', page = 1, terms = raw_query))
+        return redirect(
+            url_for(
+                'Root.Post.browse_paged',
+                page = 1,
+                terms = raw_query
+            )
+        )
 
     count = count_all_posts()
     return render_template('index.html', count = str(count), form = form)

@@ -14,7 +14,12 @@
             <tr>
                 {% if brand['contact']['mail'] %}
                     <td>{{ gettext('E-mail') }}</td>
-                    <td><a href="mailto:{{ brand['contact']['mail'] }}">{{ brand['contact']['mail'] }}</a></td>
+                    <td>
+                        <a
+                            href="mailto:{{ brand['contact']['mail'] }}">
+                            {{ brand['contact']['mail'] }}
+                        </a>
+                    </td>
                 {% endif %}
             </tr>
 

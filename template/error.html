@@ -4,7 +4,11 @@
 
 {% block body %}
     <div class="center-container">
-        <p>{% trans code = code %}Oops! You encountered HTTP {{ code }} error!{% endtrans %}</p>
+        <p>
+            {%- trans code = code -%}
+                Oops! You encountered HTTP {{ code }} error!
+            {%- endtrans -%}
+        </p>
         <p>{{ message }}</p>
     </div>
 {% endblock %}

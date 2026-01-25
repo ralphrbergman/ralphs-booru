@@ -60,7 +60,11 @@ def upload_tag(data: TagIn):
     return tag
 
 @tag_bp.patch('')
-@tag_bp.input(TagIn(partial = True), arg_name = 'data', schema_name = 'TagUpdate')
+@tag_bp.input(
+    TagIn(partial = True),
+    arg_name = 'data',
+    schema_name = 'TagUpdate'
+)
 @tag_bp.output(TagOut)
 @tag_bp.auth_required(auth)
 @post_protect

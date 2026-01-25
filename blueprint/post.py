@@ -1,15 +1,43 @@
 from os import getenv
 from shutil import copy
 
-from flask import Blueprint, request, abort, flash, redirect, render_template, send_file, url_for
+from flask import (
+    Blueprint,
+    request,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    send_file,
+    url_for
+)
 from flask_babel import gettext
 from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 
-from api import DEFAULT_LIMIT, DEFAULT_TERMS, DEFAULT_SORT, DEFAULT_SORT_DIR, add_tags, browse_post, create_post, create_snapshot, delete_post, get_post, move_post, replace_post, save_file
-from api.decorators import post_protect, perm_required
-from db import db
-from form import PostForm, UploadForm
+from api import (
+    DEFAULT_LIMIT,
+    DEFAULT_TERMS,
+    DEFAULT_SORT,
+    DEFAULT_SORT_DIR,
+    add_tags,
+    browse_post,
+    create_post,
+    create_snapshot,
+    delete_post,
+    get_post,
+    move_post,
+    replace_post,
+    save_file
+)
+from api.decorators import (
+    moderator_only,
+    owner_or_perm_required,
+    post_protect,
+    perm_required
+)
+from db import Post, db
+from form import PostForm, PostRemovalForm, UploadForm
 from .utils import create_pagination_bar, flash_errors
 
 DEFAULT_BLUR = getenv('DEFAULT_BLUR') == 'on'
@@ -73,10 +101,10 @@ def browse_paged(page: int):
 @post_bp.route('/edit/<int:post_id>', methods = ['GET', 'POST'])
 @login_required
 @post_protect
-@perm_required('post:edit')
-def edit_page(post_id: int):
+@owner_or_perm_required(Post, 'post:edit')
+def edit_page(post_id: int, post: Post):
     form = PostForm()
-    post = get_post(post_id)
+    post = post or get_post(post_id)
 
     if not post:
         return abort(404)
@@ -85,11 +113,12 @@ def edit_page(post_id: int):
         if current_user.is_authenticated:
             if (current_user == post.author or current_user.is_moderator):
                 if form.deleted.data:
-                    delete_post(post)
-
-                    db.session.commit()
-                    flash(gettext('Permanently deleted post #%(post_id)s', post_id = post.id))
-                    return redirect(url_for('Root.Post.browse_page'))
+                    return redirect(
+                        url_for(
+                            'Root.Post.remove_page',
+                            post_id = post_id
+                        )
+                    )
 
                 file = form.new_file.data
 
@@ -97,11 +126,22 @@ def edit_page(post_id: int):
                     post = replace_post(post, file)
 
                     if post:
-                        flash(gettext('Successfully exchanged post #%(post_id)s for a new file!', post_id = post.id))
+                        flash(
+                            gettext(
+                                'Successfully exchanged post #%(post_id)s'
+                                ' for a new file!',
+                                post_id = post.id
+                            )
+                        )
                     else:
                         flash(gettext('Failed to exchange post.'))
 
-                        return redirect(url_for('Root.Post.edit_page', post_id = post_id))
+                        return redirect(
+                            url_for(
+                                'Root.Post.edit_page',
+                                post_id = post_id
+                            )
+                        )
 
             db.session.commit()
             original_tags = post.tags
@@ -136,6 +176,11 @@ def view_page(post_id: int):
     if not post:
         return abort(404)
 
+    if post.removed:
+        flash(
+            f'This post has been marked deleted.<br>Reason: {post.log.reason}'
+        )
+
     return render_template('view.html', post = post)
 
 @post_bp.route('/view_f/<int:post_id>')
@@ -146,6 +191,32 @@ def view_file_resource(post_id: int):
         return send_file(post.path)
     except FileNotFoundError as exc:
         return b''
+
+@post_bp.route('/remove/<int:post_id>', methods = ['GET', 'POST'])
+@moderator_only
+def remove_page(post_id: int):
+    post = get_post(post_id)
+
+    if not post:
+        return abort(404)
+
+    form = PostRemovalForm()
+
+    if form.validate_on_submit():
+        delete_post(post, current_user, form.reason.data)
+        db.session.commit()
+
+        flash(
+            gettext(
+                'Marked post #%(post_id)s as deleted.',
+                post_id = post.id
+            )
+        )
+        return redirect(url_for('Root.Post.browse_page'))
+    else:
+        print(form.errors)
+
+    return render_template('delete_form.html', form = form)
 
 @post_bp.route('/upload', methods = ['GET', 'POST'])
 @login_required
@@ -183,9 +254,19 @@ def upload_page():
                 post.path.unlink(missing_ok = True)
 
             if posted:
-                flash(gettext('Successfully uploaded post #%(post_id)s', post_id = post.id))
+                flash(
+                    gettext(
+                        'Successfully uploaded post #%(post_id)s',
+                        post_id = post.id
+                    )
+                )
             else:
-                flash(gettext('Uploading file %(filename)s failed', filename = file.filename))
+                flash(
+                    gettext(
+                        'Uploading file %(filename)s failed',
+                        filename = file.filename
+                    )
+                )
 
         return redirect(url_for('Root.Post.browse_page'))
 

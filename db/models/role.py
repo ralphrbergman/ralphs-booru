@@ -5,7 +5,11 @@ from db import db
 from .mixins.id import IdMixin
 
 class Role(db.Model, IdMixin):
-    name: Mapped[str] = mapped_column(String(25), nullable = False, unique = True)
+    name: Mapped[str] = mapped_column(
+        String(25),
+        nullable = False,
+        unique = True
+    )
     priority: Mapped[int] = mapped_column(nullable = False, unique = True)
 
     # Relationships.

@@ -13,7 +13,11 @@ def comment_page():
     page = request.args.get('page', default = 1, type = int)
 
     comments = browse_comment(page = page)
-    bar = create_pagination_bar(page, comments.pages, 'Root.Comment.comment_page')
+    bar = create_pagination_bar(
+        page,
+        comments.pages,
+        'Root.Comment.comment_page'
+    )
 
     return render_template(
         'comment.html',

@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <form class="form" method="post">
+        {{ form.hidden_tag() }}
+        <label for="reason">Reason:</label>
+        <textarea
+            name="reason"
+            placeholder="{{ gettext('Your reason for removal goes here...') }}">
+        </textarea>
+
+        <input type="submit" value="{{ gettext('Remove') }}">
+    </form>
+{% endblock %}

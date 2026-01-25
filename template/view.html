@@ -51,15 +51,35 @@
 {% block body %}
     <div class="view-container">
         <div class="form form-lg gapped-form">
-            {% if (current_user.is_authenticated and (current_user.has_permission('post:edit') or current_user.owns(post))) %}
-                <a href="{{ url_for('Root.Post.edit_page', post_id = post.id) }}">{{ gettext('Edit') }}</a>
+            {%-
+                if (current_user.is_authenticated and
+                (current_user.has_permission('post:edit') or
+                current_user.owns(post)))
+            -%}
+                <a
+                    href="{{ url_for('Root.Post.edit_page', post_id = post.id) }}"
+                >
+                    {{ gettext('Edit') }}
+                </a>
             {% endif %}
 
             <div>
                 <p>Score: {{ post.score }}</p>
-                <a href="" onclick="vote(event, {{ post.id }}, 1, 'post')">{{ gettext('Upvote') }}</a>
+                <a
+                    href=""
+                    onclick="vote(event, {{ post.id }}, 1, 'post')"
+                >
+                    {{ gettext('Upvote') }}
+                </a>
+
                 <br>
-                <a href="" onclick="vote(event, {{ post.id }}, -1, 'post')">{{ gettext('Downvote') }}</a>
+
+                <a
+                    href=""
+                    onclick="vote(event, {{ post.id }}, -1, 'post')"
+                >
+                    {{ gettext('Downvote') }}
+                </a>
             </div>
 
             <div>
@@ -67,20 +87,38 @@
                 <ul class="tag-list">
                     {% for tag in post.tags | sort(attribute='name') %}
                         <li>
-                            <a href="{{ url_for('Root.Post.browse_paged', page = 1, terms = tag.name) }}">{{ tag.name }}</a>
+                            <span>
+                                <a
+                                    href="{{ url_for('Root.Post.browse_paged', page = 1, terms = tag.name) }}"
+                                >
+                                    {{ tag.name }}
+                                </a>
+                                <span class="no-select">{{ tag.count }}</span>
+                            </span>
                         </li>
                     {% endfor %}
                 </ul>
             </div>
 
-            <a href="{{ url_for('Root.Tag.history_page', post_id = post.id) }}">{{ gettext('Tag History') }}</a>
+            <a
+                href="{{ url_for('Root.Tag.history_page', post_id = post.id) }}"
+            >
+                {{ gettext('Tag History') }}
+            </a>
 
             <div class="post-details">
                 <p class="notable">{{ gettext('Statistics') }}:</p>
 
                 <p>ID: {{ post.id }}</p>
                 <p>{{ gettext('Posted') }}: {{ post.created }}</p>
-                <p>{{ gettext('Uploader') }}: <a href="{{ post.author.profile_url }}">{{ post.author.username }}</a></p>
+                <p>
+                    {{ gettext('Uploader') }}:
+                    <a
+                        href="{{ post.author.profile_url }}"
+                    >
+                        {{ post.author.username }}
+                    </a>
+                </p>
 
                 {% if post.width %}
                     <p>{{ gettext('Size') }}: {{ post.dimensions }}</p>
@@ -123,7 +161,10 @@
     {% block input_comment_section %}
         <form id="comment-form">
             <input type="hidden" name="post_id" value="{{ post.id }}">
-            <textarea name="content" placeholder="{{ gettext('Your comment goes here.') }}"></textarea>
+            <textarea
+                name="content"
+                placeholder="{{ gettext('Your comment goes here.') }}"
+            ></textarea>
             <button type="submit">{{ gettext('Comment') }}</button>
         </form>
     {% endblock %}

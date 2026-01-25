@@ -9,7 +9,10 @@ class SerializerMixin:
     hidden_attrs = ('path',)
 
     def to_json(self) -> str:
-        data = { c.name: getattr(self, c.name) for c in self.__table__.columns }
+        data = {
+            c.name: getattr(self, c.name)
+            for c in self.__table__.columns
+        }
 
         # Include @properties.
         properties = [

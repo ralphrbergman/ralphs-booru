@@ -32,6 +32,7 @@
 .post-container {
     align-items: center;
     border: 1px solid black;
+    box-sizing: border-box;
     display: inline-flex;
     height: 15rem;
     justify-content: center;

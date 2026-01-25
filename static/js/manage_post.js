@@ -25,6 +25,23 @@ function postClick(post) {
     }
 }
 
+function getTags() {
+    let tags = [];
+    const SpanTags = document.querySelectorAll('span.tag');
+    const TagInput = document.querySelector('input.tag');
+
+    SpanTags.forEach(function(span) {
+        const Content = span.textContent.trim();
+        if (Content.length === 0) return;
+
+        tags.push(Content);
+    });
+
+    if (TagInput.value.trim().length > 0) tags.push(TagInput.value.trim());
+
+    return tags;
+}
+
 ToggleBtn.addEventListener('click', function(event) {
     if (!controller) controller = new AbortController();
 
@@ -72,16 +89,19 @@ ToggleBtn.addEventListener('click', function(event) {
     }
 });
 
+// Handle form submission.
 PostForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const Form = new FormData(PostForm);
+
+    Form.set('tags', getTags());
     if (Form.get('tags').length === 0) return;
 
     // Create the base request object.
     let obj = Object.fromEntries(Form);
     // Split tags into array.
-    obj.tags = obj.tags.split(' ').map(tag => tag.trim());
+    obj.tags = obj.tags.split(',');
 
     // Obtain post IDs.
     obj.post_ids = [];
@@ -91,9 +111,9 @@ PostForm.addEventListener('submit', function(event) {
         obj.post_ids.push(parseInt(post.dataset.postId, 10));
     }
 
-    let endpoint = event.submitter.value === 'Add' ? '/add' : '/remove';
+    const Endpoint = event.submitter.dataset.value === 'add' ? '/add' : '/remove';
 
-    fetch(`/api/tags${endpoint}`, {
+    fetch(`/api/tags${Endpoint}`, {
         headers: {
             'Authorization': `Bearer ${ApiKey}`,
             'Content-Type': 'application/json'

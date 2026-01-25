@@ -8,7 +8,11 @@ class BaseSchema(Schema):
 
 class AuthorSchema(BaseSchema):
     """ Represents a base schema but with added author schema. """
-    author = Nested('UserOut', exclude = ('posts', 'comments'), required = True)
+    author = Nested(
+        'UserOut',
+        exclude = ('posts', 'comments'),
+        required = True
+    )
 
 class PostMixin():
     """ Represents a mixin that adds a post feature. """

@@ -9,18 +9,18 @@ import ffmpeg
 from flask_sqlalchemy.pagination import SelectPagination
 from magic import from_file
 from sqlalchemy import Select, func, or_, select
-from sqlalchemy.orm.exc import UnmappedInstanceError
 from werkzeug.datastructures import FileStorage
 
 from db import Post, Tag, User, db
 from .base import browse_element
+from .removed import create_log
 from .tag import create_tag, get_tag
 from .thumbnail import create_thumbnail
 
 NONALPHA = r'[^a-zA-Z0-9.]'
 ATTR_PATTERN = r'\b\w+:[<>]?\S*'  # attr:value, attr: , attr:<value, attr:>value
 CAPTION_PATTERN = r'"([^"]*)"'  # "hello world"
-TAG_PATTERN = r'[a-zA-Z0-9-_]+'  # tag1 tag2 tag3
+TAG_PATTERN = r'[a-zA-Z0-9-_()]+'  # tag1 tag2 tag3
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 NSFW_TAG = getenv('NSFW_TAG')
@@ -118,6 +118,15 @@ def browse_post(
 
         # Apply tag selection.
 
+        # Handle showing/hiding removed posts.
+        removed_value = Post.removed == False
+
+        if 'removed' in tags:
+            removed_value = Post.removed == True
+            tags.remove('removed')
+
+        stmt = stmt.where(removed_value)
+
         # Handle where a user wants to search for posts with no tags.
         if 'no_tags' in tags:
             stmt = stmt.where(~Post.tags.any())
@@ -209,7 +218,7 @@ def create_post(
 
     return post
 
-def delete_post(post: Post | int) -> None:
+def delete_post(post: Post | int, moderator: User, reason: str) -> None:
     """
     Deletes given post.
 
@@ -221,13 +230,7 @@ def delete_post(post: Post | int) -> None:
 
     post.path.unlink(missing_ok = True)
 
-    try:
-        db.session.delete(post.thumbnail)
-    except UnmappedInstanceError as exc:
-        # Some posts may not have a thumbnail and it's alright.
-        pass
-
-    db.session.delete(post)
+    log = create_log(post, moderator, reason)
 
 def get_dimensions(path: Path) -> tuple[int, int]:
     try:

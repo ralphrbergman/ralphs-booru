@@ -5,7 +5,14 @@ from flask import url_for
 from flask_login import UserMixin
 from secrets import token_urlsafe
 from sqlalchemy import ForeignKey, Integer, String, func, select
-from sqlalchemy.orm import declared_attr, Mapped, column_property, mapped_column, relationship, validates
+from sqlalchemy.orm import (
+    declared_attr,
+    Mapped,
+    column_property,
+    mapped_column,
+    relationship,
+    validates
+)
 from sqlalchemy.sql import ColumnElement
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -56,18 +63,31 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
 
     avatar_name: Mapped[str] = mapped_column(default = 'avatar.png')
 
-    name: Mapped[str] = mapped_column(String(length = 20), nullable = False, unique = True)
+    name: Mapped[str] = mapped_column(
+        String(length = 20),
+        nullable = False,
+        unique = True
+    )
     mail: Mapped[str] = mapped_column(nullable = True, unique = True)
     pw_hash: Mapped[str] = mapped_column(String(length = 255), nullable = False)
-    _key: Mapped[str] = mapped_column(String(length = 64), index = True, nullable = False, unique = True)
+    _key: Mapped[str] = mapped_column(
+        String(length = 64),
+        index = True,
+        nullable = False,
+        unique = True
+    )
 
     # Relationships.
     comments: Mapped[list['Comment']] = relationship(back_populates = 'author')
 
     role: Mapped['Role'] = relationship(lazy = 'joined')
+    removed: Mapped[list['RemovedLog']] = relationship(back_populates = 'by')
 
     snapshots: Mapped[list['Snapshot']] = relationship(back_populates = 'user')
-    scores: Mapped[list['ScoreAssociation']] = relationship('ScoreAssociation', back_populates = 'user')
+    scores: Mapped[list['ScoreAssociation']] = relationship(
+        'ScoreAssociation',
+        back_populates = 'user'
+    )
     posts: Mapped[list['Post']] = relationship('Post', back_populates = 'author')
 
     @validates('mail')
@@ -112,7 +132,10 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
 
     @property
     def avatar(self) -> str:
-        return url_for('Root.Account.avatar_page', filename = self.avatar_name)
+        return url_for(
+            'Root.Account.avatar_page',
+            filename = self.avatar_name
+        )
 
     @property
     def api_key(self) -> str:
@@ -138,7 +161,9 @@ class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
     @password.setter
     def password(self, password: str):
         if not password or len(password) < 8:
-            raise ValueError('Password must be at least 8 characters in length.')
+            raise ValueError(
+                'Password must be at least 8 characters in length.'
+            )
 
         hashed_password = bcrypt.generate_password_hash(password).decode()
         self.pw_hash = hashed_password

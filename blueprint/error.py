@@ -6,18 +6,24 @@ err_bp = Blueprint(
     import_name = __name__
 )
 
-@err_bp.app_errorhandler(401)
-def _401_handler(exc):
+def handle_error(code: int, message: str) -> None:
     return render_template(
         'error.html',
-        code = 401,
-        message = gettext('Unauthorized users prohibited')
-    )
+        code = code,
+        message = message
+    ), code
+
+@err_bp.app_errorhandler(401)
+def _401_handler(exc):
+    return handle_error(401, gettext('You need to login'))
+
+@err_bp.app_errorhandler(403)
+def _403_handler(exc):
+    return handle_error(403, gettext('Unauthorized users prohibited'))
 
 @err_bp.app_errorhandler(404)
 def _404_handler(exc):
-    return render_template(
-        'error.html',
-        code = 404,
-        message = gettext('The resource you we\'re looking for does not exist.')
-    ), 404
+    return handle_error(
+        404,
+        gettext('The resource you we\'re looking for does not exist.')
+    )
