@@ -260,20 +260,21 @@ def get_hash(path: Path) -> str:
 def get_mime(path: Path) -> str:
     return from_file(str(path), mime = True)
 
-def get_post(post_id: int) -> Optional[Post]:
+def get_post(post_id: int | str) -> Optional[Post]:
     """
-    Queries for a post by its ID.
+    Queries for a post by its ID or MD5.
 
     Args:
-        post_id: The ID of a post you wish to see
+        post_id: The ID/MD5 of a post you wish to see
 
     Returns:
         Post
     """
     return db.session.scalar(
-        select(Post).where(
-            Post.id.is_(post_id)
-        )
+        select(Post).where(or_(
+            Post.id.is_(post_id),
+            Post.md5.is_(post_id)
+        ))
     )
 
 def get_size(path: Path) -> int:

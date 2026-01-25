@@ -4,6 +4,7 @@ from db.models.user import find_user_by_key
 from login import login_manager
 from .comment import comment_bp
 from .post import post_bp
+from .post_bulk import post_bulk_bp
 from .score import score_bp
 from .tag import tag_bp
 from .tags import tags_bp
@@ -36,6 +37,7 @@ def load_user_from_request(request: Request):
 
 api_bp.register_blueprint(comment_bp)
 api_bp.register_blueprint(post_bp)
+api_bp.register_blueprint(post_bulk_bp)
 api_bp.register_blueprint(score_bp)
 api_bp.register_blueprint(tag_bp)
 api_bp.register_blueprint(tags_bp)

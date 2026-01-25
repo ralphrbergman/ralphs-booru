@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-01-24 00:20+0200\n"
+"POT-Creation-Date: 2026-01-25 20:09+0200\n"
 "PO-Revision-Date: 2026-01-23 18:45+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: lv\n"
@@ -19,165 +19,170 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: api/decorators.py:56
+#: api/decorators.py:65
 msgid "Can't access this party yet boss."
 msgstr "Jums nav atļauts piekļūt šai ballītei boss."
 
-#: blueprint/account.py:47
+#: blueprint/account.py:56
 msgid "Updated profile successfully"
 msgstr "Veiksmīgi atjauninājāt profilu"
 
-#: blueprint/account.py:49 blueprint/account.py:73
+#: blueprint/account.py:58 blueprint/account.py:91
 msgid "Invalid password provided"
 msgstr "Ievadīta nepareiza parole"
 
-#: blueprint/account.py:70
+#: blueprint/account.py:88
 msgid "Successfully changed password"
 msgstr "Veiksmīgi nomainijāt paroli"
 
-#: blueprint/account.py:93
+#: blueprint/account.py:116
 msgid "Incorrect username"
 msgstr "Nepareizs lietotājvārds"
 
-#: blueprint/account.py:99
+#: blueprint/account.py:127
 #, python-format
 msgid "Welcome back, %(name)s"
 msgstr "Kā iet, %(name)s?"
 
-#: blueprint/account.py:102
+#: blueprint/account.py:135
 msgid "Incorrect password"
 msgstr "Nepareiza parole ievadīta"
 
-#: blueprint/account.py:115
+#: blueprint/account.py:148
 msgid "Logged out"
 msgstr "Izgājāt no profila"
 
-#: blueprint/account.py:154
+#: blueprint/account.py:187
 msgid "Failed to create your profile."
 msgstr "Neizdevās izveidot tavu profilu."
 
-#: blueprint/account.py:160
+#: blueprint/account.py:193
 #, python-format
 msgid "Welcome, %(name)s"
 msgstr "Sveiks, %(name)s"
 
-#: blueprint/error.py:14
+#: blueprint/error.py:18
+msgid "You need to login"
+msgstr "Jums vajag pieslēgties"
+
+#: blueprint/error.py:22
 msgid "Unauthorized users prohibited"
 msgstr "Pieeja šai lapai ir liegta"
 
-#: blueprint/error.py:22
+#: blueprint/error.py:28
 msgid "The resource you we're looking for does not exist."
 msgstr "Lapa ko meklējāt neeksistē."
 
-#: blueprint/manage_user.py:53
+#: blueprint/manage_user.py:59
 #, python-format
 msgid "Role with priority %(priority)s does not exist"
 msgstr "Loma ar prioritāti %(priority)s neeksistē"
 
-#: blueprint/manage_user.py:64
+#: blueprint/manage_user.py:76
 msgid "Cannot manage the user on the same or above rank as you"
 msgstr "Nevar pārvaldīt lietotāju kam ir tāda pati loma, vai augstāka loma kā tev"
 
-#: blueprint/manage_user.py:70
+#: blueprint/manage_user.py:89
 #, python-format
 msgid "Updated user %(name)s successfully!"
 msgstr "Atjaunināja lietotāju %(name)s veiksmīgi!"
 
-#: blueprint/post.py:91
-#, python-format
-msgid "Permanently deleted post #%(post_id)s"
-msgstr "Neatgriezeniski izdzēsāt ierakstu #%(post_id)s"
-
-#: blueprint/post.py:100
+#: blueprint/post.py:131
 #, python-format
 msgid "Successfully exchanged post #%(post_id)s for a new file!"
 msgstr "Veiksmīgi izmainījāt ierakstu #%(post_id)s ar jaunu failu!"
 
-#: blueprint/post.py:102
+#: blueprint/post.py:137
 msgid "Failed to exchange post."
 msgstr "Neizdevās izmainīt ierakstu."
 
-#: blueprint/post.py:186
+#: blueprint/post.py:211
+#, fuzzy, python-format
+msgid "Marked post #%(post_id)s as deleted."
+msgstr "Neatgriezeniski izdzēsāt ierakstu #%(post_id)s"
+
+#: blueprint/post.py:259
 #, python-format
 msgid "Successfully uploaded post #%(post_id)s"
 msgstr "Veiksmīgi augšupielādējāt ierakstu #%(post_id)s"
 
-#: blueprint/post.py:188
+#: blueprint/post.py:266
 #, python-format
 msgid "Uploading file %(filename)s failed"
 msgstr "Augšupielādējot failu %(filename)s neizdevās"
 
-#: blueprint/tag.py:36
+#: blueprint/tag.py:60
 #, python-format
 msgid "Permanently deleted tag #%(tag_name)s"
 msgstr "Neatgriezeniski izdzēsāt birku #%(tag_name)s"
 
-#: blueprint/tag.py:45
+#: blueprint/tag.py:74
 #, python-format
 msgid "Updated tag %(tag_name)s successfully!"
 msgstr "Veiksmīgi atjauninājāt birku %(tag_name)s!"
 
-#: form/fields.py:14
+#: form/fields.py:16
 msgid "Password is required"
 msgstr "Ir nepieciešama parole"
 
-#: form/fields.py:24
+#: form/fields.py:40
 msgid "Passwords must be from 8 to 128 characters in length"
 msgstr "Parolēm jābūt no 8 līdz 128 rakstzīmēm garām"
 
-#: form/forms.py:30
+#: form/forms.py:67
 msgid "You need to confirm your password"
 msgstr "Lūdzu apstiprini savu paroli"
 
-#: form/forms.py:31
+#: form/forms.py:71
 msgid "Mismatch between password and confirmation password"
 msgstr "Neatbilstība starp ievadītajām parolēm"
 
-#: form/forms.py:38
+#: form/forms.py:79
 msgid "Username is already taken."
 msgstr "Lietotājvārds ir aizņemts."
 
-#: form/forms.py:41
+#: form/forms.py:86
 msgid "Please specify which post to search."
 msgstr "Lūdzu izvēlaties kuru ierakstu vēlaties meklēt."
 
-#: form/mixins.py:10
+#: form/mixins.py:29
+#, fuzzy
 msgid ""
-"You can only have a picture as your avatar. (e.g gif, jpg, jpeg, png or "
+"You can only have a picture as your avatar.(e.g gif, jpg, jpeg, png or "
 "webp)"
 msgstr ""
 "Jums ir jāizvēlās šādi faila paplašinājumi lai uzliktu kā jūsu profila "
 "bildi, .gif, .jpg, .jpeg, .png vai .webp"
 
-#: form/mixins.py:28 template/snapshot.html:10
+#: form/mixins.py:50 template/snapshot.html:10
 #, fuzzy
 msgid "User"
 msgstr "Lietotāji"
 
-#: form/mixins.py:29
+#: form/mixins.py:51
 #, fuzzy
 msgid "Janitor"
 msgstr "Lapas administrators"
 
-#: form/mixins.py:30
+#: form/mixins.py:52
 msgid "Moderator"
 msgstr ""
 
-#: form/mixins.py:31
+#: form/mixins.py:53
 msgid "Administrator"
 msgstr "Lapas administrators"
 
-#: form/mixins.py:47
+#: form/mixins.py:69
 msgid "A username is required"
 msgstr "Lietotājvārds ir nepieciešams"
 
-#: form/mixins.py:48
+#: form/mixins.py:73
 msgid "Usernames can be up to 20 characters in length"
 msgstr "Lietotājvārdi var būt līdz 20 rakstzīmēm garumā"
 
-#: form/validators.py:17
-#, python-format
-msgid "File type is not acceptable. Acceptable types are: %(extensions)s"
+#: form/validators.py:19
+#, fuzzy, python-format
+msgid "File type is not acceptable.Acceptable types are: %(extensions)s"
 msgstr ""
 "Faila paplašinājums nav pieņemams, Pieņemami paplašinājumi ir: "
 "%(extensions)s"
@@ -216,53 +221,61 @@ msgstr "Vērtība"
 msgid "E-mail"
 msgstr "E-pasts"
 
+#: template/delete_form.html:9
+#, fuzzy
+msgid "Your reason for removal goes here..."
+msgstr "Tavs komentārs šeit."
+
+#: template/delete_form.html:12 template/frag/manage_post_form.html:9
+msgid "Remove"
+msgstr "Atņemt"
+
 #: template/edit.html:3
 msgid "Edit Post"
 msgstr "Rediģēt Ierakstu"
 
-#: template/edit.html:15
+#: template/edit.html:20
 msgid "Select this usually when you found a better quality file."
 msgstr "Izvēlaties šo iespēju kad atrodat labākas kvalitātes failu."
 
-#: template/edit.html:15
+#: template/edit.html:22
 msgid "Replace with"
 msgstr "Aizstāt ar"
 
-#: template/edit.html:20 template/upload.html:20
+#: template/edit.html:28 template/upload.html:26
 msgid "Directory"
 msgstr "Mape"
 
-#: template/edit.html:25 template/upload.html:25 template/view.html:104
+#: template/edit.html:37 template/upload.html:31 template/view.html:138
 msgid "Poster"
 msgstr "Autors"
 
-#: template/edit.html:29 template/edit.html:38
+#: template/edit.html:45 template/edit.html:58
 msgid "Open"
 msgstr "Atvērt"
 
-#: template/edit.html:34 template/upload.html:30 template/view.html:94
+#: template/edit.html:50 template/upload.html:36 template/view.html:128
 msgid "Source"
 msgstr "Resurss"
 
-#: template/edit.html:43 template/upload.html:35 template/view.html:118
+#: template/edit.html:63 template/upload.html:41 template/view.html:152
 msgid "Caption"
 msgstr "Apraksts"
 
-#: template/edit.html:48 template/frag/manage_post_form.html:6
-#: template/frag/nav.html:11 template/snapshot.html:11 template/upload.html:40
-#: template/view.html:70
+#: template/edit.html:74 template/frag/nav.html:11 template/snapshot.html:11
+#: template/upload.html:46 template/view.html:86
 msgid "Tags"
 msgstr "Birkas"
 
-#: template/edit.html:53 template/edit_tag.html:30
+#: template/edit.html:91 template/edit_tag.html:41
 msgid "Delete"
 msgstr "Izdzēst"
 
-#: template/edit.html:57
+#: template/edit.html:100
 msgid "Submit"
 msgstr "Iesniegt"
 
-#: template/edit_password.html:3 template/edit_profile.html:30
+#: template/edit_password.html:3 template/edit_profile.html:36
 msgid "Edit Password"
 msgstr "Rediģēt Paroli"
 
@@ -270,7 +283,7 @@ msgstr "Rediģēt Paroli"
 msgid "Old Password"
 msgstr "Vecā Parole"
 
-#: template/edit_password.html:16 template/manage_user.html:32
+#: template/edit_password.html:16 template/manage_user.html:36
 msgid "New Password"
 msgstr "Jaunā Parole"
 
@@ -278,7 +291,7 @@ msgstr "Jaunā Parole"
 msgid "Confirm Password"
 msgstr "Apstiprināt Paroli"
 
-#: template/edit_password.html:25 template/manage_user.html:36
+#: template/edit_password.html:25 template/manage_user.html:40
 msgid "Change"
 msgstr "Nomainīt"
 
@@ -295,11 +308,11 @@ msgstr "Bilde"
 msgid "Username"
 msgstr "Lietotājvārds"
 
-#: template/edit_profile.html:26 template/login.html:13 template/signup.html:19
+#: template/edit_profile.html:30 template/login.html:13 template/signup.html:19
 msgid "Password"
 msgstr "Parole"
 
-#: template/edit_profile.html:34
+#: template/edit_profile.html:42
 #, python-format
 msgid "Your unique API key: %(api_key)s<br><b>(Do not share it with anyone)</b>"
 msgstr ""
@@ -312,19 +325,19 @@ msgid "Edit Tag"
 msgstr "Rediģēt Ierakstu"
 
 #: template/edit_tag.html:11 template/help.html:51 template/tag.html:14
-#: template/view.html:113
+#: template/view.html:147
 msgid "Name"
 msgstr "Vārds"
 
-#: template/edit_tag.html:16 template/tag.html:17 template/view.html:114
+#: template/edit_tag.html:16 template/tag.html:17 template/view.html:148
 msgid "Type"
 msgstr "Tips"
 
-#: template/edit_tag.html:25 template/tag.html:18
+#: template/edit_tag.html:31 template/tag.html:18
 msgid "Description"
 msgstr "Apraksts"
 
-#: template/edit_tag.html:34
+#: template/edit_tag.html:47
 #, fuzzy
 msgid "Update"
 msgstr "Augšupbalss"
@@ -333,7 +346,7 @@ msgstr "Augšupbalss"
 msgid "Error"
 msgstr "Kļūme"
 
-#: template/error.html:7
+#: template/error.html:8
 #, python-format
 msgid "Oops! You encountered HTTP %(code)s error!"
 msgstr "Ak vai! Tu satikies ar HTTP %(code)s kļūmi!"
@@ -528,11 +541,15 @@ msgstr "Meklēt ierakstus kuriem ir viens punkts"
 msgid "Match for a post with the file name of <i>%(example_name)s</i>"
 msgstr "Atrast ierakstu kura faila vārds ir <i>%(example_name)s</i>"
 
-#: template/help.html:142
+#: template/help.html:143
+msgid "Show removed posts"
+msgstr "Parādīt izdzēstos ierakstus"
+
+#: template/help.html:147
 msgid "Help: Uploading"
 msgstr "Palīdzēt: Augšupielāde"
 
-#: template/help.html:143
+#: template/help.html:148
 msgid ""
 "Great, you want to share with your own content, please be aware that we "
 "only host high quality memes/other content, if you upload a low quality "
@@ -549,11 +566,11 @@ msgstr ""
 "izcilu darbu daloties ar saturu, tātad tev viņi ir jāizmanto. Ja jebkad "
 "šaubāties jūs varat griezties mūsu Discord kopienā."
 
-#: template/help.html:145
+#: template/help.html:150
 msgid "Help: NSFW"
 msgstr "Palīdzēt: NSFW"
 
-#: template/help.html:146
+#: template/help.html:151
 #, python-format
 msgid ""
 "By default NSFW-related posts are hidden, if you wish to view NSFW and "
@@ -569,20 +586,20 @@ msgid "Index"
 msgstr "Mājas"
 
 #: template/frag/post_search_form.html:41 template/index.html:15
-#: template/snapshot.html:36
+#: template/snapshot.html:46
 msgid "Search"
 msgstr "Meklēt"
 
 #: template/frag/post_search_form.html:11 template/index.html:29
-#: template/profile.html:27
+#: template/profile.html:37
 msgid "Posts"
 msgstr "Ieraksti"
 
-#: template/layout.html:5
+#: template/layout.html:6
 msgid "DO NOT SHARE THIS WITH ANYONE"
 msgstr "NEDALIES AR NEVIENU ŠO VĒRTĪBU"
 
-#: template/layout.html:9
+#: template/layout.html:12
 msgid "Ralph's kind of Booru"
 msgstr "Ralfa Būru"
 
@@ -598,8 +615,8 @@ msgstr "Loma"
 msgid "Created"
 msgstr "Izveidots"
 
-#: template/list_user.html:23 template/profile.html:21 template/tag.html:26
-#: template/view.html:59
+#: template/list_user.html:26 template/profile.html:29 template/tag.html:37
+#: template/view.html:62
 msgid "Edit"
 msgstr "Rediģēt"
 
@@ -615,15 +632,15 @@ msgstr "Atcerēties Mani"
 msgid "Manage User"
 msgstr "Pārvaldīt Lietotāju"
 
-#: template/profile.html:18
+#: template/profile.html:22
 msgid "Level"
 msgstr "Līmenis"
 
-#: template/profile.html:28
+#: template/profile.html:44
 msgid "Join Date"
 msgstr "Reģistrējās"
 
-#: template/profile.html:32
+#: template/profile.html:48
 msgid "'s latest posts"
 msgstr "jaunākie ieraksti"
 
@@ -655,7 +672,7 @@ msgstr "Ieraksts"
 msgid "Time"
 msgstr "Laiks"
 
-#: template/snapshot.html:23
+#: template/snapshot.html:32
 msgid "Revert"
 msgstr "Atgriezt Atpakaļ"
 
@@ -667,11 +684,11 @@ msgstr "Birku Lapaspuse"
 msgid "Count"
 msgstr "Skaits"
 
-#: template/tag.html:36 template/view.html:80
+#: template/tag.html:49 template/view.html:106
 msgid "Tag History"
 msgstr "Birku Vēsture"
 
-#: template/frag/nav.html:24 template/upload.html:3 template/upload.html:45
+#: template/frag/nav.html:24 template/upload.html:3 template/upload.html:51
 msgid "Upload"
 msgstr "Augšupielādēt"
 
@@ -679,43 +696,39 @@ msgstr "Augšupielādēt"
 msgid "File(s)"
 msgstr "Failu(s)"
 
-#: template/view.html:46
-msgid "View "
-msgstr ""
-
-#: template/view.html:64
+#: template/view.html:72
 msgid "Upvote"
 msgstr "Augšupbalss"
 
-#: template/view.html:66
+#: template/view.html:81
 msgid "Downvote"
 msgstr "Lejupbalss"
 
-#: template/view.html:83
+#: template/view.html:110
 msgid "Statistics"
 msgstr "Statistika"
 
-#: template/view.html:86
+#: template/view.html:113
 msgid "Posted"
 msgstr "Publicēts"
 
-#: template/view.html:87
+#: template/view.html:115
 msgid "Uploader"
 msgstr "Īpašnieks"
 
-#: template/view.html:90
+#: template/view.html:124
 msgid "Size"
 msgstr "Izmērs"
 
-#: template/view.html:115
+#: template/view.html:149
 msgid "Disk Size"
 msgstr "Vieta uz Diska"
 
-#: template/view.html:130
+#: template/view.html:166
 msgid "Your comment goes here."
 msgstr "Tavs komentārs šeit."
 
-#: template/view.html:131
+#: template/view.html:168
 msgid "Comment"
 msgstr "Komentēt"
 
@@ -743,13 +756,9 @@ msgstr "Priekš Izstrādātājiem"
 msgid "Toggle"
 msgstr "Pārslēgt"
 
-#: template/frag/manage_post_form.html:11
+#: template/frag/manage_post_form.html:8
 msgid "Add"
 msgstr "Pievienot"
-
-#: template/frag/manage_post_form.html:12
-msgid "Remove"
-msgstr "Atņemt"
 
 #: template/frag/nav.html:10
 msgid "Browse"
@@ -842,4 +851,7 @@ msgstr "Attēla piezīme"
 #: template/frag/posts.html:36
 msgid "Video flair"
 msgstr "Video piezīme"
+
+#~ msgid "View "
+#~ msgstr "Skatīt "
 
