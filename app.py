@@ -65,6 +65,14 @@ def create_app() -> APIFlask:
         db.session.add_all([admin, mod, user, janitor])
         db.session.commit()
 
+    # Elevate standard HTTP links to HTTPS for consumption
+    # within Jinja2 templates.
+    def secure_url(url: str) -> str:
+        if url and url.startswith('http://'):
+            return url.replace('http://', 'https://')
+
+        return url
+
     # Initialize translations
     def get_locale() -> str:
         return g.get('lang_code', request.accept_languages.best_match(SUPPORTED_TRANSLATIONS))
@@ -106,6 +114,7 @@ def create_app() -> APIFlask:
     # Initialize database migration interface
     migrate = Migrate(app, db)
 
+    app.jinja_env.filters['secure'] = secure_url
     app.register_blueprint(api_bp)
     app.register_blueprint(root_bp)
 
