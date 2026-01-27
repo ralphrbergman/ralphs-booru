@@ -3,11 +3,11 @@
         {% set f_type = post.mime.split('/')[0] %}
 
         {% if f_type == 'image' %}
-            <img src="{{ post.view_uri }}">
+            <img src="{{ post.view_uri | secure }}">
         {% elif f_type == 'video' %}
-            <video src="{{ post.view_uri }}" controls></video>
+            <video src="{{ post.view_uri | secure }}" controls></video>
         {% elif f_type == 'audio' %}
-            <audio src="{{ post.view_uri }}" controls></audio>
+            <audio src="{{ post.view_uri | secure }}" controls></audio>
         {% endif %}
     {% endif %}
 {% endblock %}
