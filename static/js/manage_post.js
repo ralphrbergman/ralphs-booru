@@ -1,9 +1,11 @@
-const ApiKey = document.getElementById('api-key').textContent;
-const PostForm = document.getElementById('manage-post-form');
-PostForm.style.display = 'block';
+import { sendMessage } from "./message.js";
 
-const ToggleBtn = document.getElementById('toggle-btn');
-const Posts = document.querySelectorAll('.post-container');
+const apiKey = document.getElementById('api-key').textContent;
+const postForm = document.getElementById('manage-post-form');
+postForm.style.display = 'block';
+
+const toggleBtn = document.getElementById('toggle-btn');
+const posts = document.querySelectorAll('.post-container');
 
 // AbortController used to disconnect 'postClick' function.
 let controller;
@@ -27,28 +29,30 @@ function postClick(post) {
 
 function getTags() {
     let tags = [];
-    const SpanTags = document.querySelectorAll('span.tag');
-    const TagInput = document.querySelector('input.tag');
+    const spanTags = document.querySelectorAll('span.tag');
+    const tagInput = document.querySelector('input.tag');
 
-    SpanTags.forEach(function(span) {
+    spanTags.forEach(function(span) {
         const Content = span.textContent.trim();
         if (Content.length === 0) return;
 
         tags.push(Content);
     });
 
-    if (TagInput.value.trim().length > 0) tags.push(TagInput.value.trim());
+    if (tagInput.value.trim().length > 0) tags.push(tagInput.value.trim());
 
     return tags;
 }
 
-ToggleBtn.addEventListener('click', function(event) {
+toggleBtn.addEventListener('click', function(event) {
     if (!controller) controller = new AbortController();
+
+    let fn;
 
     if (state === false) {
         state = true;
 
-        function fn(post) {
+        fn = function(post) {
             // Assign a colored border.
             if (selectedPosts.includes(post)) {
                 post.classList.add('selected');
@@ -68,7 +72,7 @@ ToggleBtn.addEventListener('click', function(event) {
     } else {
         state = false;
 
-        function fn(post) {
+        fn = function(post) {
             post.classList.remove('selected');
             post.classList.remove('deselected');
 
@@ -77,8 +81,8 @@ ToggleBtn.addEventListener('click', function(event) {
     }
 
     // Connect/Disconnect click event on posts.
-    for (let i = 0; i < Posts.length; i++) {
-        let post = Posts[i].parentElement;
+    for (let i = 0; i < posts.length; i++) {
+        let post = posts[i].parentElement;
 
         fn(post);
     }
@@ -90,13 +94,22 @@ ToggleBtn.addEventListener('click', function(event) {
 });
 
 // Handle form submission.
-PostForm.addEventListener('submit', function(event) {
+postForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const Form = new FormData(PostForm);
+    // Ignore when there are no posts selected for change.
+    if (selectedPosts.length === 0) {
+        sendMessage('You haven\'t selected any posts.', true, 2);
+        return;
+    }
+
+    const Form = new FormData(postForm);
 
     Form.set('tags', getTags());
-    if (Form.get('tags').length === 0) return;
+    if (Form.get('tags').length === 0) {
+        sendMessage('Tags are missing.', true, 2);
+        return;
+    }
 
     // Create the base request object.
     let obj = Object.fromEntries(Form);
@@ -111,14 +124,21 @@ PostForm.addEventListener('submit', function(event) {
         obj.post_ids.push(parseInt(post.dataset.postId, 10));
     }
 
-    const Endpoint = event.submitter.dataset.value === 'add' ? '/add' : '/remove';
+    const added = event.submitter.dataset.value === 'add';
+    const endpoint = added ? '/add' : '/remove';
 
-    fetch(`/api/tags${Endpoint}`, {
+    fetch(`/api/tags${endpoint}`, {
         headers: {
-            'Authorization': `Bearer ${ApiKey}`,
+            'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json'
         },
         method: 'PATCH',
         body: JSON.stringify(obj)
-    })
+    }).then(function(response) {
+        if (response.ok) {
+            const actionText = added ? 'added' : 'removed';
+
+            sendMessage(`Successfully ${actionText} tags: ${obj.tags.join(', ')}`)
+        }
+    });
 });
