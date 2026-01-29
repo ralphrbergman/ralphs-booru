@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: b322ca6fb802
+Revision ID: 43e1a810e56f
 Revises: 
-Create Date: 2026-01-24 23:48:23.803047
+Create Date: 2026-01-29 08:26:41.374556
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b322ca6fb802'
+revision = '43e1a810e56f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -65,6 +65,26 @@ def upgrade():
     with op.batch_alter_table('user', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_user__key'), ['_key'], unique=True)
 
+    op.create_table('post',
+    sa.Column('modified', sa.DateTime(), nullable=True),
+    sa.Column('op', sa.String(), nullable=True),
+    sa.Column('src', sa.String(), nullable=True),
+    sa.Column('caption', sa.String(), nullable=True),
+    sa.Column('directory', sa.String(), nullable=True),
+    sa.Column('md5', sa.String(), nullable=False),
+    sa.Column('ext', sa.String(length=4), nullable=False),
+    sa.Column('mime', sa.String(), nullable=False),
+    sa.Column('size', sa.Integer(), nullable=False),
+    sa.Column('height', sa.Integer(), nullable=True),
+    sa.Column('width', sa.Integer(), nullable=True),
+    sa.Column('author_id', sa.Integer(), nullable=False),
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('removed', sa.Boolean(), server_default=sa.text('0'), nullable=False),
+    sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('md5')
+    )
     op.create_table('removed_log',
     sa.Column('entity_id', sa.Integer(), nullable=False),
     sa.Column('entity_type', sa.String(length=15), nullable=False),
@@ -85,28 +105,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('target_id', 'target_type', 'user_id', name='user_target_type_uc')
-    )
-    op.create_table('post',
-    sa.Column('modified', sa.DateTime(), nullable=True),
-    sa.Column('log_id', sa.Integer(), nullable=True),
-    sa.Column('op', sa.String(), nullable=True),
-    sa.Column('src', sa.String(), nullable=True),
-    sa.Column('caption', sa.String(), nullable=True),
-    sa.Column('directory', sa.String(), nullable=True),
-    sa.Column('md5', sa.String(), nullable=False),
-    sa.Column('ext', sa.String(length=4), nullable=False),
-    sa.Column('mime', sa.String(), nullable=False),
-    sa.Column('size', sa.Integer(), nullable=False),
-    sa.Column('height', sa.Integer(), nullable=True),
-    sa.Column('width', sa.Integer(), nullable=True),
-    sa.Column('author_id', sa.Integer(), nullable=False),
-    sa.Column('created', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('removed', sa.Boolean(), server_default=sa.text('0'), nullable=False),
-    sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
-    sa.ForeignKeyConstraint(['log_id'], ['removed_log.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('md5')
     )
     op.create_table('comment',
     sa.Column('post_id', sa.Integer(), nullable=False),
@@ -160,9 +158,9 @@ def downgrade():
 
     op.drop_table('snapshot')
     op.drop_table('comment')
-    op.drop_table('post')
     op.drop_table('score_association')
     op.drop_table('removed_log')
+    op.drop_table('post')
     with op.batch_alter_table('user', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_user__key'))
 

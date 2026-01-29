@@ -35,6 +35,8 @@ DEFAULT_BLUR=on
 NSFW_TAG=nsfw
 # Directories of sensitive (e.g NSFW) content.
 SENSITIVE_DIRS=<directory-names-separated-by-comma>
+# Whether HTTPS is enabled or not
+SSL_ENABLED=false
 # Path to temporary files, preferred it's in project's root.
 # This directory stores thumbnails before they get moved.
 TEMP_PATH=<path/to/temp>

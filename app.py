@@ -16,6 +16,8 @@ from translation import SUPPORTED_TRANSLATIONS, babel
 
 load_dotenv()
 
+SSL_ENABLED = getenv('SSL_ENABLED') == 'true'
+
 def create_app() -> APIFlask:
     app = APIFlask(
         import_name = __name__,
@@ -68,7 +70,7 @@ def create_app() -> APIFlask:
     # Elevate standard HTTP links to HTTPS for consumption
     # within Jinja2 templates.
     def secure_url(url: str) -> str:
-        if url and url.startswith('http://'):
+        if url and url.startswith('http://') and SSL_ENABLED:
             return url.replace('http://', 'https://')
 
         return url
