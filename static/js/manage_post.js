@@ -1,4 +1,4 @@
-import { sendMessage } from "./message.js";
+import { sendMessage, sendErrorMessage } from "./message.js";
 
 const apiKey = document.getElementById('api-key').textContent;
 const postForm = document.getElementById('manage-post-form');
@@ -99,7 +99,7 @@ postForm.addEventListener('submit', function(event) {
 
     // Ignore when there are no posts selected for change.
     if (selectedPosts.length === 0) {
-        sendMessage('You haven\'t selected any posts.', true, 2);
+        sendErrorMessage('You haven\'t selected any posts.');
         return;
     }
 
@@ -107,7 +107,7 @@ postForm.addEventListener('submit', function(event) {
 
     Form.set('tags', getTags());
     if (Form.get('tags').length === 0) {
-        sendMessage('Tags are missing.', true, 2);
+        sendErrorMessage('Tags are missing.');
         return;
     }
 

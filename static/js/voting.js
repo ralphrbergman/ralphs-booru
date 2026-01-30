@@ -1,3 +1,9 @@
+import { sendErrorMessage } from "./message.js";
+
+const postId = document.getElementById('post-id').textContent;
+const upvoteBtn = document.getElementById('upvote-btn');
+const downvoteBtn = document.getElementById('downvote-btn');
+
 function vote(event, targetId, score, targetType = 'post') {
     event.preventDefault();
 
@@ -11,9 +17,21 @@ function vote(event, targetId, score, targetType = 'post') {
             'target_type': targetType,
             'value': score
         })
-    }).then(response => {
+    }).then(async function (response) {
         if (response.ok) {
             location.reload();
+        } else {
+            const json = await response.json();
+
+            sendErrorMessage(`Error: ${json['detail']}`);
         }
     })
 }
+
+upvoteBtn.addEventListener('click', function(event) {
+    vote(event, parseInt(postId), 1, 'post')
+});
+
+downvoteBtn.addEventListener('click', function(event) {
+    vote(event, parseInt(postId), -1, 'post')
+});

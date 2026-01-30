@@ -1,4 +1,5 @@
-from flask import Blueprint, Request
+from flask import Blueprint, Request, request, jsonify, make_response, redirect, url_for
+from login import login_manager
 
 from db.models.user import find_user_by_key
 from login import login_manager
@@ -15,6 +16,18 @@ api_bp = Blueprint(
     import_name = __name__,
     url_prefix = '/api'
 )
+
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    if request.path.startswith('/api'):
+        response = make_response(jsonify({
+            'detail': 'Authentication is required.',
+            'status': 401
+        }), 401)
+    
+        return response
+    else:
+        return redirect(url_for(login_manager.login_view, next = request.url))
 
 @api_bp.errorhandler(404)
 def _404_handler(exc):

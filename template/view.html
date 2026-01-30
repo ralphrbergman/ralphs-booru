@@ -51,6 +51,8 @@
 {% block body %}
     <div class="view-container">
         <div class="form form-lg gapped-form">
+            <span id="post-id" class="hidden">{{ post.id }}</span>
+
             {%-
                 if (current_user.is_authenticated and
                 (current_user.has_permission('post:edit') or
@@ -65,21 +67,9 @@
 
             <div>
                 <p>Score: {{ post.score }}</p>
-                <a
-                    href=""
-                    onclick="vote(event, {{ post.id }}, 1, 'post')"
-                >
-                    {{ gettext('Upvote') }}
-                </a>
-
+                <a id="upvote-btn" href="">{{ gettext('Upvote') }}</a>
                 <br>
-
-                <a
-                    href=""
-                    onclick="vote(event, {{ post.id }}, -1, 'post')"
-                >
-                    {{ gettext('Downvote') }}
-                </a>
+                <a id="downvote-btn" href="">{{ gettext('Downvote') }}</a>
             </div>
 
             <div>
@@ -174,5 +164,5 @@
 {% block script %}
     <script src="{{ url_for('static', filename = 'js/comment.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/textarea.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'js/voting.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/voting.js') }}" type="module"></script>
 {% endblock %}

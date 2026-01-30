@@ -18,3 +18,7 @@ export function sendMessage(message, removeAfter = true, delay = 3) {
         setTimeout(removeMessage, delay * 1000, span)
     }
 }
+
+export function sendErrorMessage(message) {
+    return sendMessage(message, true, 5);
+}

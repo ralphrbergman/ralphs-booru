@@ -1,5 +1,5 @@
 from apiflask import APIBlueprint, abort
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from api import add_vote, delete_score, get_score, remove_vote
 from api.decorators import owner_only, post_protect
@@ -38,6 +38,7 @@ def remove_score(score_id: int, score: ScoreAssociation):
 @score_bp.input(ScoreIn, arg_name = 'data')
 @score_bp.output(ScoreOut)
 @post_protect
+@login_required
 def upload_score(data: ScoreIn):
     value: int = data['value']
 
