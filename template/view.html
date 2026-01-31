@@ -65,6 +65,8 @@
                 </a>
             {% endif %}
 
+            {% include 'frag/enlarge.html' %}
+
             <div>
                 <p>Score: {{ post.score }}</p>
                 <a id="upvote-btn" href="">{{ gettext('Upvote') }}</a>
@@ -163,6 +165,7 @@
 
 {% block script %}
     <script src="{{ url_for('static', filename = 'js/comment.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/enlarge.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/textarea.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/voting.js') }}" type="module"></script>
 {% endblock %}
