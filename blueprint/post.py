@@ -24,14 +24,15 @@ from api import (
     browse_post,
     create_post,
     create_snapshot,
+    delete_log,
     delete_post,
     get_post,
     move_post,
+    perma_delete_post,
     replace_post,
     save_file
 )
 from api.decorators import (
-    moderator_only,
     owner_or_perm_required,
     post_protect,
     perm_required
@@ -119,6 +120,13 @@ def edit_page(post_id: int, post: Post):
                             post_id = post_id
                         )
                     )
+                elif post.removed:
+                    return redirect(
+                        url_for(
+                            'Root.Post.revert_page',
+                            post_id = post_id
+                        )
+                    )
 
                 file = form.new_file.data
 
@@ -193,30 +201,45 @@ def view_file_resource(post_id: int):
         return b''
 
 @post_bp.route('/remove/<int:post_id>', methods = ['GET', 'POST'])
-@moderator_only
-def remove_page(post_id: int):
-    post = get_post(post_id)
-
+@owner_or_perm_required(Post, 'post:delete')
+def remove_page(post_id: int, post: Post):
     if not post:
         return abort(404)
 
     form = PostRemovalForm()
 
     if form.validate_on_submit():
-        delete_post(post, current_user, form.reason.data)
+        if form.perma.data:
+            perma_delete_post(post)
+        else:
+            delete_post(post, current_user, form.reason.data)
+
         db.session.commit()
 
-        flash(
-            gettext(
-                'Marked post #%(post_id)s as deleted.',
-                post_id = post.id
+        if form.perma.data:
+            flash(gettext('Permanently deleted post #%(post_id)s.', post_id = post.id))
+        else:
+            flash(
+                gettext(
+                    'Marked post #%(post_id)s as deleted.',
+                    post_id = post.id
+                )
             )
-        )
+
         return redirect(url_for('Root.Post.browse_page'))
-    else:
-        print(form.errors)
+
+    flash_errors(form)
 
     return render_template('delete_form.html', form = form)
+
+@post_bp.route('/revert/<int:post_id>', methods = ['GET', 'POST'])
+@owner_or_perm_required(Post, 'post:delete')
+def revert_page(post_id: int, post: Post):
+    if post.removed:
+        delete_log(post)
+
+    db.session.commit()
+    return redirect(url_for('Root.Post.view_page', post_id = post_id))
 
 @post_bp.route('/upload', methods = ['GET', 'POST'])
 @login_required

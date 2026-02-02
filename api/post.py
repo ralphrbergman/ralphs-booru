@@ -9,6 +9,7 @@ import ffmpeg
 from flask_sqlalchemy.pagination import SelectPagination
 from magic import from_file
 from sqlalchemy import Select, func, or_, select
+from sqlalchemy.orm.exc import UnmappedInstanceError
 from werkzeug.datastructures import FileStorage
 
 from db import Post, Tag, User, db
@@ -228,9 +229,19 @@ def delete_post(post: Post | int, moderator: User, reason: str) -> None:
     if isinstance(post, int):
         post = get_post(post)
 
-    post.path.unlink(missing_ok = True)
-
     log = create_log(post, moderator, reason)
+
+def perma_delete_post(post: Post | int) -> None:
+    if isinstance(post, int):
+        post = get_post(post)
+    
+    try:
+        db.session.delete(post.thumbnail)
+    except UnmappedInstanceError as exc:
+        # Some posts may not have a thumbnail and it's alright.
+        pass
+
+    db.session.delete(post)
 
 def get_dimensions(path: Path) -> tuple[int, int]:
     try:

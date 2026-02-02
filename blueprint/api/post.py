@@ -25,7 +25,7 @@ def obtain_post(post_id: int):
 @post_bp.delete('/<int:post_id>')
 @post_bp.output({}, status_code = 204)
 @post_bp.auth_required(auth)
-@owner_or_perm_required(Post, 'post:edit')
+@owner_or_perm_required(Post, 'post:delete')
 def remove_post(post_id: int, post: Post):
     if not post:
         abort(404, message = 'Post not found.')

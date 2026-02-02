@@ -50,7 +50,17 @@ class PasswordForm(FlaskForm, WeakPasswordMixin, SubmitMixin):
     confirm_new_pw = StrongPasswordField('confirm_new_pw')
 
 class PostRemovalForm(FlaskForm, SubmitMixin):
-    reason = StringField('reason', validators = [Length(max = 150)])
+    perma = BooleanField('perma')
+    reason = StringField(
+        'reason',
+        validators = [
+            Length(
+                min = 15,
+                max = 150,
+                message = 'Reason must be between 15 and 150 characters long.'
+            )
+        ]
+    )
 
 class SearchForm(FlaskForm, SubmitMixin):
     search = StringField('search')

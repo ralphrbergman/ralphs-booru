@@ -2,7 +2,7 @@ from datetime import datetime
 from math import floor, log, pow
 from os import getenv
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 from urllib.parse import urlparse
 
 from flask import url_for
@@ -65,7 +65,7 @@ class Post(
     height: Mapped[int] = mapped_column(nullable = True)
     width: Mapped[int] = mapped_column(nullable = True)
 
-    comments: Mapped[list['Comment']] = relationship(back_populates = 'post')
+    comments: Mapped[list['Comment']] = relationship(back_populates = 'post', cascade = 'all, delete-orphan')
     snapshots: Mapped[list['Snapshot']] = relationship(
         back_populates = 'post',
         cascade = 'all, delete-orphan'
@@ -167,9 +167,8 @@ class Post(
         return in_sensitive_dir or nsfw_tag_applied
 
     @property
-    def path(self) -> Optional[Path]:
-        if not self.removed:
-            return CONTENT_PATH / (self.directory or '') / self.name
+    def path(self) -> Path:
+        return CONTENT_PATH / (self.directory or '') / self.name
 
     @property
     def uri(self) -> str:

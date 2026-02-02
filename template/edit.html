@@ -98,7 +98,9 @@
                     if not (current_user.has_permission('post:delete') or current_user.owns(post))
                 -%}
                     disabled
-                {% endif %}>
+                {% endif %}
+                
+                {% if post.removed %}checked{% endif %}>
             </div>
 
             <button
