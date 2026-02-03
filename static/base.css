@@ -80,6 +80,10 @@ body {
     min-width: 0em;
 }
 
+.logo-bg {
+    background-color: white;
+}
+
 .message {
     border-radius: var(--smaller-gap);;
     background-color: var(--bg-color);
