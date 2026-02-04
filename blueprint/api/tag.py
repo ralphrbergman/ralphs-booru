@@ -16,6 +16,9 @@ tag_bp = APIBlueprint(
 @tag_bp.get('/<int:tag_id>')
 @tag_bp.output(TagOut)
 def obtain_tag(tag_id: int):
+    """
+    Get information about a tag.
+    """
     tag = get_tag(tag_id)
 
     if not tag:
@@ -26,7 +29,12 @@ def obtain_tag(tag_id: int):
 @tag_bp.delete('/<int:tag_id>')
 @tag_bp.output({}, status_code = 204)
 @tag_bp.auth_required(auth)
+@perm_required('tag:edit')
 def remove_tag(tag_id: int):
+    """
+    Deletes a tag.
+    You need a tag:edit permission for this.
+    """
     tag = get_tag(tag_id)
 
     if not tag:
@@ -43,18 +51,26 @@ def remove_tag(tag_id: int):
 @post_protect
 @perm_required('tag:edit')
 def upload_tag(data: TagIn):
-    tag = create_tag(data['name'])
-
-    tag.name = data['name']
-    tag.type = data['type']
-    tag.desc = data['desc']
+    """
+    Creates new tag.
+    You must have the tag:edit permission to do this.
+    """
+    posts = []
 
     for post_id in data.get('post_ids'):
         post = get_post(post_id)
         if not post: continue
 
-        tag.posts.append(post)
-        hist = create_snapshot(post, current_user)
+        posts.append(post)
+
+    tag = create_tag(data['name'], posts)
+
+    tag.type = data['type']
+    tag.desc = data['desc']
+
+    # Create tag snapshots for the posts.
+    for post in posts:
+        create_snapshot(post, current_user)
 
     db.session.commit()
     return tag
@@ -70,6 +86,10 @@ def upload_tag(data: TagIn):
 @post_protect
 @perm_required('tag:edit')
 def update_tag(data: TagIn):
+    """
+    Updates given tag.
+    You must have the tag:edit permission.
+    """
     tag = get_tag(data['name'])
 
     if not tag:
@@ -90,6 +110,10 @@ def update_tag(data: TagIn):
 @post_protect
 @perm_required('tag:edit')
 def add_tags(data: TagsIn):
+    """
+    Add tags to post.
+    You need tag:edit permission for this API call.
+    """
     post = get_post(data['post_id'])
 
     for tag_name in data['tags']:
@@ -100,7 +124,7 @@ def add_tags(data: TagsIn):
 
         if tag not in post.tags:
             post.tags.append(tag)
-            hist = create_snapshot(post, current_user)
+            create_snapshot(post, current_user)
 
     db.session.commit()
     return {
@@ -115,6 +139,10 @@ def add_tags(data: TagsIn):
 @post_protect
 @perm_required('tag:edit')
 def remove_tags(data: TagsIn):
+    """
+    Remove tags from post.
+    You need tag:edit permission for this API call.
+    """
     post = get_post(data['post_id'])
 
     for tag_name in data['tags']:

@@ -7,9 +7,17 @@ from db import db, User
 from .base import browse_element
 
 def browse_user(*args, **kwargs):
+    """
+    Creates and executes select of users by criteria.
+    """
     return browse_element(User, *args, **kwargs)
 
-def create_user(name: str, mail: str, password: str, avatar: Optional[str] = None) -> Optional[User]:
+def create_user(
+    name: str,
+    mail: str,
+    password: str,
+    avatar: Optional[str] = None
+) -> Optional[User]:
     """
     Creates and returns user object.
 
@@ -18,9 +26,6 @@ def create_user(name: str, mail: str, password: str, avatar: Optional[str] = Non
         mail: User's e-mail
         password: Hashed user's password
         avatar: Optional avatar filename
-
-    Returns:
-        User: Created user
     """
     user = User()
 

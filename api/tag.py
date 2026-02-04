@@ -8,6 +8,12 @@ from db import db, Post, Tag
 from .base import browse_element
 
 def add_tags(tag_list: list[str]) -> list[Tag]:
+    """
+    Creates a list of tags and returns created instances.
+
+    Args:
+        tag_list: List of tag names
+    """
     new_tags = list()
     # This is used to ignore tags that have been already added.
     tag_names = set()
@@ -27,6 +33,9 @@ def add_tags(tag_list: list[str]) -> list[Tag]:
     return new_tags
 
 def browse_tag(*args, **kwargs) -> SelectPagination:
+    """
+    Creates and executes a select of tags by criteria.
+    """
     return browse_element(Tag, *args, **kwargs)
 
 def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
@@ -34,11 +43,8 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
     Creates and returns tag object.
 
     Args:
-        name (str): Tag's name
-        posts (list): Optional for adding tag to posts
-
-    Returns:
-        Tag
+        name: Tag's name
+        posts: Optional for adding tag to posts
     """
     tag = Tag()
     db.session.add(tag)
@@ -71,10 +77,7 @@ def get_tag(id: str | int) -> Optional[Tag]:
     Queries for a tag and returns.
 
     Args:
-        name (str | int)
-
-    Returns:
-        Tag
+        id: Tag's name or its ID
     """
     return db.session.scalar(
         select(Tag).where(

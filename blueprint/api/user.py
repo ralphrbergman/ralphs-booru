@@ -14,6 +14,9 @@ user_bp = APIBlueprint(
 @user_bp.get('/<int:user_id>')
 @user_bp.output(UserOut)
 def obtain_user(user_id: int):
+    """
+    Obtain information about a user.
+    """
     user = get_user(user_id)
 
     if not user:
@@ -24,6 +27,9 @@ def obtain_user(user_id: int):
 @user_bp.get('/username/<username>')
 @user_bp.output(UserOut)
 def obtain_user_by_username(username: str):
+    """
+    Obtain information about a user by their username.
+    """
     user = get_user_by_username(username)
 
     if not user:
@@ -35,4 +41,7 @@ def obtain_user_by_username(username: str):
 @user_bp.output(UserOut)
 @user_bp.auth_required(auth)
 def obtain_authenticated_user():
+    """
+    Get information about yourself.
+    """
     return current_user

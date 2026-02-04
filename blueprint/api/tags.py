@@ -20,6 +20,10 @@ tags_bp = APIBlueprint(
 @post_protect
 @perm_required('tag:edit')
 def add_tags(data: TagBulkIn):
+    """
+    Add tags to multiple posts at once.
+    You need tag:edit permission.
+    """
     posts = []
     tags = []
 
@@ -42,7 +46,7 @@ def add_tags(data: TagBulkIn):
         for post in posts:
             if tag not in post.tags:
                 post.tags.append(tag)
-                hist = create_snapshot(post, current_user)
+                create_snapshot(post, current_user)
 
     db.session.commit()
     return {
@@ -57,6 +61,10 @@ def add_tags(data: TagBulkIn):
 @post_protect
 @perm_required('tag:edit')
 def remove_tags(data: TagBulkIn):
+    """
+    Remove multiple tags from multiple posts.
+    You need tag:edit permission.
+    """
     posts = []
     tags = []
 
@@ -77,7 +85,7 @@ def remove_tags(data: TagBulkIn):
         for post in posts:
             if tag in post.tags:
                 post.tags.remove(tag)
-                hist = create_snapshot(post, current_user)
+                create_snapshot(post, current_user)
 
     db.session.commit()
     return {

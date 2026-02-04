@@ -3,7 +3,7 @@ from apiflask.fields import Boolean, Integer, List, Nested, String
 from .base import BaseSchema
 
 class UserOut(BaseSchema):
-    """ Represents an outside User schema. """
+    """ Represents an outbound user object. """
     avatar_name = String()
     name = String(required = True)
     comments = List(Nested('CommentIn'))

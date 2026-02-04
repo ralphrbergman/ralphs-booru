@@ -16,6 +16,10 @@ post_bulk_bp = APIBlueprint(
 @post_bulk_bp.output(BulkPostOut)
 @moderator_only
 def update_bulk_post(data: BulkPostIn):
+    """
+    Update posts in bulk.
+    Only a moderator at this time is allowed to bulk update.
+    """
     posts = []
 
     for post_data in data['posts']:

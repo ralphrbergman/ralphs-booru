@@ -5,7 +5,6 @@ from typing import Optional
 
 import ffmpeg
 from PIL import Image
-from sqlalchemy.exc import IntegrityError
 
 from db import db, Post, Thumbnail
 
@@ -29,10 +28,7 @@ def create_thumbnail(post: Post) -> Thumbnail:
     Creates and returns thumbnail object that represents a post's thumbnail.
 
     Args:
-        post (Post): Post to capture thumbnail of.
-
-    Returns:
-        Thumbnail
+        post: Post to capture thumbnail of.
     """
     temp_f = generate_thumbnail(post)
     alpha = is_alpha_used(temp_f)
@@ -60,17 +56,17 @@ def create_thumbnail(post: Post) -> Thumbnail:
 
     return thumb
 
-def generate_thumbnail(post: Post, ext: ThumbnailType = ThumbnailType.PNG) -> Optional[Path]:
+def generate_thumbnail(
+    post: Post,
+    ext: ThumbnailType = ThumbnailType.PNG
+) -> Optional[Path]:
     """
     Generate and return thumbnail based off the content's embedded
     cover art or the generic first frame.
 
     Args:
-        post (Post)
-        ext (ThumbnailType)
-
-    Returns:
-        Path
+        post
+        ext
     """
     out = TEMP / (post.md5 + f'.{ext.value}')
     post_path = str(post.path)
@@ -91,7 +87,11 @@ def generate_thumbnail(post: Post, ext: ThumbnailType = ThumbnailType.PNG) -> Op
     stream = ffmpeg.input(post_path)[str(index)]
 
     # Specify muxer.
-    stream = ffmpeg.filter(stream, 'format', pix_fmts = 'rgba' if ext == ThumbnailType.PNG else 'yuvj420p')
+    stream = ffmpeg.filter(
+        stream,
+        'format',
+        pix_fmts = 'rgba' if ext == ThumbnailType.PNG else 'yuvj420p'
+    )
     # Specify dimensions.
     stream = ffmpeg.filter(stream, 'scale', h = HEIGHT_EXPR, w = WIDTH_EXPR)
 
@@ -116,10 +116,7 @@ def is_alpha_used(path: Path) -> bool:
     and requires a PNG container.
 
     Args:
-        path (Path)
-
-    Returns:
-        bool
+        path
     """
     # TODO:
     # Document the code and what it does for what purpose.

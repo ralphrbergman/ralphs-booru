@@ -1,6 +1,6 @@
 from functools import wraps
 from os import getenv
-from typing import Callable
+from typing import Any, Callable
 
 from apiflask import abort as api_abort
 from flask import request, abort
@@ -13,7 +13,10 @@ from db import db
 ALLOW_USERS = getenv('ALLOW_USERS') == 'true'
 ALLOW_POSTS = getenv('ALLOW_POSTS') == 'true'
 
-def _get_entity(model_class):
+def _get_entity(model_class: Any):
+    """
+    Gets entity from given class and ID passed in request arguments.
+    """
     v_args = request.view_args
 
     try:
@@ -29,7 +32,11 @@ def _get_entity(model_class):
 
     return entity, entity_name
 
-def _level_required(LEVEL: int, model_class, abort_fn: Callable, *abort_args):
+def _level_required(LEVEL: int, model_class: Any, abort_fn: Callable, *abort_args):
+    """
+    Restricts callback from users below a given level or 
+    who aren't moderators, or who aren't the author of a given entity.
+    """
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
@@ -47,6 +54,9 @@ def _level_required(LEVEL: int, model_class, abort_fn: Callable, *abort_args):
     return decorator
 
 def admin_only(callback):
+    """
+    Restricts callback from users who aren't an admin.
+    """
     @wraps(callback)
     def wrapper(*args, **kwargs):
         if current_user.is_authenticated and current_user.is_admin:
@@ -56,7 +66,15 @@ def admin_only(callback):
 
     return wrapper
 
-def api_level_required(LEVEL: int, model_class):
+def api_level_required(LEVEL: int, model_class: Any):
+    """
+    Restricts API endpoint from people who are below the level,
+    or who aren't moderators and don't own the resource.
+
+    Args:
+        LEVEL: Minimum level required
+        model_class: Model to query for ownership attainment
+    """
     return _level_required(
         LEVEL,
         model_class,
@@ -81,7 +99,15 @@ def anonymous_only(callback):
 
     return wrapper
 
-def level_required(LEVEL: int, model_class):
+def level_required(LEVEL: int, model_class: Any):
+    """
+    Restricts frontend endpoint from users who aren't of level,
+    or who don't own the resource nor aren't moderators.
+
+    Args:
+        LEVEL: Minimum required level
+        model_class: Model to query for ownership attainment
+    """
     return _level_required(LEVEL, model_class, abort, 403)
 
 def moderator_only(callback):
@@ -100,12 +126,12 @@ def moderator_only(callback):
 
     return wrapper
 
-def owner_only(model_class):
+def owner_only(model_class: Any):
     """
     Restricts view for users that own a resource or are moderators.
 
     Args:
-        callback: Route to restrict
+        model_class: Model to query for ownership attainment
     """
     def decorator(callback):
         @wraps(callback)
@@ -126,7 +152,15 @@ def owner_only(model_class):
         return wrapper
     return decorator
 
-def owner_or_perm_required(model_class, slug: str):
+def owner_or_perm_required(model_class: Any, slug: str):
+    """
+    Restricts view to users owning the resource or
+    having a permission slip.
+
+    Args:
+        model_class: Model to query for ownership attainment
+        slug: Permission name
+    """
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
@@ -157,8 +191,7 @@ def owner_or_perm_required(model_class, slug: str):
 
 def post_protect(callback):
     """
-    Restricts view if post management is
-    not possible at the moment.
+    Restricts view if post management is not possible at the moment.
 
     Args:
         callback: Route to restrict
@@ -174,6 +207,12 @@ def post_protect(callback):
     return wrapper
 
 def perm_required(slug: str):
+    """
+    Restricts view to users who have specified permission.
+
+    Args:
+        slug: Permission name
+    """
     def decorator(callback):
         @wraps(callback)
         def wrapper(*args, **kwargs):
@@ -189,8 +228,7 @@ def perm_required(slug: str):
 
 def user_protect(callback):
     """
-    Restricts view if user account management is
-    not possible at the moment.
+    Restricts view if user account management is not possible at the moment.
 
     Args:
         callback: Route to restrict

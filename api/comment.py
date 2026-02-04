@@ -43,9 +43,18 @@ def create_comment(content: str, author: User, post: Post) -> Comment:
     return comment
 
 def delete_comment(comment: Comment) -> None:
+    """
+    Mark given comment deleted.
+    """
     db.session.delete(comment)
 
 def get_comment(comment_id: int) -> Optional[Comment]:
+    """
+    Get comment from ID.
+
+    Args:
+        comment_id: Comment's unique ID
+    """
     comment = db.session.execute(
         select(Comment)
         .where(Comment.id == comment_id)

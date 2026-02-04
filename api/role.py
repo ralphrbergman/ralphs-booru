@@ -6,6 +6,9 @@ from db import Role, db
 
 def get_role_by_priority(priority: int) -> Optional[Role]:
     """
+    Returns role by its priority.
+    """
+    """
     Gets role from its priority.
 
     Args:

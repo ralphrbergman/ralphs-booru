@@ -7,7 +7,17 @@ from db import Post, Snapshot, User, db
 from .base import browse_element
 from .tag import create_tag, get_tag
 
-def browse_snapshots(*args, post_id: Optional[int] = None, **kwargs) -> SelectPagination:
+def browse_snapshots(
+    *args,
+    post_id: Optional[int] = None,
+    **kwargs
+) -> SelectPagination:
+    """
+    Creates and executes a select of snapshots by criteria.
+
+    Args:
+        post_id: Which post's snapshots to show
+    """
     def apply_snapshot_specific_query(stmt: Select) -> None:
         nonlocal post_id
 
@@ -15,9 +25,19 @@ def browse_snapshots(*args, post_id: Optional[int] = None, **kwargs) -> SelectPa
 
         return stmt
 
-    return browse_element(Snapshot, extra_fn = apply_snapshot_specific_query, *args, **kwargs)
+    return browse_element(
+        Snapshot,
+        extra_fn = apply_snapshot_specific_query, *args, **kwargs
+    )
 
 def create_snapshot(post: Post, user: User) -> Snapshot:
+    """
+    Creates a snapshot of post.
+
+    Args:
+        post: Snapshot target
+        user: Who creates the snapshot
+    """
     snap = Snapshot()
 
     snap.post = post
@@ -29,9 +49,19 @@ def create_snapshot(post: Post, user: User) -> Snapshot:
     return snap
 
 def get_snapshot(id: int) -> Optional[Snapshot]:
+    """
+    Obtains snapshot by its ID.
+    """
     return db.session.scalar(select(Snapshot).where(Snapshot.id == id))
 
 def revert_snapshot(snapshot: Snapshot, user: User) -> Snapshot:
+    """
+    Reverts post to previous snapshot.
+
+    Args:
+        snapshot: Which snapshot to revert
+        user: User who reverts snapshot
+    """
     prev = snapshot.previous
     post = snapshot.post
 

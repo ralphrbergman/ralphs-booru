@@ -3,6 +3,7 @@ from apiflask.fields import File, List
 from apiflask.validators import FileType, Length
 
 class FileIn(Schema):
+    """ Represents an inbound file object. """
     files = List(File(required = True, validate = [
         FileType([
             '.gif',

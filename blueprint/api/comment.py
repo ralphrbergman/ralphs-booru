@@ -20,6 +20,9 @@ comment_bp = APIBlueprint(
 @comment_bp.get('/<int:comment_id>')
 @comment_bp.output(CommentOut)
 def obtain_comment(comment_id: int):
+    """
+    Find comment by its unique identifier.
+    """
     return get_comment(comment_id)
 
 @comment_bp.delete('/<int:comment_id>')
@@ -27,6 +30,9 @@ def obtain_comment(comment_id: int):
 @comment_bp.auth_required(auth)
 @owner_only(Comment)
 def remove_comment(comment_id: int, comment: Comment):
+    """
+    Delete specific comment.
+    """
     if not comment:
         abort(404, message = 'Comment not found.')
 
@@ -42,6 +48,9 @@ def remove_comment(comment_id: int, comment: Comment):
 @post_protect
 @owner_only(Comment)
 def update_comment(comment_id: int, data: CommentIn):
+    """
+    Update specific comment. Only the owner of the comment can update.
+    """
     comment = get_comment(comment_id)
     post = get_post(data['post_id'])
 
@@ -64,6 +73,9 @@ def update_comment(comment_id: int, data: CommentIn):
 @post_protect
 @perm_required('post:comment')
 def upload_comment(data: CommentIn):
+    """
+    Post a comment.
+    """
     post = get_post(data['post_id'])
 
     if not post:

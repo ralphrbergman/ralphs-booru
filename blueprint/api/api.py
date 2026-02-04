@@ -1,4 +1,12 @@
-from flask import Blueprint, Request, request, jsonify, make_response, redirect, url_for
+from flask import (
+    Blueprint,
+    Request,
+    request,
+    jsonify,
+    make_response,
+    redirect,
+    url_for
+)
 from login import login_manager
 
 from db.models.user import find_user_by_key
@@ -19,22 +27,38 @@ api_bp = Blueprint(
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
+    """
+    Function that runs whenever unauthorized access happens.
+    This points the user in a direction depending if it's an API call seeking
+    JSON or a frontend user needing to see the beautiful HTML document.
+    """
     if request.path.startswith('/api'):
         response = make_response(jsonify({
             'detail': 'Authentication is required.',
             'status': 401
         }), 401)
-    
+
         return response
     else:
         return redirect(url_for(login_manager.login_view, next = request.url))
 
 @api_bp.errorhandler(404)
 def _404_handler(exc):
-    return {'message': 'You are at the wrong place', 'code': 404}, 404
+    """
+    Function ran whenever an invalid endpoint is visited.
+    """
+    return {
+        'message': 'You are at the wrong place',
+        'code': 404
+    }, 404
 
 @login_manager.request_loader
 def load_user_from_request(request: Request):
+    """
+    Function that runs before a request processing
+    to validate a user's API key.
+    It returns the appropriate user from passed API key.
+    """
     # Ignore API key usage beyond non-API requests.
     if not request.path.startswith('/api'):
         return
