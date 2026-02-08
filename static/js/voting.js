@@ -1,5 +1,6 @@
 import { sendErrorMessage } from "./message.js";
 
+const apiKey = document.getElementById('api-key').textContent;
 const postId = document.getElementById('post-id').textContent;
 const upvoteBtn = document.getElementById('upvote-btn');
 const downvoteBtn = document.getElementById('downvote-btn');
@@ -10,6 +11,7 @@ function vote(event, targetId, score, targetType = 'post') {
     fetch(`/api/score`, {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
