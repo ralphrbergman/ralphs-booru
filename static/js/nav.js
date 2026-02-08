@@ -1,8 +1,8 @@
-const Anchors = document.getElementById('navbar-anchors');
-const MenuToggler = document.getElementById('menu-toggler');
+const anchors = document.getElementById('navbar-anchors');
+const menuToggler = document.getElementById('menu-toggler');
 
-MenuToggler.addEventListener('click', function() {
-    const State = Anchors.style.display == '' ? 'none' : '';
+menuToggler.addEventListener('click', function() {
+    const State = anchors.style.display == '' ? 'none' : '';
 
-    Anchors.style.display = State;
+    anchors.style.display = State;
 });

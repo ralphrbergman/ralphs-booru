@@ -1,10 +1,10 @@
 {
-    const PostForm = document.getElementById('post-form');
-    const InteractiveTags = document.getElementById('interactive-tags');
-    const TagInput = InteractiveTags.querySelector('input.tag');
+    const postForm = document.getElementById('post-form');
+    const interactiveTags = document.getElementById('interactive-tags');
+    const tagInput = interactiveTags.querySelector('input.tag');
 
     // Handle form submission.
-    PostForm.addEventListener('submit', function(event) {
+    postForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
         let tags = [];
@@ -16,12 +16,12 @@
         });
 
         // Add the current value in the input box if the user didn't hit space.
-        if (TagInput.value.trim()) {
-            tags.push(TagInput.value.trim());
+        if (tagInput.value.trim()) {
+            tags.push(tagInput.value.trim());
         }
 
         // Construct a form.
-        let data = new FormData(PostForm);
+        let data = new FormData(postForm);
         
         data.set('tags', tags.join(' '));
 
@@ -29,7 +29,7 @@
             method: 'POST',
             body: data
         })
-        .then(response => {
+        .then(function (response) {
             if (response.redirected) {
                 window.location.href = response.url;
             } else if (response.ok) {

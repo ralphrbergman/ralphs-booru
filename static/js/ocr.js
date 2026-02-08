@@ -1,12 +1,12 @@
-const DetectBtn = document.getElementById('ocr-btn');
-const Caption = document.querySelector('[name="caption"]');
+const detectBtn = document.getElementById('ocr-btn');
+const caption = document.querySelector('[name="caption"]');
 
-DetectBtn.addEventListener('click', async function() {
-    const Image = document.querySelector('.view-container img');
+detectBtn.addEventListener('click', async function() {
+    const image = document.querySelector('.view-container img');
     // Tesseract detection.
-    const Worker = await Tesseract.createWorker('eng');
-    const { data: { text } } = await Worker.recognize(Image);
+    const worker = await Tesseract.createWorker('eng');
+    const { data: { text } } = await worker.recognize(image);
 
-    Caption.textContent = text;
-    window.resizeTextArea(Caption);
+    caption.textContent = text;
+    window.resizeTextArea(caption);
 });

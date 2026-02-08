@@ -1,15 +1,15 @@
 {
-    const InteractiveTags = document.getElementById('interactive-tags');
+    const interactiveTags = document.getElementById('interactive-tags');
 
     function getSpans() {
         return document.querySelectorAll('span.tag');
     }
 
     function getSpanByContent(element) {
-        const SpanTags = getSpans();
+        const spanTags = getSpans();
 
-        for (let i = 0; i < SpanTags.length; i++) {
-            let span = SpanTags[i];
+        for (let i = 0; i < spanTags.length; i++) {
+            let span = spanTags[i];
 
             if (element.tagName === 'SPAN') {
                 if (span.textContent == element.textContent && span !== element) {
@@ -51,30 +51,30 @@
     }
 
     // Register event listeners for already existing tag blocks.
-    const SpanTags = getSpans();
+    const spanTags = getSpans();
 
-    SpanTags.forEach(function(span) {
+    spanTags.forEach(function(span) {
         manageSpan(span);
     });
 
     // Handle creating new tags.
-    const TagInput = InteractiveTags.querySelector('input.tag');
+    const tagInput = interactiveTags.querySelector('input.tag');
 
-    TagInput.addEventListener('keydown', function(event) {
+    tagInput.addEventListener('keydown', function(event) {
         if (event.key === ' ' || event.key === 'Enter') {
             event.preventDefault();
 
-            const Value = TagInput.value.trim();
+            const Value = tagInput.value.trim();
 
-            if (Value && !getSpanByContent(TagInput)) {
+            if (Value && !getSpanByContent(tagInput)) {
                 const span = document.createElement('span');
 
                 span.className = 'tag';
                 span.contentEditable = true;
                 span.textContent = Value;
 
-                InteractiveTags.insertBefore(span, TagInput);
-                TagInput.value = '';
+                interactiveTags.insertBefore(span, tagInput);
+                tagInput.value = '';
 
                 manageSpan(span);
             }
