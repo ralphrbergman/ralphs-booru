@@ -1,13 +1,38 @@
-from typing import Optional
+from typing import Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
-from sqlalchemy import and_, select
+from sqlalchemy import Select, and_, or_, select
 
 from db import Comment, Post, User, db
 from .base import browse_element
 
+T = TypeVar('T')
+
 def browse_comment(*args, **kwargs) -> SelectPagination:
-    return browse_element(Comment, *args, **kwargs)
+    """
+    Paginates comments by criteria.
+
+    Args:
+        direction (str, optional): Sorting direction, asc for ascending
+        and desc for descending
+        limit (int): Amount of comments per page
+        page (int): Page
+        sort (str): Comment's column to sort by
+        terms (str): Words to search
+    """
+    def comment_select(stmt: Select[T]) -> Select[T]:
+        terms = kwargs.get('terms')
+        if not terms:   return stmt
+
+        conditions = set()
+
+        for word in terms.split():
+            conditions.add(Comment.content == word)
+            conditions.add(Comment.content.icontains(word))
+
+        return stmt.where(or_(*conditions))
+
+    return browse_element(Comment, comment_select, *args, **kwargs)
 
 def create_comment(content: str, author: User, post: Post) -> Comment:
     """

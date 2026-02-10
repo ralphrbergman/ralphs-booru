@@ -3,6 +3,11 @@
 {% set title = gettext('List Users') %}
 
 {% block body %}
+    <form>
+        <input name="search" type="text" placeholder="username email ...">
+        <input type="submit" value="{{ gettext('Search') }}">
+    </form>
+
     <div class="table-container">
         <table class="center-table">
             <tr>

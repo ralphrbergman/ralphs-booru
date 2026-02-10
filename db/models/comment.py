@@ -6,8 +6,16 @@ from .mixins.author import AuthorMixin
 from .mixins.created import CreatedMixin
 from .mixins.id import IdMixin
 from .mixins.score import ScoreMixin
+from .mixins.sortable import SortableMixin
 
-class Comment(db.Model, AuthorMixin, CreatedMixin, IdMixin, ScoreMixin):
+class Comment(
+    db.Model,
+    AuthorMixin,
+    CreatedMixin,
+    IdMixin,
+    ScoreMixin,
+    SortableMixin
+):
     post_id: Mapped[int] = mapped_column(
         ForeignKey('post.id'),
         nullable = False

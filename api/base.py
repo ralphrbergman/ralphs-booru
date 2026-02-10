@@ -1,3 +1,4 @@
+from os import getenv
 from typing import Callable, Literal, Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
@@ -8,43 +9,42 @@ from db import db
 DEFAULT_LIMIT = 20
 DEFAULT_SORT = 'id'
 DEFAULT_SORT_DIR = 'desc'
+NSFW_TAG = getenv('NSFW_TAG')
+# What default term(s) shall be used when none are provided?
+DEFAULT_TERMS = f'-{NSFW_TAG}'
 LIMIT_THRESHOLD = 100
 
 T = TypeVar('T')
 
 def browse_element(
-    element,
+    element: T,
     extra_fn: Optional[Callable[[Select[T]], Select[T]]] = None,
     direction: Optional[Literal['asc', 'desc']] = DEFAULT_SORT_DIR,
     limit: Optional[int] = DEFAULT_LIMIT,
     page: Optional[int] = 1,
-    sort: Optional[str] = DEFAULT_SORT
+    sort: Optional[str] = DEFAULT_SORT,
+    terms: Optional[str] = DEFAULT_TERMS
     ) -> SelectPagination:
     """
-    Selects given element and creates a pagination for it.
-    Allows to implement further selection by extra_fn parameter.
+    Paginates element.
 
     Args:
-        element: Database element to select
+        element: Element to select
         extra_fn: Function that receives statement for additional selecting
-        limit: How many elements to show per page
-        page: Page number
-        sort_str: Sort direction, default is descending ('desc')
-
-    Returns:
-        SelectPagination: Pagination object
+        direction: Sort direction, default is descending ('desc')
+        Must be between 'desc' and 'asc' (ascending)
+        limit: How many elements per page
+        page: Page
+        sort: What column to sort
+        terms: Searching terms
     """
     if limit and limit > LIMIT_THRESHOLD:
         limit = LIMIT_THRESHOLD
 
-    column = getattr(element, sort)
+    if direction not in ('asc', 'desc'):
+        direction = DEFAULT_SORT_DIR
 
-    if not column:
-        column = getattr(element, DEFAULT_SORT)
-
-    stmt = select(element).order_by(
-        getattr(column, direction)()
-    )
+    stmt = element.apply_sort(select(element), sort, direction)
 
     if extra_fn:
         stmt = extra_fn(stmt)

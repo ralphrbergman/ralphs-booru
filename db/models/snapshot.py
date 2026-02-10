@@ -10,9 +10,10 @@ from sqlalchemy.orm import (
 from db import db
 from .mixins.created import CreatedMixin
 from .mixins.id import IdMixin
+from .mixins.sortable import SortableMixin
 from .user import User
 
-class Snapshot(db.Model, CreatedMixin, IdMixin):
+class Snapshot(db.Model, CreatedMixin, IdMixin, SortableMixin):
     post_id: Mapped[int] = mapped_column(
         ForeignKey(
             'post.id',

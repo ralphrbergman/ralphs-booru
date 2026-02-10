@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block body %}
+    <form>
+        <input name="search" type="text" placeholder="tag1 tag2 ...">
+        <input type="submit" value="{{ gettext('Search') }}">
+    </form>
+
     <div class="table-container">
         <table class="center-table tag-table">
             <tr>

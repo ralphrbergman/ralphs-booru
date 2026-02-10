@@ -3,7 +3,7 @@ from os import getenv
 from pathlib import Path
 from re import findall, sub, search
 from shutil import copy
-from typing import Optional
+from typing import Optional, TypeVar
 
 import ffmpeg
 from flask_sqlalchemy.pagination import SelectPagination
@@ -39,27 +39,27 @@ MIME_MAP = {
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 NSFW_TAG = getenv('NSFW_TAG')
-# What default term(s) shall be used when none are provided?
-DEFAULT_TERMS = f'-{NSFW_TAG}'
 TEMP = Path(getenv('TEMP_PATH'))
+
+T = TypeVar('T')
 
 def browse_post(
     *args,
-    terms: Optional[str] = DEFAULT_TERMS,
     **kwargs
 ) -> SelectPagination:
     """
-    Creates and executes a select of posts by given criteria.
+    Paginates posts by criteria.
 
     Args:
-        limit: How many posts per page to display
-        page: Page number
-        terms: Terms to search for if any
-        sort_str: Sorting way
+        direction (str, optional): Sorting direction, asc for ascending
+        and desc for descending
+        limit (int): Amount of posts per page
+        page (int): Page
+        sort (str): Post's column to sort by
+        terms (str): Tags, caption and attribute selection
     """
-    def apply_post_specific_queries(stmt: Select) -> None:
-        nonlocal terms
-
+    def post_select(stmt: Select[T]) -> Select[T]:
+        terms = kwargs['terms']
         caption = None
 
         try:
@@ -155,7 +155,7 @@ def browse_post(
 
         return stmt
 
-    return browse_element(Post, apply_post_specific_queries, *args, **kwargs)
+    return browse_element(Post, post_select, *args, **kwargs)
 
 def count_all() -> int:
     """

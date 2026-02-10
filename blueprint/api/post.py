@@ -5,19 +5,41 @@ from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 from werkzeug.datastructures import FileStorage
 
-from api import create_post, create_snapshot, delete_post, get_post, save_file
+from api import browse_post, create_post, create_snapshot, delete_post, get_post, save_file
 from api.decorators import owner_or_perm_required, post_protect, perm_required
 from api_auth import auth
 from db import Post, db
-from db.schemas import PostFormIn, PostIn, PostDeleteIn, PostOut
+from db.schemas import BrowseIn, BulkPostOut, PostFormIn, PostIn, PostDeleteIn, PostOut
 
 post_bp = APIBlueprint(
     name = 'Post API',
-    import_name = __name__,
-    url_prefix = '/post'
+    import_name = __name__
 )
 
-@post_bp.get('/<post_id>')
+@post_bp.get('/posts')
+@post_bp.input(BrowseIn, arg_name = 'data', location = 'query')
+@post_bp.output(BulkPostOut)
+def get_posts(data: BrowseIn):
+    """
+    Browse multiple posts.
+    """
+    limit = data['limit']
+    page = data['page']
+    sort = data['sort']
+    sort_by = data['sort_by']
+    terms = data['terms']
+
+    return {
+        'posts': browse_post(
+            limit = limit,
+            page = page,
+            sort = sort,
+            direction = sort_by,
+            terms = terms
+        ).items
+    }
+
+@post_bp.get('/post/<post_id>')
 @post_bp.output(PostOut)
 def obtain_post(post_id: str):
     """
@@ -28,7 +50,7 @@ def obtain_post(post_id: str):
 
     return get_post(post_id)
 
-@post_bp.delete('/<int:post_id>')
+@post_bp.delete('/post/<int:post_id>')
 @post_bp.input(PostDeleteIn, arg_name = 'data', location = 'query')
 @post_bp.output({}, status_code = 204)
 @post_bp.auth_required(auth)
@@ -47,7 +69,7 @@ def remove_post(data: PostDeleteIn, post_id: int, post: Post):
 
     return {}
 
-@post_bp.patch('/<int:post_id>')
+@post_bp.patch('/post/<int:post_id>')
 @post_bp.input(
     PostIn(partial = True),
     arg_name = 'data',
@@ -71,7 +93,7 @@ def update_post(post_id: int, data: PostIn, post: Post):
     db.session.commit()
     return post
 
-@post_bp.post('')
+@post_bp.post('/post')
 @post_bp.input(PostFormIn, arg_name = 'data', location = 'form_and_files')
 @post_bp.output(PostOut(many = True))
 @post_bp.auth_required(auth)

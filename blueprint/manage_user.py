@@ -15,11 +15,13 @@ manage_user_bp = Blueprint(
 )
 
 @manage_user_bp.route('/list')
-@moderator_only
 def user_list_page():
-    page = request.args.get('page', default = 1, type = int)
+    return redirect(url_for('Root.Manage User.user_list_paged', page = 1))
 
-    users = browse_user(page = page)
+@manage_user_bp.route('/list/<int:page>')
+@moderator_only
+def user_list_paged(page: int):
+    users = browse_user(page = page, terms = request.args.get('search'))
     bar = create_pagination_bar(
         page,
         users.pages,

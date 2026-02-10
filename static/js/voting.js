@@ -25,7 +25,7 @@ function vote(event, targetId, score, targetType = 'post') {
         } else {
             const json = await response.json();
 
-            sendErrorMessage(`Error: ${json['detail']}`);
+            sendErrorMessage(`Error: ${json['message']}`);
         }
     })
 }

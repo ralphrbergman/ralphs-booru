@@ -5,9 +5,10 @@ from sqlalchemy.orm import Mapped, mapped_column, validates
 from db import db
 from .mixins.created import CreatedMixin
 from .mixins.id import IdMixin
+from .mixins.sortable import SortableMixin
 from .mixins.serializer import SerializerMixin
 
-class Tag(db.Model, CreatedMixin, IdMixin, SerializerMixin):
+class Tag(db.Model, CreatedMixin, IdMixin, SortableMixin, SerializerMixin):
     id: Mapped[int] = mapped_column(primary_key = True)
     name: Mapped[str] = mapped_column(nullable = False, unique = True)
     

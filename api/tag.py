@@ -1,11 +1,13 @@
-from typing import Optional
+from typing import Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
-from sqlalchemy import or_, select
+from sqlalchemy import Select, or_, select
 from sqlalchemy.exc import IntegrityError
 
 from db import db, Post, Tag
 from .base import browse_element
+
+T = TypeVar('T')
 
 def add_tags(tag_list: list[str]) -> list[Tag]:
     """
@@ -34,9 +36,28 @@ def add_tags(tag_list: list[str]) -> list[Tag]:
 
 def browse_tag(*args, **kwargs) -> SelectPagination:
     """
-    Creates and executes a select of tags by criteria.
+    Paginates tags by criteria.
+
+    Args:
+        direction (str, optional): Sorting direction, asc for ascending
+        and desc for descending
+        limit (int): Amount of tags per page
+        page (int): Page
+        sort (str): Tag's column to sort by
+        terms (str): Tag name to search for
     """
-    return browse_element(Tag, *args, **kwargs)
+    def tag_select(stmt: Select[T]) -> Select[T]:
+        terms = kwargs.get('terms')
+        if not terms:   return stmt
+
+        conditions = set()
+
+        for word in terms.split():
+            conditions.add(Tag.name == word)
+
+        return stmt.where(or_(*conditions))
+
+    return browse_element(Tag, tag_select, *args, **kwargs)
 
 def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
     """

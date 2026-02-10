@@ -18,6 +18,7 @@ from .mixins.created import CreatedMixin
 from .mixins.id import IdMixin
 from .mixins.removed import RemovedMixin
 from .mixins.score import ScoreMixin
+from .mixins.sortable import SortableMixin
 from .mixins.serializer import SerializerMixin
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
@@ -32,6 +33,7 @@ class Post(
     IdMixin,
     RemovedMixin,
     ScoreMixin,
+    SortableMixin,
     SerializerMixin
 ):
     modified: Mapped[datetime] = mapped_column(

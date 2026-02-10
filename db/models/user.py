@@ -21,6 +21,7 @@ from encryption import bcrypt
 from .comment import Comment
 from .mixins.created import CreatedMixin
 from .mixins.id import IdMixin
+from .mixins.sortable import SortableMixin
 from .mixins.serializer import SerializerMixin
 from .post import Post
 
@@ -34,7 +35,14 @@ def find_user_by_key(key: str) -> Optional[User]:
         select(User).where(User._key == key)
     ).first()
 
-class User(db.Model, CreatedMixin, IdMixin, SerializerMixin, UserMixin):
+class User(
+    db.Model,
+    CreatedMixin,
+    IdMixin,
+    SortableMixin,
+    SerializerMixin,
+    UserMixin
+):
     LEVEL_HARDNESS = int(getenv('HARDNESS'))
 
     @classmethod

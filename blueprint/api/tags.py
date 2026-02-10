@@ -1,7 +1,7 @@
 from apiflask import APIBlueprint
 from flask_login import current_user
 
-from api import browse_tag, create_snapshot, create_tag, get_tag, get_post
+from api import create_snapshot, create_tag, get_tag, get_post
 from api.decorators import post_protect, perm_required
 from api_auth import auth
 from db import db

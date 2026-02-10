@@ -3,6 +3,11 @@
 {% set title = gettext('Comments') ~ ': ' ~ comments.items | length %}
 
 {% block body %}
+    <form>
+        <input name="search" type="text" placeholder="word word ...">
+        <input type="submit" value="{{ gettext('Search') }}">
+    </form>
+
     <p>{%- trans post_count = post_count -%}
         This page displays comments site-wide across all {{ post_count }} posts.
         {%- endtrans -%}</p>

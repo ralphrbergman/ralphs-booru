@@ -11,6 +11,9 @@ from flask_babel import gettext
 from flask_login import current_user, login_required
 
 from api import (
+    DEFAULT_LIMIT,
+    DEFAULT_SORT,
+    DEFAULT_SORT_DIR,
     browse_tag,
     browse_snapshots,
     delete_tag,
@@ -20,7 +23,7 @@ from api import (
 )
 from api.decorators import post_protect, perm_required
 from db import db
-from form import SnapshotForm, TagForm
+from form import SearchForm, SnapshotForm, TagForm
 from .utils import create_pagination_bar
 
 tag_bp = Blueprint(
@@ -111,7 +114,13 @@ def tag_page():
 
 @tag_bp.route('<int:page>')
 def tag_paged(page: int):
-    tags = browse_tag(page = page)
+    tags = browse_tag(
+        direction = request.args.get('sort_by', DEFAULT_SORT_DIR),
+        limit = request.args.get('limit', DEFAULT_LIMIT),
+        page = page,
+        sort = request.args.get('sort', DEFAULT_SORT),
+        terms = request.args.get('search')
+    )
 
     bar = create_pagination_bar(
         tags.page,

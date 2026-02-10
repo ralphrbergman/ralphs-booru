@@ -1,18 +1,25 @@
-from flask import Blueprint, request, render_template
+from flask import Blueprint, request, redirect, render_template, url_for
 
 from api import browse_comment, count_all_posts
 from .utils import create_pagination_bar
 
 comment_bp = Blueprint(
     name = 'Comment',
-    import_name = __name__
+    import_name = __name__,
+    url_prefix = '/comments'
 )
 
-@comment_bp.route('/comments')
+@comment_bp.route('')
 def comment_page():
-    page = request.args.get('page', default = 1, type = int)
+    return redirect(url_for('Root.Comment.comment_paged', page = 1))
 
-    comments = browse_comment(page = page)
+@comment_bp.route('/<int:page>')
+def comment_paged(page: int):
+    comments = browse_comment(
+        page = page,
+        terms = request.args.get('search')
+    )
+
     bar = create_pagination_bar(
         page,
         comments.pages,

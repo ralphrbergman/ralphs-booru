@@ -34,7 +34,7 @@ def unauthorized_callback():
     """
     if request.path.startswith('/api'):
         response = make_response(jsonify({
-            'detail': 'Authentication is required.',
+            'message': 'Authentication is required.',
             'status': 401
         }), 401)
 

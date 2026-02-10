@@ -1,16 +1,32 @@
-from typing import Optional
+from typing import Optional, TypeVar
 
-from sqlalchemy import select
+from sqlalchemy import Select, or_, select
 from sqlalchemy.exc import IntegrityError
 
 from db import db, User
 from .base import browse_element
 
+T = TypeVar('T')
+
 def browse_user(*args, **kwargs):
     """
     Creates and executes select of users by criteria.
     """
-    return browse_element(User, *args, **kwargs)
+    def user_select(stmt: Select[T]) -> Select[T]:
+        terms = kwargs.get('terms')
+        if not terms:   return stmt
+
+        conditions = set()
+
+        for word in terms.split():
+            conditions.add(User.name == word)
+            conditions.add(User.name.icontains(word))
+            conditions.add(User.mail == word)
+            conditions.add(User.mail.icontains(word))
+
+        return stmt.where(or_(*conditions))
+
+    return browse_element(User, user_select, *args, **kwargs)
 
 def create_user(
     name: str,
