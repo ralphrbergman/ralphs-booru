@@ -9,9 +9,6 @@ from db import db
 DEFAULT_LIMIT = 20
 DEFAULT_SORT = 'id'
 DEFAULT_SORT_DIR = 'desc'
-NSFW_TAG = getenv('NSFW_TAG')
-# What default term(s) shall be used when none are provided?
-DEFAULT_TERMS = f'-{NSFW_TAG}'
 LIMIT_THRESHOLD = 100
 
 T = TypeVar('T')
@@ -23,7 +20,7 @@ def browse_element(
     limit: Optional[int] = DEFAULT_LIMIT,
     page: Optional[int] = 1,
     sort: Optional[str] = DEFAULT_SORT,
-    terms: Optional[str] = DEFAULT_TERMS
+    terms: Optional[str] = None
     ) -> SelectPagination:
     """
     Paginates element.

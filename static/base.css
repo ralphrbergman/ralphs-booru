@@ -37,7 +37,7 @@ body {
 }
 
 .content-wrapper {
-    background-color: white;
+    background-color: var(--body-color);
     display: flex;
     flex-direction: column;
     gap: var(--gap);

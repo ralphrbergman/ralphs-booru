@@ -21,7 +21,7 @@ def browse_comment(*args, **kwargs) -> SelectPagination:
         terms (str): Words to search
     """
     def comment_select(stmt: Select[T]) -> Select[T]:
-        terms = kwargs.get('terms')
+        terms: str = kwargs.get('terms')
         if not terms:   return stmt
 
         conditions = set()

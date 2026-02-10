@@ -13,7 +13,7 @@ def browse_user(*args, **kwargs):
     Creates and executes select of users by criteria.
     """
     def user_select(stmt: Select[T]) -> Select[T]:
-        terms = kwargs.get('terms')
+        terms: str = kwargs.get('terms')
         if not terms:   return stmt
 
         conditions = set()

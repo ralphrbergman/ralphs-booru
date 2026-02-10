@@ -1,4 +1,4 @@
-from .browse import BrowseIn
+from .browse import BrowseIn, CommentBrowse, PostBrowse, TagBrowse
 from .comment import CommentIn, CommentOut
 from .file import FileIn
 from .post import PostFormIn, PostIn, PostDeleteIn, PostOut

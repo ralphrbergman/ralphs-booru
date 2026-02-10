@@ -9,7 +9,7 @@ from api import browse_post, create_post, create_snapshot, delete_post, get_post
 from api.decorators import owner_or_perm_required, post_protect, perm_required
 from api_auth import auth
 from db import Post, db
-from db.schemas import BrowseIn, BulkPostOut, PostFormIn, PostIn, PostDeleteIn, PostOut
+from db.schemas import BrowseIn, PostBrowse, PostFormIn, PostIn, PostDeleteIn, PostOut
 
 post_bp = APIBlueprint(
     name = 'Post API',
@@ -18,25 +18,22 @@ post_bp = APIBlueprint(
 
 @post_bp.get('/posts')
 @post_bp.input(BrowseIn, arg_name = 'data', location = 'query')
-@post_bp.output(BulkPostOut)
+@post_bp.output(PostBrowse)
 def get_posts(data: BrowseIn):
     """
     Browse multiple posts.
     """
-    limit = data['limit']
-    page = data['page']
-    sort = data['sort']
-    sort_by = data['sort_by']
-    terms = data['terms']
+    pagination = browse_post(
+        direction = data['sort_by'],
+        limit = data['limit'],
+        page = data['page'],
+        sort = data['sort'],
+        terms = data['terms']
+    )
 
     return {
-        'posts': browse_post(
-            limit = limit,
-            page = page,
-            sort = sort,
-            direction = sort_by,
-            terms = terms
-        ).items
+        'pages': pagination.pages,
+        'posts': pagination.items
     }
 
 @post_bp.get('/post/<post_id>')

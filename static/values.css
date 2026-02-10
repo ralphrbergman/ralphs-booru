@@ -1,6 +1,7 @@
 :root {
     /* Color configuration. */
     --bg-color: #9532e6;
+    --body-color: white;
     --contrast-color: #e63286;
     --link-color: #29c7e6;
 

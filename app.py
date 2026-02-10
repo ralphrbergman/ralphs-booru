@@ -19,14 +19,17 @@ load_dotenv()
 SSL_ENABLED = getenv('SSL_ENABLED') == 'true'
 
 def create_app() -> APIFlask:
+    url = brand['url']
     app = APIFlask(
         import_name = __name__,
         template_folder = 'template',
         title = 'Ralphs Booru'
     )
-    app.config['SERVERS'] = [
-        {'url': brand['url'], 'description': 'Production server'}
-    ]
+
+    if url:
+        app.config['SERVERS'] = [
+            {'url': url, 'description': 'Production server'}
+        ]
 
     app.jinja_env.globals['brand'] = brand
     app.config['SECRET_KEY'] = getenv('SECRET_KEY')

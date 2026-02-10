@@ -1,3 +1,7 @@
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'tag.css') }}">
+{% endblock %}
+
 {% block body %}
     <div id="interactive-tags" class="hidden" name="tags"{% if not (current_user.has_permission('tag:edit') or current_user.owns(post)) %}disabled{% endif %}>
         {%- if post and post.tags is not none -%}
@@ -5,6 +9,15 @@
                 <span class="tag" contenteditable="true">{{ tag.name }}</span>
             {%- endfor -%}
         {%- endif -%}
-        <input class="tag" type="text">
+
+        <div class="tag-div">
+            <input class="tag" type="text">
+            <ul class="suggestions"></ul>
+        </div>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename = 'js/tag_handler.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename = 'js/suggestions.js') }}" type="module"></script>
 {% endblock %}

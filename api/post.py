@@ -39,6 +39,8 @@ MIME_MAP = {
 
 CONTENT_PATH = Path(getenv('CONTENT_PATH'))
 NSFW_TAG = getenv('NSFW_TAG')
+# What default term(s) shall be used when none are provided?
+DEFAULT_TERMS = f'-{NSFW_TAG}'
 TEMP = Path(getenv('TEMP_PATH'))
 
 T = TypeVar('T')
@@ -59,7 +61,7 @@ def browse_post(
         terms (str): Tags, caption and attribute selection
     """
     def post_select(stmt: Select[T]) -> Select[T]:
-        terms = kwargs['terms']
+        terms = kwargs.get('terms', DEFAULT_TERMS)
         caption = None
 
         try:

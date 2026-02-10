@@ -1,17 +1,37 @@
 from apiflask import APIBlueprint
 from flask_login import current_user
 
-from api import create_snapshot, create_tag, get_tag, get_post
+from api import browse_tag, create_snapshot, create_tag, get_tag, get_post
 from api.decorators import post_protect, perm_required
 from api_auth import auth
 from db import db
-from db.schemas import TagBulkIn, TagBulkOut
+from db.schemas import BrowseIn, TagBulkIn, TagBulkOut, TagBrowse
 
 tags_bp = APIBlueprint(
     name = 'Tags API',
     import_name = __name__,
     url_prefix = '/tags'
 )
+
+@tags_bp.get('')
+@tags_bp.input(BrowseIn, arg_name = 'data', location = 'query')
+@tags_bp.output(TagBrowse)
+def get_tags(data: BrowseIn):
+    """
+    Browse multiple tags.
+    """
+    pagination = browse_tag(
+        direction = data['sort_by'],
+        limit = data['limit'],
+        page = data['page'],
+        sort = data['sort'],
+        terms = data['terms']
+    )
+
+    return {
+        'pages': pagination.pages,
+        'tags': pagination.items
+    }
 
 @tags_bp.patch('/add')
 @tags_bp.input(TagBulkIn, arg_name = 'data')

@@ -2,7 +2,6 @@ from .base import (
     DEFAULT_LIMIT,
     DEFAULT_SORT,
     DEFAULT_SORT_DIR,
-    DEFAULT_TERMS,
     LIMIT_THRESHOLD,
     browse_element
 )
@@ -13,6 +12,7 @@ from .comment import (
     get_comment
 )
 from .post import (
+    DEFAULT_TERMS,
     browse_post,
     count_all as count_all_posts,
     create_post,

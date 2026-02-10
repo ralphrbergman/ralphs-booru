@@ -1,7 +1,7 @@
 from typing import Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
-from sqlalchemy import Select, or_, select
+from sqlalchemy import Select, and_, or_, select
 from sqlalchemy.exc import IntegrityError
 
 from db import db, Post, Tag
@@ -47,15 +47,26 @@ def browse_tag(*args, **kwargs) -> SelectPagination:
         terms (str): Tag name to search for
     """
     def tag_select(stmt: Select[T]) -> Select[T]:
-        terms = kwargs.get('terms')
+        terms: str = kwargs.get('terms')
         if not terms:   return stmt
 
-        conditions = set()
+        n_cond = set()  # Store excluding tags
+        p_cond = set()  # Store including tags
 
         for word in terms.split():
-            conditions.add(Tag.name == word)
+            if word.startswith('-'):
+                n_cond.add(Tag.name != word[1:])
+            else:
+                p_cond.add(Tag.name.icontains(word))
+                p_cond.add(Tag.name == word)
 
-        return stmt.where(or_(*conditions))
+        if p_cond:
+            stmt = stmt.where(or_(*p_cond))
+
+        if n_cond:
+            stmt = stmt.where(and_(*n_cond))
+
+        return stmt
 
     return browse_element(Tag, tag_select, *args, **kwargs)
 

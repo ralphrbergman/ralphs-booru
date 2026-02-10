@@ -124,7 +124,7 @@
 {% block script %}
     <script src="{{ url_for('static', filename = 'js/ocr.js') }}"></script>    
     <script src="{{ url_for('static', filename = 'js/show_tags.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'js/tag_handler.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/tag_handler.js') }}" type="module"></script>
     <script src="{{ url_for('static', filename = 'js/textarea.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/upload.js') }}"></script>
 {% endblock %}
