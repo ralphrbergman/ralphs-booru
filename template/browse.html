@@ -4,7 +4,7 @@
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'post.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'tag_editor.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'tag-editor.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -21,5 +21,4 @@
 
 {% block script %}
     <script src="{{ url_for('static', filename = 'js/manage_post.js') }}" type="module"></script>
-    <script src="{{ url_for('static', filename = 'js/tag_handler.js') }}" type="module"></script>
 {% endblock %}

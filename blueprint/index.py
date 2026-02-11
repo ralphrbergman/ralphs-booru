@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, request, redirect, render_template, url_for
 
 from api import count_all_posts
 from form import SearchForm
@@ -8,11 +8,11 @@ index_bp = Blueprint(
     import_name = __name__
 )
 
-@index_bp.route('/', methods = ['GET', 'POST'])
+@index_bp.get('/')
 def index_page():
-    form = SearchForm()
+    form = SearchForm(request.args, meta = {'csrf': False})
 
-    if form.validate_on_submit():
+    if request.args and form.validate():
         raw_query = form.search.data.strip()
 
         if 'nsfw' not in raw_query:
@@ -22,7 +22,7 @@ def index_page():
             url_for(
                 'Root.Post.browse_paged',
                 page = 1,
-                terms = raw_query
+                search = raw_query
             )
         )
 

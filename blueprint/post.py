@@ -58,7 +58,7 @@ def browse_paged(page: int):
 
     blur = args.get('blur', default = DEFAULT_BLUR)
     limit = args.get('limit', default = DEFAULT_LIMIT, type = int)
-    terms = args.get('terms', default = DEFAULT_TERMS)
+    search = args.get('search', default = DEFAULT_TERMS)
     sort = args.get('sort', default = DEFAULT_SORT)
     sort_direction = args.get('sort_direction', default = DEFAULT_SORT_DIR)
 
@@ -70,23 +70,23 @@ def browse_paged(page: int):
                 blur = blur,
                 limit = limit,
                 page = page,
-                terms = terms,
+                search = search,
                 sort = sort,
                 sort_direction = sort_direction
             )
         )
 
-    posts = browse_post(
+    pagination = browse_post(
         direction = sort_direction,
         limit = limit,
         page = page,
-        terms = terms,
+        terms = search,
         sort = sort
     )
 
     bar = create_pagination_bar(
         page,
-        posts.pages,
+        pagination.pages,
         'Root.Post.browse_paged',
         **request.args
     )
@@ -96,7 +96,8 @@ def browse_paged(page: int):
         bar = bar,
         blur = blur,
         current_page = page,
-        posts = posts
+        posts = pagination,
+        search = search
     )
 
 @post_bp.route('/edit/<int:post_id>', methods = ['GET', 'POST'])

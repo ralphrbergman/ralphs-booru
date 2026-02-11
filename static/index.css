@@ -29,7 +29,7 @@
     border: 0.1rem solid var(--bg-color);
     cursor: pointer;
     font-size: var(--larger-font-size);
-    padding: var(--medium-gap);
+    padding: var(--small-gap);
 }
 
 .search-btn {

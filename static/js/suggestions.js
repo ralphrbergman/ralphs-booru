@@ -1,20 +1,16 @@
 import { createTag, getSpans } from './tag_handler.js';
 
-const input = document.querySelector('input.tag');
-const list = document.querySelector('ul.suggestions');
-
 // Holds current fetch request.
 let controller;
 
-function addSuggestion(tagName) {
+function addSuggestion(input, tagName) {
     input.value = null;
-    createTag(tagName);
-
-    input.focus();
+    createTag(tagName, input.parentElement.parentElement, input);
 }
 
-async function handleSuggesting(event) {
-    const query = this.value;
+async function handleSuggesting(input, list) {
+    const query = input.value;
+
     if (controller) controller.abort();
     if (!query.length) return;
 
@@ -25,7 +21,7 @@ async function handleSuggesting(event) {
     // Ignore tags that are already specified.
     const ignoreTags = [];
 
-    getSpans().forEach(function(span) {
+    getSpans(input.parentElement.parentElement).forEach(function(span) {
         ignoreTags.push('-' + span.textContent);
     });
 
@@ -58,7 +54,7 @@ async function handleSuggesting(event) {
 
             list.appendChild(li);
 
-            li.addEventListener('mousedown', addSuggestion.bind(null, tagName));
+            li.addEventListener('mousedown', addSuggestion.bind(null, input, tagName));
         }
     } catch (error) {
         if (error.name === 'AbortError') return;
@@ -66,10 +62,16 @@ async function handleSuggesting(event) {
     }
 }
 
-input.addEventListener('focusin', handleSuggesting);
-input.addEventListener('focusout', function() {
-    list.innerHTML = '';
-    list.style.display = 'none';
-});
+const inputs = document.querySelectorAll('input.tag');
 
-input.addEventListener('input', handleSuggesting);
+inputs.forEach(function(input) {
+    const list = input.nextElementSibling;
+
+    input.addEventListener('focusin', handleSuggesting.bind(null, input, list));
+    input.addEventListener('focusout', function() {
+        list.innerHTML = '';
+        list.style.display = 'none';
+    });
+
+    input.addEventListener('input', handleSuggesting.bind(null, input, list));
+});

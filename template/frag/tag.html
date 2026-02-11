@@ -1,9 +1,12 @@
 {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'tag.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'tag-editor.css') }}">
 {% endblock %}
 
 {% block body %}
-    <div id="interactive-tags" class="hidden" name="tags"{% if not (current_user.has_permission('tag:edit') or current_user.owns(post)) %}disabled{% endif %}>
+    <div class="interactive-tags hidden" name="tags"
+    {%- if current_user.is_authenticated and not (current_user.has_permission('tag:edit') or current_user.owns(post)) -%}
+        disabled
+    {% endif %}>
         {%- if post and post.tags is not none -%}
             {%- for tag in post.tags -%}
                 <span class="tag" contenteditable="true">{{ tag.name }}</span>

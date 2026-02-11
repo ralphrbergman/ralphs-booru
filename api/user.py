@@ -10,7 +10,15 @@ T = TypeVar('T')
 
 def browse_user(*args, **kwargs):
     """
-    Creates and executes select of users by criteria.
+    Paginates users by criteria.
+
+    Args:
+        direction (str, optional): Sorting direction, asc for ascending
+        and desc for descending
+        limit (int): Amount of users per page
+        page (int): Page
+        sort (str): User's column to sort by
+        terms (str): Username or user's e-mail
     """
     def user_select(stmt: Select[T]) -> Select[T]:
         terms: str = kwargs.get('terms')

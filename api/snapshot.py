@@ -13,12 +13,17 @@ def browse_snapshots(
     **kwargs
 ) -> SelectPagination:
     """
-    Creates and executes a select of snapshots by criteria.
+    Paginates snapshots by criteria.
 
     Args:
         post_id: Which post's snapshots to show
+        direction (str, optional): Sorting direction, asc for ascending
+        and desc for descending
+        limit (int): Amount of snapshots per page
+        page (int): Page
+        sort (str): Snapshot's column to sort by
     """
-    def apply_snapshot_specific_query(stmt: Select) -> None:
+    def snapshot_select(stmt: Select) -> None:
         nonlocal post_id
 
         stmt = stmt.where(Snapshot.post_id == post_id)
@@ -27,7 +32,9 @@ def browse_snapshots(
 
     return browse_element(
         Snapshot,
-        extra_fn = apply_snapshot_specific_query, *args, **kwargs
+        extra_fn = snapshot_select,
+        *args,
+        **kwargs
     )
 
 def create_snapshot(post: Post, user: User) -> Snapshot:

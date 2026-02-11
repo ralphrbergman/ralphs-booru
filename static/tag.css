@@ -1,22 +1,5 @@
 @import 'values.css';
 
-.suggestions {
-    background-color: var(--body-color);
-    display: none;
-    list-style-type: none;
-    padding: var(--small-gap);
-    position: absolute;
-}
-
-.suggestions li {
-    cursor: pointer;
-}
-
-.suggestions li:not(:last-child) {
-    margin-bottom: var(--smaller-gap);
-    user-select: none;
-}
-
 .tag-table th,
 .tag-table td {
     padding-bottom: var(--smaller-gap);

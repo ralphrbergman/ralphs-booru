@@ -13,6 +13,7 @@ from sqlalchemy.orm.exc import UnmappedInstanceError
 from werkzeug.datastructures import FileStorage
 
 from db import Post, Tag, User, db
+from db.models.tag import TAG_PATTERN
 from .base import browse_element
 from .removed import create_log
 from .tag import create_tag, get_tag
@@ -21,7 +22,6 @@ from .thumbnail import create_thumbnail
 NONALPHA = r'[^a-zA-Z0-9.]'
 ATTR_PATTERN = r'\b\w+:[<>]?\S*'  # attr:value, attr: , attr:<value, attr:>value
 CAPTION_PATTERN = r'"([^"]*)"'  # "hello world"
-TAG_PATTERN = r'[a-zA-Z0-9-_()]+'  # tag1 tag2 tag3
 
 MIME_MAP = {
     'gif': 'image/gif',
@@ -66,7 +66,7 @@ def browse_post(
 
         try:
             # Capture caption text from terms.
-            caption = search(CAPTION_PATTERN, terms)[1]
+            caption = terms(CAPTION_PATTERN, terms)[1]
             terms = sub(CAPTION_PATTERN, '', terms)
         except TypeError:
             pass
@@ -143,7 +143,7 @@ def browse_post(
 
         stmt = stmt.where(removed_value)
 
-        # Handle where a user wants to search for posts with no tags.
+        # Handle where a user wants to terms for posts with no tags.
         if 'no_tags' in tags:
             stmt = stmt.where(~Post.tags.any())
         else:

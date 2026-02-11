@@ -1,0 +1,32 @@
+.suggestions {
+    background-color: var(--body-color);
+    display: none;
+    list-style-type: none;
+    padding: var(--small-gap);
+    position: absolute;
+    z-index: 2;
+}
+
+.suggestions li {
+    cursor: pointer;
+}
+
+.suggestions li:not(:last-child) {
+    margin-bottom: var(--smaller-gap);
+    user-select: none;
+}
+
+.tag {
+    border: 1px solid gray;
+    border-radius: 4px;
+    background-color: Field;
+    color: FieldText;
+    padding: 2px 2px;
+    word-break: break-all;
+}
+
+div[name='tags'] {
+    background-color: Field;
+    flex-wrap: wrap;
+    gap: var(--small-gap);
+}

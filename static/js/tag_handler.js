@@ -1,6 +1,6 @@
-const interactiveTags = document.getElementById('interactive-tags');
+const interList = document.getElementsByClassName('interactive-tags');
 
-export function createTag(tagName) {
+export function createTag(tagName, interactiveTags, tagInput) {
     const span = document.createElement('span');
 
     span.className = 'tag';
@@ -10,16 +10,15 @@ export function createTag(tagName) {
     interactiveTags.insertBefore(span, tagInput.parentElement);
     tagInput.value = '';
 
-    manageSpan(span);
+    manageSpan(span, interactiveTags);
 }
 
-
-export function getSpans() {
-    return document.querySelectorAll('span.tag');
+export function getSpans(interactiveTags) {
+    return interactiveTags.querySelectorAll('span.tag');
 }
 
-export function getSpanByContent(element) {
-    const spanTags = getSpans();
+export function getSpanByContent(element, interactiveTags) {
+    const spanTags = getSpans(interactiveTags);
 
     for (let i = 0; i < spanTags.length; i++) {
         let span = spanTags[i];
@@ -36,7 +35,17 @@ export function getSpanByContent(element) {
     }
 }
 
-export function manageSpan(span) {
+export function getTags(interactiveTags) {
+    const tags = [];
+
+    getSpans(interactiveTags).forEach(function(span) {
+        tags.push(span.textContent);
+    });
+
+    return tags;
+}
+
+export function manageSpan(span, interactiveTags) {
     function handleSpan() {
         if (span.textContent.trim().length === 0) {
             span.remove();
@@ -47,14 +56,14 @@ export function manageSpan(span) {
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
 
-            if (!getSpanByContent(span)) {
+            if (!getSpanByContent(span, interactiveTags)) {
                 span.nextSibling.focus();
             }
         }
     });
 
     span.addEventListener('focusout', function(event) {
-        if (getSpanByContent(span)) {
+        if (getSpanByContent(span, interactiveTags)) {
             span.remove();
             return;
         }
@@ -63,24 +72,27 @@ export function manageSpan(span) {
     });
 }
 
-// Register event listeners for already existing tag blocks.
-const spanTags = getSpans();
+for (let i = 0; i < interList.length; i++) {
+    const interactiveTags = interList[i];
+    const tagInput = interactiveTags.querySelector('input.tag');
 
-spanTags.forEach(function(span) {
-    manageSpan(span);
-});
+    // Register event listeners for already existing tag blocks.
+    const spanTags = getSpans(interactiveTags);
 
-// Handle creating new tags.
-const tagInput = interactiveTags.querySelector('input.tag');
+    spanTags.forEach(function(span) {
+        manageSpan(span, interactiveTags);
+    });
 
-tagInput.addEventListener('keydown', function(event) {
-    if (event.key === ' ' || event.key === 'Enter') {
-        event.preventDefault();
+    // Handle creating new tags.
+    tagInput.addEventListener('keydown', function(event) {
+        if (event.key === ' ' || event.key === 'Enter') {
+            event.preventDefault();
 
-        const Value = tagInput.value.trim();
+            const Value = tagInput.value.trim();
 
-        if (Value && !getSpanByContent(tagInput)) {
-            createTag(Value);
+            if (Value && !getSpanByContent(tagInput, interactiveTags)) {
+                createTag(Value, interactiveTags, tagInput);
+            }
         }
-    }
-});
+    });
+}
