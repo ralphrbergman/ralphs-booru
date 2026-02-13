@@ -1,7 +1,7 @@
 from hashlib import md5 as _md5
 from os import getenv
 from pathlib import Path
-from re import findall, sub, search
+from re import findall, sub
 from shutil import copy
 from typing import Optional, TypeVar
 
@@ -213,16 +213,12 @@ def create_post(
     try:
         tag_objs = list()
 
-        for tag_name in tags.split(' '):
-            tag = get_tag(tag_name)
+        for tag_name in tags.split():
+            if not tag_name:    continue
+            tag = get_tag(tag_name) or create_tag(tag_name)
 
-            if not tag:
-                tag = create_tag(tag_name)
-
-                if not tag:
-                    continue
-
-            post.tags.append(tag)
+            if tag:
+                post.tags.append(tag)
     except AttributeError as exc:
         pass
 

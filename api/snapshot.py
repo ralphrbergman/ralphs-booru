@@ -78,7 +78,8 @@ def revert_snapshot(snapshot: Snapshot, user: User) -> Snapshot:
     for tag_name in prev.tags.split():
         tag = get_tag(tag_name) or create_tag(tag_name)
 
-        post.tags.append(tag)
+        if tag:
+            post.tags.append(tag)
 
     new_snapshot = create_snapshot(post, user)
 

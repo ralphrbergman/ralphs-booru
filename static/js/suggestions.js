@@ -29,7 +29,7 @@ async function handleSuggesting(input, list) {
         const params = new URLSearchParams({
             limit: 10,
             page: 1,
-            sort: 'id',
+            sort: 'name',
             sort_by: 'desc',
             terms: query
         });

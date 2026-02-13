@@ -5,7 +5,7 @@
 {% block body %}
     <nav id="navbar">
         <ul id="navbar-anchors">
-            <li><a class="navbar-anchor navbar-logo" href="{{ url_for('Root.Index.index_page') }}"><img class="logo-bg" src="{{ url_for('static', filename = 'favicon.png') }}" alt="Website's logo" height="50px" width="50px"></a></li>
+            <li><a class="navbar-anchor navbar-logo" href="{{ url_for('Root.Index.index_page') }}"><img src="{{ url_for('static', filename = 'favicon.png') }}" alt="Website's logo" height="50px" width="50px"></a></li>
             <li><a class="navbar-anchor" href="{{ url_for('Root.Index.index_page') }}">{{ gettext('Index') }}</a></li>
             <li><a class="navbar-anchor" href="{{ url_for('Root.Post.browse_page') }}">{{ gettext('Browse') }}</a></li>
             <li><a class="navbar-anchor" href="{{ url_for('Root.Tag.tag_page') }}">{{ gettext('Tags') }}</a></li>

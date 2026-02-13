@@ -116,6 +116,7 @@ def upload_post(data: PostFormIn):
         )
 
         posted = False
+        db.session.flush()
         create_snapshot(post, current_user)
 
         try:

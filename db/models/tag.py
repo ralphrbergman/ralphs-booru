@@ -34,11 +34,11 @@ class Tag(db.Model, CreatedMixin, IdMixin, SortableMixin, SerializerMixin):
     )
 
     @validates('name')
-    def validate_tag(self, key: str, value: str) -> Optional[str]:
+    def validate_name(self, key: str, value: str) -> Optional[str]:
         """
         Throw ValueError if the tag name isn't up to standard.
         """
-        clean = sub(NEG_PATTERN, '', value).strip()
+        clean = sub(NEG_PATTERN, '', value).strip().lower()
 
         if not clean:
             raise ValueError('Tag name should be alphanumeric characters '\
@@ -46,7 +46,7 @@ class Tag(db.Model, CreatedMixin, IdMixin, SortableMixin, SerializerMixin):
             value
             )
 
-        return value
+        return clean
 
     @validates('desc')
     def validate_desc(self, key: str, value: str) -> Optional[str]:

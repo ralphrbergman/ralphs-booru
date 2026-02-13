@@ -2,7 +2,6 @@ from typing import Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
 from sqlalchemy import Select, and_, or_, select
-from sqlalchemy.exc import IntegrityError
 
 from db import db, Post, Tag
 from .base import browse_element
@@ -21,16 +20,14 @@ def add_tags(tag_list: list[str]) -> list[Tag]:
     tag_names = set()
 
     for tag_name in tag_list:
-        if len(tag_name) == 0 or tag_name in tag_names:
-            break
+        if not tag_name or tag_name in tag_names:
+            continue
 
-        tag = get_tag(tag_name)
+        tag = get_tag(tag_name) or create_tag(tag_name)
 
-        if not tag:
-            tag = create_tag(tag_name)
-
-        new_tags.append(tag)
-        tag_names.add(tag_name)
+        if tag:
+            new_tags.append(tag)
+            tag_names.add(tag_name)
 
     return new_tags
 
@@ -70,7 +67,7 @@ def browse_tag(*args, **kwargs) -> SelectPagination:
 
     return browse_element(Tag, tag_select, *args, **kwargs)
 
-def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
+def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag | None:
     """
     Creates and returns tag object.
 
@@ -81,19 +78,18 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag:
     tag = Tag()
     db.session.add(tag)
 
-    tag.name = name
+    try:
+        tag.name = name
+    except ValueError:
+        # Name of tag is purely invalid characters.
+        db.session.expunge(tag)
+        return None
 
     try:
         for post in posts:
             post.tags.append(tag)
     except TypeError as exc:
         pass
-
-    try:
-        db.session.commit()
-    except IntegrityError as exc:
-        db.session.rollback()
-        return
 
     return tag
 

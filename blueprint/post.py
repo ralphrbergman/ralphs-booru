@@ -166,7 +166,8 @@ def edit_page(post_id: int, post: Post):
                 pass
 
             if post.tags != original_tags:
-                hist = create_snapshot(post, current_user)
+                db.session.flush()
+                create_snapshot(post, current_user)
 
             move_post(post, form.directory.data.strip())
 
@@ -264,6 +265,7 @@ def upload_page():
             )
 
             posted = False
+            db.session.flush()
             create_snapshot(post, current_user)
 
             try:

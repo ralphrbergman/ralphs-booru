@@ -1,5 +1,6 @@
 from apiflask import APIBlueprint, abort
 from flask_login import current_user
+from sqlalchemy.exc import IntegrityError
 
 from api import create_snapshot, create_tag, delete_tag, get_tag, get_post
 from api.decorators import post_protect, perm_required
@@ -63,17 +64,25 @@ def upload_tag(data: TagIn):
 
         posts.append(post)
 
-    tag = create_tag(data['name'], posts)
+    tag = get_tag(data['name']) or create_tag(data['name'], posts)
+
+    if not tag:
+        return abort(400, message = 'Invalid tag name.')
 
     tag.type = data['type']
     tag.desc = data['desc']
 
     # Create tag snapshots for the posts.
     for post in posts:
+        db.session.flush()
         create_snapshot(post, current_user)
 
-    db.session.commit()
-    return tag
+    try:
+        db.session.commit()
+        return tag
+    except IntegrityError as exc:
+        db.session.rollback()
+        return
 
 @tag_bp.patch('')
 @tag_bp.input(
@@ -117,16 +126,15 @@ def add_tags(data: TagsIn):
     post = get_post(data['post_id'])
 
     for tag_name in data['tags']:
-        tag = get_tag(tag_name)
+        tag = get_tag(tag_name) or create_tag(tag_name)
 
-        if not tag:
-            tag = create_tag(tag_name)
-
-        if tag not in post.tags:
+        if tag and tag not in post.tags:
             post.tags.append(tag)
-            create_snapshot(post, current_user)
 
+    db.session.flush()
+    create_snapshot(post, current_user)
     db.session.commit()
+
     return {
         'post_id': post.id,
         'tags': post.tags
@@ -150,7 +158,10 @@ def remove_tags(data: TagsIn):
 
         if tag and tag in post.tags:
             post.tags.remove(tag)
-            hist = create_snapshot(post, current_user)
+
+    db.session.flush()
+    create_snapshot(post, current_user)
+    db.session.commit()
 
     return {
         'post_id': post.id,

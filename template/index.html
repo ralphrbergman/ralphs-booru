@@ -9,6 +9,8 @@
 
 {% block body %}
     <div class="center-container">
+        <img src="{{ url_for('static', filename = 'favicon.png') }}" width="300" height="300" alt="{{ gettext('Website logo') }}">
+
         <form id="search-form" class="form">
             <noscript>
                 <input class="search-box" type="text" name="search" contenteditable="true" placeholder="tag1 tag2">
