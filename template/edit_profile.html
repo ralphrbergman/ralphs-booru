@@ -8,17 +8,17 @@
             {{ form.hidden_tag() }}
 
             <div class="input-group">
-                <label for="avatar">{{ gettext('Avatar') }}:</label>
+                <label class="no-select" for="avatar">{{ gettext('Avatar') }}:</label>
                 <input type="file" name="avatar">
             </div>
 
             <div class="input-group">
-                <label for="username">{{ gettext('Username') }}:</label>
+                <label class="no-select" for="username">{{ gettext('Username') }}:</label>
                 <input type="text" name="username" value="{{ user.name }}" disabled>
             </div>
 
             <div class="input-group">
-                <label for="email">{{ gettext('E-mail') }}:</label>
+                <label class="no-select" for="email">{{ gettext('E-mail') }}:</label>
                 <input
                     type="email"
                     name="email"
@@ -27,22 +27,28 @@
             </div>
 
             <div class="input-group">
-                <label for="pw">{{ gettext('Password') }}:</label>
+                <label class="no-select" for="pw">{{ gettext('Password') }}:</label>
                 <input type="password" name="pw">
             </div>
 
             <a
+                class="no-select"
                 href="{{ url_for('Root.Account.edit_password_page') }}">
                 {{ gettext('Edit Password') }}
             </a>
 
             <input type="submit" value="Submit">
 
-            <p>
+            <p class="no-select">
                 {%- trans api_key = user.api_key -%}
-                    Your unique API key: {{ api_key }}<br><b>(Do not share it with anyone)</b>
+                    Your unique API key: <span id="user-api-key">{{ api_key }}</span><br><b>(Do not share it with anyone)</b>
                 {%- endtrans -%}
             </p>
+            <button id="key-btn">Show key</button>
         </form>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename = 'js/api_key.js') }}"></script>
 {% endblock %}

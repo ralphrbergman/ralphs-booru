@@ -8,7 +8,9 @@
             <div data-post-id="{{ post.id }}">
                 <a class="{{ container_name }} post-container" href="{{ url_for('Root.Post.view_page', post_id = post.id) }}">
                     {% if post.thumbnail is not none %}
-                        <img class="post-thumbnail {% if blur and post.nsfw %}post-blur{% endif %}" src="{{ url_for('Root.Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ post.id }} Thumbnail">
+                        <img class="post-thumbnail
+                            {% if blur and post.nsfw %} post-blur{% endif %}
+                        " src="{{ url_for('Root.Thumbnail.thumbnail_route', post_id = post.id) }}" alt="{{ gettext('%(post_id)s Thumbnail', post_id = post.id) }}">
                     {% endif %}
 
                     <div class="post-flairs no-select">

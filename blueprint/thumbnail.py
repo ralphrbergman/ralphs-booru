@@ -14,7 +14,7 @@ def thumbnail_route(post_id: int):
 
     try:
         thumb = post.thumbnail
-    except AttributeError as exc:
+    except AttributeError as exception:
         return abort(404)
 
     mime = from_buffer(thumb.data)

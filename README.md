@@ -13,6 +13,17 @@ ALLOW_POSTS=true|false
 # Allow user creation/logging in?
 ALLOW_USERS=true|false
 
+# Pagination values
+# How many elements to display per page
+DEFAULT_LIMIT=20
+# What column to sort by?
+DEFAULT_SORT=id
+# Column sort direction, either 'asc' for ascending
+# or 'desc' for descending order
+DEFAULT_SORT_DIR=desc
+# How many elements per page to display upper constraint
+LIMIT_THRESHOLD=100
+
 # All about leveling
 # How many levels to level up
 HARDNESS=5

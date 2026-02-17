@@ -122,7 +122,7 @@ def upload_post(data: PostFormIn):
         try:
             db.session.commit()
             posted = True
-        except IntegrityError as exc:
+        except IntegrityError as exception:
             # Error likely of post that already exists.
             db.session.rollback()
 

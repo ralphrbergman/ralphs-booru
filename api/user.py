@@ -1,5 +1,6 @@
 from typing import Optional, TypeVar
 
+from flask_sqlalchemy.pagination import SelectPagination
 from sqlalchemy import Select, or_, select
 from sqlalchemy.exc import IntegrityError
 
@@ -8,7 +9,7 @@ from .base import browse_element
 
 T = TypeVar('T')
 
-def browse_user(*args, **kwargs):
+def browse_user(*args, **kwargs) -> SelectPagination[User]:
     """
     Paginates users by criteria.
 
@@ -62,7 +63,7 @@ def create_user(
     db.session.add(user)
     try:
         db.session.commit()
-    except IntegrityError as exc:
+    except IntegrityError as exception:
         # User's name & e-mail can raise this.
         db.session.rollback()
 

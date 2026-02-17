@@ -1,6 +1,12 @@
 const interList = document.getElementsByClassName('interactive-tags');
 
 export function createTag(tagName, interactiveTags, tagInput) {
+    /**
+     * Adds new tag to interactive tag area.
+     * @param {string} tagName Tag to add.
+     * @param {HTMLDivElement} interactiveTags Specific interactive tags element.
+     * @param {HTMLInputElement} tagInput Input element, used to position tag before it.
+    */
     const span = document.createElement('span');
 
     span.className = 'tag';
@@ -14,10 +20,21 @@ export function createTag(tagName, interactiveTags, tagInput) {
 }
 
 export function getSpans(interactiveTags) {
+    /**
+     * Obtains tags from interactive tag area.
+     * @param {HTMLDivElement} interactiveTags Specific tag area.
+     * @returns {NodeList<HTMLSpanElement>}
+    */
     return interactiveTags.querySelectorAll('span.tag');
 }
 
 export function getSpanByContent(element, interactiveTags) {
+    /**
+     * Obtain specific element by tag name from another span element.
+     * @param {HTMLSpanElement} element Span element to compare.
+     * @param {HTMLDivElement} interactiveTags Tag area to select from.
+     * @returns {HTMLSpanElement} The span whose value matches.
+    */
     const spanTags = getSpans(interactiveTags);
 
     for (let i = 0; i < spanTags.length; i++) {
@@ -36,16 +53,31 @@ export function getSpanByContent(element, interactiveTags) {
 }
 
 export function getTags(interactiveTags) {
+    /**
+     * Obtains tag names from tag area.
+     * @param {HTMLDivElement} interactiveTags Specific tag area
+     * @returns {string[]}
+    */
     const tags = [];
 
     getSpans(interactiveTags).forEach(function(span) {
         tags.push(span.textContent);
     });
 
+    const tagInInput = interactiveTags.querySelector('input.tag').value.trim();
+
+    // Also include the not committed tag in input field.
+    if (tagInInput) tags.push(tagInInput);
+
     return tags;
 }
 
 export function manageSpan(span, interactiveTags) {
+    /**
+     * Handles span for tagging.
+     * @param {HTMLSpanElement} span Span who should be handled.
+     * @param {HTMLDivElement} interactiveTags Specific tag area.
+    */
     function handleSpan() {
         if (span.textContent.trim().length === 0) {
             span.remove();

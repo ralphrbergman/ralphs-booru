@@ -8,7 +8,7 @@ from .base import browse_element
 
 T = TypeVar('T')
 
-def browse_comment(*args, **kwargs) -> SelectPagination:
+def browse_comment(*args, **kwargs) -> SelectPagination[Comment]:
     """
     Paginates comments by criteria.
 
@@ -49,10 +49,10 @@ def create_comment(content: str, author: User, post: Post) -> Comment:
         return
 
     # Find already existing comment with the same content to prevent spamming.
-    comment = db.session.scalars(
+    comment = db.session.scalar(
         select(Comment)
         .where(and_(Comment.content == content, Comment.author == author))
-    ).first()
+    )
 
     if comment:
         return

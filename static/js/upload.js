@@ -24,6 +24,7 @@ postForm.addEventListener('submit', function(event) {
     
     data.set('tags', tags.join(' '));
 
+    // Send the request.
     fetch(window.location.href, {
         method: 'POST',
         body: data

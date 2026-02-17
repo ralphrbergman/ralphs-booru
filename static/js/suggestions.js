@@ -1,14 +1,24 @@
 import { createTag, getSpans } from './tag_handler.js';
 
-// Holds current fetch request.
+// Holds current fetch request abort controller.
 let controller;
 
 function addSuggestion(input, tagName) {
+    /**
+     * Adds suggestion to tag area.
+     * @param {HTMLInputElement} input - Input element to reset.
+     * @param {string} tagName - Tag to add.
+    */
     input.value = null;
     createTag(tagName, input.parentElement.parentElement, input);
 }
 
 async function handleSuggesting(input, list) {
+    /**
+     * Adds handling of suggestions to an input element.
+     * @param {HTMLInputElement} input - Input element to add suggestions to.
+     * @param {HTMLUListElement} list - List element to hold suggestions.
+    */
     const query = input.value;
 
     if (controller) controller.abort();
@@ -16,7 +26,6 @@ async function handleSuggesting(input, list) {
 
     // Setup abort controller.
     controller = new AbortController();
-    const signal = controller.signal;
 
     // Ignore tags that are already specified.
     const ignoreTags = [];
@@ -33,35 +42,43 @@ async function handleSuggesting(input, list) {
             sort_by: 'desc',
             terms: query
         });
+
+        // Make the request for suggestions.
         const response = await fetch(
             `/api/tags?${params.toString()}+${ignoreTags.join('+')}`,
             {
-                signal
+                signal: controller.signal
             }
-        );
-        const json = await response.json();
-        const tags = json['tags'];
-        if (!tags.length) return;
+        ).then(async function(response) {
+            const json = await response.json();
+            const tags = json['tags'];
+            if (!tags.length) return;
 
-        list.innerHTML = null;
-        list.style.display = 'block';
+            // Display the suggestions.
+            list.innerHTML = null;
+            list.style.display = 'block';
 
-        for (let i = 0; i < tags.length; i++) {
-            const tagName = tags[i]['name'];
+            for (let i = 0; i < tags.length; i++) {
+                const tagName = tags[i]['name'];
 
-            const li = document.createElement('li');
-            li.textContent = tagName;
+                const li = document.createElement('li');
+                li.textContent = tagName;
 
-            list.appendChild(li);
+                list.appendChild(li);
 
-            li.addEventListener('mousedown', addSuggestion.bind(null, input, tagName));
-        }
+                li.addEventListener(
+                    'mousedown',
+                    addSuggestion.bind(null, input, tagName)
+                );
+            }
+        });
     } catch (error) {
         if (error.name === 'AbortError') return;
         console.log(`Suggestion error: ${error}`);
     }
 }
 
+// Handle registering suggestion feature to input elements.
 const inputs = document.querySelectorAll('input.tag');
 
 inputs.forEach(function(input) {

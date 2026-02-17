@@ -42,7 +42,7 @@
     {% endif %}
 {% endblock %}
 
-{% set title = 'View' ~ ': ' ~ post.id %}
+{% set title = gettext('View') ~ ': ' ~ post.id %}
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
@@ -64,8 +64,6 @@
                     {{ gettext('Edit') }}
                 </a>
             {% endif %}
-
-            {% include 'frag/enlarge.html' %}
 
             <div>
                 <p>Score: {{ post.score }}</p>
@@ -165,7 +163,6 @@
 
 {% block script %}
     <script src="{{ url_for('static', filename = 'js/comment.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'js/enlarge.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/post_voting.js') }}" type="module"></script>
     <script src="{{ url_for('static', filename = 'js/textarea.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'js/voting.js') }}" type="module"></script>
 {% endblock %}

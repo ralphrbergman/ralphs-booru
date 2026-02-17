@@ -31,7 +31,7 @@ def add_tags(tag_list: list[str]) -> list[Tag]:
 
     return new_tags
 
-def browse_tag(*args, **kwargs) -> SelectPagination:
+def browse_tag(*args, **kwargs) -> SelectPagination[Tag]:
     """
     Paginates tags by criteria.
 
@@ -88,7 +88,7 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag | None:
     try:
         for post in posts:
             post.tags.append(tag)
-    except TypeError as exc:
+    except TypeError as exception:
         pass
 
     return tag

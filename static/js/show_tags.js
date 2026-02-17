@@ -8,7 +8,7 @@ for (let i = 0; i < searchBoxes.length; i++) {
 }
 
 // Show the interactive tag area,
-// the legacy input element is automatically hidden.
+// the legacy text area element is automatically hidden.
 for (let i = 0; i < interList.length; i++) {
     const interactiveTags = interList[i];
 

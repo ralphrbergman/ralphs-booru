@@ -28,7 +28,6 @@ body {
     flex-direction: column;
     height: 100%;
     justify-content: center;
-    width: 100%;
 }
 
 .center-table {
@@ -49,7 +48,6 @@ body {
     margin-right: auto;
 
     padding: var(--gap);
-    width: 80%;
 }
 
 .hidden {

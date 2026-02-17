@@ -76,8 +76,8 @@ def add_tags(data: TagBulkIn):
 
     try:
         db.session.commit()
-    except IntegrityError as exc:
-        abort(500, message = f'Bulk operation failed: {exc}')
+    except IntegrityError as exception:
+        abort(500, message = f'Bulk operation failed: {exception}')
 
     return {
         'post_ids': [ post.id for post in posts ],
@@ -124,8 +124,8 @@ def remove_tags(data: TagBulkIn):
 
     try:
         db.session.commit()
-    except IntegrityError as exc:
-        abort(500, message = f'Bulk operation failed: {exc}')
+    except IntegrityError as exception:
+        abort(500, message = f'Bulk operation failed: {exception}')
 
     return {
         'post_ids': [ post.id for post in posts ],

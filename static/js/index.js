@@ -3,6 +3,7 @@ import { getTags } from "./tag_handler.js";
 const interactiveTags = document.getElementsByClassName('interactive-tags')[0];
 const searchForm = document.getElementById('search-form');
 
+// Handle form submission.
 searchForm.addEventListener('submit', function(event) {
     event.preventDefault();
 

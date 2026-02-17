@@ -7,7 +7,7 @@
         {% set search = request.args.get('search') %}
 
         <label for="blur">{{ gettext('Blur') }}:</label>
-        <input type="checkbox" name="blur" {% if blur == 'on' %}checked{% endif %}>
+        <input type="checkbox" name="blur" {% if blur == 'true' %}checked{% endif %}>
 
         <label for="limit">{{ gettext('Posts') }}:</label>
         <select name="limit">

@@ -22,7 +22,7 @@ def _get_entity(model_class: Any):
     try:
         entity_id = list(v_args.values())[-1]
         entity_name = list(v_args.keys())[-1].strip('_id')
-    except IndexError as exc:
+    except IndexError as exception:
         return
 
     entity = db.session.scalars(
@@ -142,7 +142,7 @@ def owner_only(model_class: Any):
             try:
                 if entity.author == current_user:
                     return callback(*args, **kwargs)
-            except AttributeError as exc:
+            except AttributeError as exception:
                 # "Entity" doesn't have 'author'.
                 if entity.user_id == current_user.id:
                     return callback(*args, **kwargs)

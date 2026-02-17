@@ -43,7 +43,7 @@ def unauthorized_callback():
         return redirect(url_for(login_manager.login_view, next = request.url))
 
 @api_bp.errorhandler(404)
-def _404_handler(exc):
+def _404_handler(exception):
     """
     Function ran whenever an invalid endpoint is visited.
     """

@@ -6,10 +6,10 @@ from sqlalchemy import Select, select
 
 from db import db
 
-DEFAULT_LIMIT = 20
-DEFAULT_SORT = 'id'
-DEFAULT_SORT_DIR = 'desc'
-LIMIT_THRESHOLD = 100
+DEFAULT_LIMIT = int(getenv('DEFAULT_LIMIT'))
+DEFAULT_SORT = getenv('DEFAULT_SORT')
+DEFAULT_SORT_DIR = getenv('DEFAULT_SORT_DIR')
+LIMIT_THRESHOLD = int(getenv('LIMIT_THRESHOLD'))
 
 T = TypeVar('T')
 

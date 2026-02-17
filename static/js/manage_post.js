@@ -2,6 +2,8 @@ import { sendMessage, sendErrorMessage } from "./message.js";
 
 const apiKey = document.getElementById('api-key').textContent;
 const postForm = document.getElementById('manage-post-form');
+
+// Show the form once JavaScript begins running.
 postForm.style.display = 'block';
 
 const toggleBtn = document.getElementById('toggle-btn');
@@ -14,23 +16,24 @@ let state = false;
 let selectedPosts = [];
 
 function postClick(post) {
-    if (post.classList.contains('deselected')) {
-        post.classList.add('selected');
-        post.classList.remove('deselected');
+    /**
+     * Toggle between selected and deselected state for post.
+     * @param {HTMLDivElement} post - Post to toggle.
+    */
 
-        selectedPosts.push(post);
-    } else {
-        post.classList.add('deselected');
-        post.classList.remove('selected');
+    if (post.classList.contains('deselected')) selectedPosts.push(post);
+    else selectedPosts.splice(selectedPosts.indexOf(post), 1);
 
-        selectedPosts.splice(selectedPosts.indexOf(post), 1);
-    }
+    post.classList.toggle('deselected');
+    post.classList.toggle('selected');
 }
 
 function getTags() {
+    /** Obtain tags from interactive tags area. */
+    const spanTags = postForm.querySelectorAll('span.tag');
+    const tagInput = postForm.querySelector('input.tag');
+
     let tags = [];
-    const spanTags = document.querySelectorAll('span.tag');
-    const tagInput = document.querySelector('input.tag');
 
     spanTags.forEach(function(span) {
         const Content = span.textContent.trim();
@@ -39,6 +42,7 @@ function getTags() {
         tags.push(Content);
     });
 
+    // Also include tag that's not pushed to a span.
     if (tagInput.value.trim().length > 0) tags.push(tagInput.value.trim());
 
     return tags;
@@ -50,6 +54,7 @@ toggleBtn.addEventListener('click', function(event) {
     let fn;
 
     if (state === false) {
+        // Turn on post selection mode.
         state = true;
 
         fn = function(post) {
@@ -70,6 +75,7 @@ toggleBtn.addEventListener('click', function(event) {
             });
         }
     } else {
+        // Turn off post selection.
         state = false;
 
         fn = function(post) {
@@ -80,7 +86,7 @@ toggleBtn.addEventListener('click', function(event) {
         }
     }
 
-    // Connect/Disconnect click event on posts.
+    // Handle connect/disconnect click event on posts.
     for (let i = 0; i < posts.length; i++) {
         let post = posts[i].parentElement;
 
@@ -106,6 +112,7 @@ postForm.addEventListener('submit', function(event) {
     const Form = new FormData(postForm);
 
     Form.set('tags', getTags());
+
     if (Form.get('tags').length === 0) {
         sendErrorMessage('Tags are missing.');
         return;
@@ -124,9 +131,11 @@ postForm.addEventListener('submit', function(event) {
         obj.post_ids.push(parseInt(post.dataset.postId, 10));
     }
 
+    // Select endpoint.
     const added = event.submitter.dataset.value === 'add';
     const endpoint = added ? '/add' : '/remove';
 
+    // Send the request.
     fetch(`/api/tags${endpoint}`, {
         headers: {
             'Authorization': `Bearer ${apiKey}`,
@@ -136,6 +145,7 @@ postForm.addEventListener('submit', function(event) {
         body: JSON.stringify(obj)
     }).then(function(response) {
         if (response.ok) {
+            // Message the user.
             const actionText = added ? 'added' : 'removed';
 
             sendMessage(`Successfully ${actionText} tags: ${obj.tags.join(', ')}`)

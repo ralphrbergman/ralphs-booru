@@ -1,11 +1,18 @@
+/**
+ * JavaScript module that provides the API of voting posts/comments.
+*/
 import { sendErrorMessage } from "./message.js";
 
 const apiKey = document.getElementById('api-key').textContent;
-const postId = document.getElementById('post-id').textContent;
-const upvoteBtn = document.getElementById('upvote-btn');
-const downvoteBtn = document.getElementById('downvote-btn');
 
-function vote(event, targetId, score, targetType = 'post') {
+export function vote(event, targetId, score, targetType = 'post') {
+    /**
+     * Marks a vote for specific target.
+     * @param {MouseEvent} event Event to stop midway from submitting.
+     * @param {number} targetId
+     * @param {number} score -1 for negative voting and 1 for positive. 
+     * @param {string} targetType
+    */
     event.preventDefault();
 
     fetch(`/api/score`, {
@@ -29,11 +36,3 @@ function vote(event, targetId, score, targetType = 'post') {
         }
     })
 }
-
-upvoteBtn.addEventListener('click', function(event) {
-    vote(event, parseInt(postId), 1, 'post')
-});
-
-downvoteBtn.addEventListener('click', function(event) {
-    vote(event, parseInt(postId), -1, 'post')
-});

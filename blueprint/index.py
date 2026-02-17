@@ -12,7 +12,7 @@ index_bp = Blueprint(
 def index_page():
     form = SearchForm(request.args, meta = {'csrf': False})
 
-    if request.args and form.validate():
+    if form.validate() and form.search.data:
         raw_query = form.search.data.strip()
 
         if 'nsfw' not in raw_query:

@@ -39,8 +39,8 @@ def _set_vote(
 
     try:
         db.session.commit()
-    except IntegrityError as exc:
-        print(exc)
+    except IntegrityError as exception:
+        print(exception)
         db.session.rollback()
         return
 

@@ -37,7 +37,7 @@ def create_thumbnail(post: Post) -> Thumbnail:
         try:
             # Create new thumbnail in MJPEG container to minimize storage cost.
             temp_f.unlink(missing_ok = True)
-        except AttributeError as exc:
+        except AttributeError as exception:
             pass
 
         temp_f = generate_thumbnail(post, ThumbnailType.JPEG)
@@ -47,7 +47,7 @@ def create_thumbnail(post: Post) -> Thumbnail:
     try:
         with temp_f.open('rb') as stream:
             thumb.data = stream.read()
-    except AttributeError as exc:
+    except AttributeError as exception:
         # No thumbnail was made.
         return
 
@@ -74,7 +74,7 @@ def generate_thumbnail(
     # Find out which video stream has an embedded thumbnail.
     try:
         probe_data = ffmpeg.probe(post_path)
-    except ffmpeg.Error as exc:
+    except ffmpeg.Error as exception:
         return
 
     index: Optional[int] = None
@@ -104,7 +104,7 @@ def generate_thumbnail(
         ).run(
             overwrite_output = True
         )
-    except ffmpeg.Error as exc:
+    except ffmpeg.Error as exception:
         # File isn't visual.
         return
 

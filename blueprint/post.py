@@ -1,4 +1,4 @@
-from os import getenv
+from pathlib import Path
 from shutil import copy
 
 from flask import (
@@ -41,7 +41,7 @@ from db import Post, db
 from form import PostForm, PostRemovalForm, UploadForm
 from .utils import create_pagination_bar, flash_errors
 
-DEFAULT_BLUR = getenv('DEFAULT_BLUR') == 'on'
+DEFAULT_BLUR = 'true'
 
 post_bp = Blueprint(
     name = 'Post',
@@ -94,7 +94,7 @@ def browse_paged(page: int):
     return render_template(
         'browse.html',
         bar = bar,
-        blur = blur,
+        blur = blur == 'true',
         current_page = page,
         posts = pagination,
         search = search
@@ -111,69 +111,78 @@ def edit_page(post_id: int, post: Post):
     if not post:
         return abort(404)
 
-    if form.validate_on_submit():
-        if current_user.is_authenticated:
-            if (current_user == post.author or current_user.is_moderator):
-                if form.deleted.data:
-                    return redirect(
-                        url_for(
-                            'Root.Post.remove_page',
-                            post_id = post_id
-                        )
+    if form.validate_on_submit() and current_user.is_authenticated and\
+    (current_user == post.author or current_user.is_moderator):
+        mod_paths: set[Path] = set()
+
+        if form.deleted.data:
+            return redirect(
+                url_for('Root.Post.remove_page', post_id = post_id)
+            )
+        elif post.removed:
+            return redirect(
+                url_for('Root.Post.revert_page', post_id = post_id)
+            )
+
+        file = form.new_file.data
+
+        if file:
+            # new_path refers to the uploaded file.
+            # whilst old_path refers to the post file before exchange.
+            post, new_path, old_path = replace_post(post, file)
+            mod_paths.add(new_path)
+            mod_paths.add(old_path)
+
+            if post:
+                flash(
+                    gettext(
+                        'Successfully exchanged post #%(post_id)s'
+                        ' for a new file!',
+                        post_id = post.id
                     )
-                elif post.removed:
-                    return redirect(
-                        url_for(
-                            'Root.Post.revert_page',
-                            post_id = post_id
-                        )
-                    )
+                )
+            else:
+                flash(gettext('Failed to exchange post.'))
 
-                file = form.new_file.data
+                return redirect(
+                    url_for('Root.Post.edit_page', post_id = post_id)
+                )
 
-                if file:
-                    post = replace_post(post, file)
-
-                    if post:
-                        flash(
-                            gettext(
-                                'Successfully exchanged post #%(post_id)s'
-                                ' for a new file!',
-                                post_id = post.id
-                            )
-                        )
-                    else:
-                        flash(gettext('Failed to exchange post.'))
-
-                        return redirect(
-                            url_for(
-                                'Root.Post.edit_page',
-                                post_id = post_id
-                            )
-                        )
-
+        try:
             db.session.commit()
-            original_tags = post.tags
+        except IntegrityError as exception:
+            db.session.rollback()
+            return
+        except Exception as exception:
+            # TODO: Log unhandled exception.
+            db.session.rollback()
+            return
 
-            post.op = form.op.data.strip()
-            post.src = form.src.data.strip()
-            post.caption = form.caption.data.strip()
+        # Take care of temporary files.
+        for path in mod_paths:
+            path.unlink(missing_ok = True)
 
-            try:
-                post.tags = add_tags(form.tags.data.split(' '))
-            except AttributeError as exc:
-                # Form tags is None, likely because the user can't manage tags.
-                pass
+        original_tags = post.tags
 
-            if post.tags != original_tags:
-                db.session.flush()
-                create_snapshot(post, current_user)
+        post.op = form.op.data.strip()
+        post.src = form.src.data.strip()
+        post.caption = form.caption.data.strip()
 
-            move_post(post, form.directory.data.strip())
+        try:
+            post.tags = add_tags(form.tags.data.split(' '))
+        except AttributeError as exception:
+            # Form tags is None, likely because the user can't manage tags.
+            pass
 
-            db.session.commit()
+        if post.tags != original_tags:
+            db.session.flush()
+            create_snapshot(post, current_user)
 
-            return redirect(url_for('Root.Post.view_page', post_id = post_id))
+        move_post(post, form.directory.data.strip())
+
+        db.session.commit()
+
+        return redirect(url_for('Root.Post.view_page', post_id = post_id))
 
     flash_errors(form)
 
@@ -199,8 +208,8 @@ def view_file_resource(post_id: int):
 
     try:
         return send_file(post.path)
-    except FileNotFoundError as exc:
-        return b''
+    except FileNotFoundError as exception:
+        return abort(404)
 
 @post_bp.route('/remove/<int:post_id>', methods = ['GET', 'POST'])
 @owner_or_perm_required(Post, 'post:delete')
@@ -271,7 +280,7 @@ def upload_page():
             try:
                 db.session.commit()
                 posted = True
-            except IntegrityError as exc:
+            except IntegrityError as exception:
                 # Error likely of post that already exists.
                 db.session.rollback()
 

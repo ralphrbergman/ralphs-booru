@@ -13,6 +13,7 @@ from wtforms import (
 from wtforms.validators import DataRequired, Length
 
 from .fields import StrongPasswordField, WeakPasswordField
+from .validators import validate_dimensions
 
 class AvatarMixin:
     avatar = FileField('avatar', validators = [
@@ -29,7 +30,8 @@ class AvatarMixin:
                 'You can only have a picture as your avatar.'
                 '(e.g gif, jpg, jpeg, png or webp)'
             )
-        )
+        ),
+        validate_dimensions()
     ])
 
 class DeletedMixin:

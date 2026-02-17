@@ -48,7 +48,7 @@ T = TypeVar('T')
 def browse_post(
     *args,
     **kwargs
-) -> SelectPagination:
+) -> SelectPagination[Post]:
     """
     Paginates posts by criteria.
 
@@ -89,28 +89,30 @@ def browse_post(
 
         # Apply attribute selectors.
         for attr in attrs:
-            sign = ''
-
-            if '<' in attr:
-                sign = '<'
-            elif '>' in attr:
-                sign = '>'
+            sign = '<' if '<' in attr else ('>' if '>' in attr else '')
 
             name, value = attr.split(f':{sign}', 1)
+
+            # Handle specific attributes.
+            if name == 'author':
+                stmt = stmt.join(Post.author).where(User.name == value)
+
+                continue
+
             try:
                 value = int(value)
-            except ValueError as exc:
+            except ValueError as exception:
                 pass
 
             try:
                 col = getattr(Post, name)
             # Skip attribute selector that doesn't exist.
-            except AttributeError as exc:
+            except AttributeError as exception:
                 continue
 
             try:
                 value = int(value)
-            except ValueError as exc:
+            except ValueError as exception:
                 pass
 
             if (
@@ -219,7 +221,7 @@ def create_post(
 
             if tag:
                 post.tags.append(tag)
-    except AttributeError as exc:
+    except AttributeError as exception:
         pass
 
     post.directory = directory
@@ -248,7 +250,7 @@ def create_post(
 
     try:
         thumbnail.post_id = post.id
-    except AttributeError as exc:
+    except AttributeError as exception:
         # No thumbnail was made.
         pass
 
@@ -275,7 +277,7 @@ def perma_delete_post(post: Post | int) -> None:
     
     try:
         db.session.delete(post.thumbnail)
-    except UnmappedInstanceError as exc:
+    except UnmappedInstanceError as exception:
         # Some posts may not have a thumbnail and it's alright.
         pass
 
@@ -331,11 +333,14 @@ def get_generic_mime(path: Path) -> str:
     return from_file(str(path), mime = True)
 
 def get_mime(path: Path) -> Optional[str]:
-    probe_output = ffmpeg.probe(str(path))
+    try:
+        probe_output = ffmpeg.probe(str(path))
+    except ffmpeg.Error as exception:
+        return
 
     try:
         format_name = probe_output['format']['format_name']
-    except KeyError as exc:
+    except KeyError as exception:
         # Could the file be malformed?
         return
 
@@ -417,7 +422,7 @@ def process_filename(filename: str) -> str:
     """
     return sub(NONALPHA, '', filename)
 
-def replace_post(post: Post, file: FileStorage) -> Post:
+def replace_post(post: Post, file: FileStorage) -> tuple[Post, Path, Path]:
     """
     Replaces given Post with new file.
 
@@ -439,12 +444,16 @@ def replace_post(post: Post, file: FileStorage) -> Post:
     dimensions = get_dimensions(path)
     ext = get_extension(path)
     mime = get_mime(path)
+
+    if not mime:
+        return
+
     size = get_size(path)
 
     try:
         post.height = dimensions[1]
         post.width = dimensions[0]
-    except TypeError as exc:
+    except TypeError as exception:
         pass
 
     post.ext = ext
@@ -458,8 +467,6 @@ def replace_post(post: Post, file: FileStorage) -> Post:
 
     post.path.parent.mkdir(parents = True, exist_ok = True)
     copy(path, post.path)
-    path.unlink(missing_ok = True)
-    prev_path.unlink(missing_ok = True)
 
     thumb = create_thumbnail(post)
 
@@ -467,7 +474,7 @@ def replace_post(post: Post, file: FileStorage) -> Post:
         thumb.post_id = post.id
         thumb.post = post
 
-    return post
+    return post, path, prev_path
 
 def save_file(file: FileStorage) -> Path:
     """

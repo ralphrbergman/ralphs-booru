@@ -80,7 +80,7 @@ def upload_tag(data: TagIn):
     try:
         db.session.commit()
         return tag
-    except IntegrityError as exc:
+    except IntegrityError as exception:
         db.session.rollback()
         return
 
