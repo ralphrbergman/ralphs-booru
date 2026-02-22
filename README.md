@@ -13,6 +13,9 @@ ALLOW_POSTS=true|false
 # Allow user creation/logging in?
 ALLOW_USERS=true|false
 
+# How big of thumbnails to create
+TARGET_SIZE=250
+
 # Pagination values
 # How many elements to display per page
 DEFAULT_LIMIT=20

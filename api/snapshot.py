@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Optional
 
 from flask_sqlalchemy.pagination import SelectPagination
@@ -6,6 +7,8 @@ from sqlalchemy import Select, select
 from db import Post, Snapshot, User, db
 from .base import browse_element
 from .tag import create_tag, get_tag
+
+logger = getLogger('app_logger')
 
 def browse_snapshots(
     *args,
@@ -27,6 +30,7 @@ def browse_snapshots(
         nonlocal post_id
 
         stmt = stmt.where(Snapshot.post_id == post_id)
+        logger.debug(f'Searching for post #{post_id} snapshots.')
 
         return stmt
 
@@ -52,6 +56,9 @@ def create_snapshot(post: Post, user: User) -> Snapshot:
     snap.tags = ' '.join(sorted(( tag.name for tag in post.tags )))
 
     db.session.add(snap)
+    logger.info(
+        f'Created snapshot for post #{post.id} with tags {snap.tags}'
+    )
 
     return snap
 
@@ -83,4 +90,7 @@ def revert_snapshot(snapshot: Snapshot, user: User) -> Snapshot:
 
     new_snapshot = create_snapshot(post, user)
 
+    logger.info(
+        f'Reverting snapshot #{snapshot.post.id} to {new_snapshot.tags}'
+    )
     return new_snapshot

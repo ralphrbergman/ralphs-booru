@@ -2,6 +2,11 @@
 
 {% set title = gettext('Comments') ~ ': ' ~ comments.items | length %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'pagination.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
+{% endblock %}
+
 {% block body %}
     <form>
         <input name="search" type="text" placeholder="word word ...">
@@ -14,4 +19,8 @@
 
     {% include 'frag/comment-section.html' %}
     {% include 'frag/pagination.html' %}
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename = 'js/comment_voting.js') }}" type="module"></script>
 {% endblock %}

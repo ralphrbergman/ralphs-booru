@@ -1,9 +1,7 @@
-{% block body %}
-    {% with messages = get_flashed_messages() %}
-        <div id="messages">
-            {% for message in messages %}
-                <span class="message no-select">{{ message | safe }}</span>
-            {% endfor %}
-        </div>
-    {% endwith %}
-{% endblock %}
+{% with messages = get_flashed_messages() %}
+    <div id="messages">
+        {% for message in messages %}
+            <span class="message no-select">{{ message | safe }}</span>
+        {% endfor %}
+    </div>
+{% endwith %}

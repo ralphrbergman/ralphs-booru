@@ -2,6 +2,7 @@ from apiflask import APIBlueprint
 
 from api import get_post
 from api.decorators import moderator_only
+from api_auth import auth
 from db import db
 from db.schemas import BulkPostIn, BulkPostOut
 
@@ -14,6 +15,7 @@ post_bulk_bp = APIBlueprint(
 @post_bulk_bp.patch('')
 @post_bulk_bp.input(BulkPostIn, arg_name = 'data')
 @post_bulk_bp.output(BulkPostOut)
+@post_bulk_bp.auth_required(auth)
 @moderator_only
 def update_bulk_post(data: BulkPostIn):
     """

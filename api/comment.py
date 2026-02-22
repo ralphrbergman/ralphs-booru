@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
@@ -7,6 +8,8 @@ from db import Comment, Post, User, db
 from .base import browse_element
 
 T = TypeVar('T')
+
+logger = getLogger('app_logger')
 
 def browse_comment(*args, **kwargs) -> SelectPagination[Comment]:
     """
@@ -29,6 +32,7 @@ def browse_comment(*args, **kwargs) -> SelectPagination[Comment]:
         for word in terms.split():
             conditions.add(Comment.content == word)
             conditions.add(Comment.content.icontains(word))
+            logger.debug(f'Searching comments for word: {word}')
 
         return stmt.where(or_(*conditions))
 
@@ -43,18 +47,33 @@ def create_comment(content: str, author: User, post: Post) -> Comment:
         author (User)
         post (Post)
     """
+    logger.debug(
+        f'Creating comment on post {post.id} from '\
+        f'{author.name}'
+    )
+
     content = content.strip()
 
     if len(content) == 0:
+        logger.debug('Skipping empty comment.')
         return
 
     # Find already existing comment with the same content to prevent spamming.
     comment = db.session.scalar(
         select(Comment)
-        .where(and_(Comment.content == content, Comment.author == author))
+        .where(
+            and_(
+                Comment.content == content,
+                Comment.author == author,
+                Comment.post == post
+            )
+        )
     )
 
     if comment:
+        logger.warning(
+            f'Comment {comment.id} already exists, skipping potential spam.'
+        )
         return
 
     comment = Comment()
@@ -65,6 +84,7 @@ def create_comment(content: str, author: User, post: Post) -> Comment:
 
     db.session.add(comment)
 
+    logger.debug(f'Created comment: {comment.id}')
     return comment
 
 def delete_comment(comment: Comment) -> None:
@@ -72,6 +92,10 @@ def delete_comment(comment: Comment) -> None:
     Mark given comment deleted.
     """
     db.session.delete(comment)
+    logger.info(
+        f'Deleting comment from {comment.author.name} '\
+        f'on {comment.post.id}'
+    )
 
 def get_comment(comment_id: int) -> Optional[Comment]:
     """

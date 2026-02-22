@@ -12,6 +12,7 @@ from blueprint import api_bp, root_bp
 from db import db, Permission, Role, User
 from encryption import bcrypt
 from login import login_manager
+from logger import setup_logging
 from translation import SUPPORTED_TRANSLATIONS, babel
 
 load_dotenv()
@@ -25,6 +26,9 @@ def create_app() -> APIFlask:
         template_folder = 'template',
         title = 'Ralphs Booru'
     )
+
+    # Setup logging.
+    setup_logging()
 
     if url:
         app.config['SERVERS'] = [

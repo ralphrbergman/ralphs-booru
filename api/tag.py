@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
@@ -8,6 +9,8 @@ from .base import browse_element
 
 T = TypeVar('T')
 
+logger = getLogger('app_logger')
+
 def add_tags(tag_list: list[str]) -> list[Tag]:
     """
     Creates a list of tags and returns created instances.
@@ -16,10 +19,9 @@ def add_tags(tag_list: list[str]) -> list[Tag]:
         tag_list: List of tag names
     """
     new_tags = list()
-    # This is used to ignore tags that have been already added.
-    tag_names = set()
+    tag_names = set(tag_list)  # A set automatically removes duplicate tags.
 
-    for tag_name in tag_list:
+    for tag_name in tag_names:
         if not tag_name or tag_name in tag_names:
             continue
 
@@ -27,8 +29,8 @@ def add_tags(tag_list: list[str]) -> list[Tag]:
 
         if tag:
             new_tags.append(tag)
-            tag_names.add(tag_name)
 
+    logger.debug(f'Added tags: {', '.join(tag_names)}')
     return new_tags
 
 def browse_tag(*args, **kwargs) -> SelectPagination[Tag]:
@@ -56,6 +58,8 @@ def browse_tag(*args, **kwargs) -> SelectPagination[Tag]:
             else:
                 p_cond.add(Tag.name.icontains(word))
                 p_cond.add(Tag.name == word)
+
+            logger.debug(f'Searching tag: {word}')
 
         if p_cond:
             stmt = stmt.where(or_(*p_cond))
@@ -91,6 +95,7 @@ def create_tag(name: str, posts: Optional[list[Post]] = None) -> Tag | None:
     except TypeError as exception:
         pass
 
+    logger.info(f'Created tag: {name}')
     return tag
 
 def delete_tag(tag: Tag) -> None:
@@ -98,7 +103,7 @@ def delete_tag(tag: Tag) -> None:
     Deletes given tag.
     """
     db.session.delete(tag)
-    db.session.commit()
+    logger.info(f'Deleting tag: {tag.name}')
 
 def get_tag(id: str | int) -> Optional[Tag]:
     """

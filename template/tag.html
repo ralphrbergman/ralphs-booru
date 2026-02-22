@@ -3,6 +3,7 @@
 {% set title = gettext('Tags Page') ~ ': ' ~ current_page %}
 
 {% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'pagination.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'tag.css') }}">
 {% endblock %}
 

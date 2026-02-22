@@ -1,25 +1,19 @@
-{% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'footer.css') }}">
-{% endblock %}
+<footer class="bg main-footer">
+    <div class="footer-content">
+        <ul class="footer-anchors">
+            <li><p class="notable">{{ gettext('Links') }}</p></li>
+            <li><a href="{{ url_for('Root.Help.help_page') }}">{{ gettext('Help') }}</a></li>
+            <li><a href="{{ url_for('Root.Contact.contact_page') }}">{{ gettext('Contact Me') }}</a></li>
+            <li><a href="{{ brand['source-url'] }}">{{ gettext('Source Code') }}</a></li>
+        </ul>
+        <ul class="footer-anchors">
+            <li><p class="notable">{{ gettext('For Developers') }}</p></li>
+            <li><a href="/docs">REST API</a></li>
+        </ul>
+    </div>
 
-{% block body %}
-    <footer class="bg main-footer">
-        <div class="footer-content">
-            <ul class="footer-anchors">
-                <li><p class="notable">{{ gettext('Links') }}</p></li>
-                <li><a href="{{ url_for('Root.Help.help_page') }}">{{ gettext('Help') }}</a></li>
-                <li><a href="{{ url_for('Root.Contact.contact_page') }}">{{ gettext('Contact Me') }}</a></li>
-                <li><a href="{{ brand['source-url'] }}">{{ gettext('Source Code') }}</a></li>
-            </ul>
-            <ul class="footer-anchors">
-                <li><p class="notable">{{ gettext('For Developers') }}</p></li>
-                <li><a href="/docs">REST API</a></li>
-            </ul>
-        </div>
-
-        <div>
-            <p>{{ brand['contact']['address'] }} v{{ brand['version'] }}</p>
-            <p>{{ brand['copyright'] }}</p>
-        </div>
-    </footer>
-{% endblock %}
+    <div>
+        <p>{{ brand['contact']['address'] }} v{{ brand['version'] }}</p>
+        <p>{{ brand['copyright'] }}</p>
+    </div>
+</footer>

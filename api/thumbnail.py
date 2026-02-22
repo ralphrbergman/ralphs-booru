@@ -1,4 +1,5 @@
 from enum import Enum
+from logging import getLogger
 from os import getenv
 from pathlib import Path
 from typing import Optional
@@ -11,10 +12,12 @@ from db import db, Post, Thumbnail
 TEMP = Path(getenv('TEMP_PATH'))
 
 # Define how large thumbnails should be in pixels.
-TARGET = 250
+TARGET = getenv('TARGET_SIZE')
 # Use the largest axis for target.
 HEIGHT_EXPR = f'if(gt(iw, ih), {TARGET}, -1)'
 WIDTH_EXPR = f'if(gt(iw, ih), -1, {TARGET})'
+
+logger = getLogger('app_logger')
 
 class ThumbnailType(Enum):
     """
@@ -32,15 +35,20 @@ def create_thumbnail(post: Post) -> Thumbnail:
     """
     temp_f = generate_thumbnail(post)
     alpha = is_alpha_used(temp_f)
+    logger.debug(f'Generated PNG thumbnail: {temp_f}')
 
     if not alpha:
+        # Create new thumbnail in MJPEG container to minimize storage cost.
         try:
-            # Create new thumbnail in MJPEG container to minimize storage cost.
             temp_f.unlink(missing_ok = True)
         except AttributeError as exception:
             pass
 
         temp_f = generate_thumbnail(post, ThumbnailType.JPEG)
+        logger.debug(
+            f'Generated JPEG thumbnail: {temp_f} '\
+            'cause it doesn\'t require transparency.'
+        )
 
     thumb = Thumbnail(post = post)
 
@@ -48,12 +56,13 @@ def create_thumbnail(post: Post) -> Thumbnail:
         with temp_f.open('rb') as stream:
             thumb.data = stream.read()
     except AttributeError as exception:
-        # No thumbnail was made.
+        logger.debug('No thumbnail was made.')
         return
 
     temp_f.unlink(missing_ok = True)
     db.session.add(thumb)
 
+    logger.info(f'Created thumbnail for post #{post.id}')
     return thumb
 
 def generate_thumbnail(
@@ -74,7 +83,10 @@ def generate_thumbnail(
     # Find out which video stream has an embedded thumbnail.
     try:
         probe_data = ffmpeg.probe(post_path)
-    except ffmpeg.Error as exception:
+    except ffmpeg.Error:
+        logger.error(
+            f'Can\'t probe non-visual file: {post_path}'
+        )
         return
 
     index: Optional[int] = None
@@ -82,6 +94,9 @@ def generate_thumbnail(
     for stream in probe_data['streams']:
         if stream.get('disposition', {}).get('attached_pic') == 1:
             index = stream['index']
+            logger.debug(
+                f'Found visual stream: {index}/{len(probe_data['streams'])}'
+            )
             break
 
     stream = ffmpeg.input(post_path)[str(index)]
@@ -92,6 +107,12 @@ def generate_thumbnail(
         'format',
         pix_fmts = 'rgba' if ext == ThumbnailType.PNG else 'yuvj420p'
     )
+    logger.debug(
+        'Using PNG format for thumbnail'
+        if ext == ThumbnailType.PNG else
+        'Using JPEG format for thumbnail'
+    )
+
     # Specify dimensions.
     stream = ffmpeg.filter(stream, 'scale', h = HEIGHT_EXPR, w = WIDTH_EXPR)
 
@@ -105,9 +126,10 @@ def generate_thumbnail(
             overwrite_output = True
         )
     except ffmpeg.Error as exception:
-        # File isn't visual.
+        logger.warning(f'Path: {post_path} isn\'t a visual file.')
         return
 
+    logger.debug(f'Generated thumbnail: {out}')
     return out
 
 def is_alpha_used(path: Path) -> bool:
@@ -118,12 +140,10 @@ def is_alpha_used(path: Path) -> bool:
     Args:
         path
     """
-    # TODO:
-    # Document the code and what it does for what purpose.
     try:
         image = Image.open(path)
     except AttributeError:
-        # No path passed.
+        logger.error(f'Can\'t work with path: {path} in alpha checking.')
         return False
 
     if image.mode == 'P':
@@ -131,10 +151,18 @@ def is_alpha_used(path: Path) -> bool:
             image = image.convert('RGBA')
         else:
             image.close()
+            logger.warning(
+                f'Path: {path} is palette-based and lacks transparency data.'
+            )
+
             return False
-    
+
     if image.mode not in ('LA', 'RGBA'):
         image.close()
+        logger.warning(
+            f'Required Alpha channel (RGBA/LA) not found for path: {path}'
+        )
+
         return False
 
     alpha_channel = image.getchannel('A')
@@ -142,6 +170,10 @@ def is_alpha_used(path: Path) -> bool:
 
     if min_a == 255 and max_a == 255:
         image.close()
+        logger.warning(
+            f'Path: {path} doesn\'t have any pixels that use transparency'
+        )
+
         return False
 
     image.close()

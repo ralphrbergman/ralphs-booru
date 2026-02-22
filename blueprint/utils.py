@@ -1,10 +1,18 @@
+from logging import getLogger
 from math import floor
-from typing import Optional
+from typing import Optional, Protocol
 
-from flask import flash, url_for
+from flask import request, flash, url_for
+from flask_login import current_user
 from flask_wtf import FlaskForm
 
 PAGINATION_DEPTH = 5
+
+class LoggerCallable(Protocol):
+    def __call__(self, message: str) -> None:
+        ...
+
+logger = getLogger('app_logger')
 
 def create_pagination_bar(
         current_page: int,
@@ -58,3 +66,28 @@ def flash_errors(form: FlaskForm) -> None:
     for field in form.errors.values():
         for error in field:
             flash(error)
+            log_anon_activity(logger.error, f'Received error: {error}')
+
+def get_ip() -> str:
+    """ Returns request IP address. """
+    return request.headers.get('X-Forwarded-For') or\
+    request.headers.get('X-Real-IP') or\
+    request.remote_addr
+
+def get_username() -> str:
+    """ Returns request username. """
+    return str(current_user.id) if current_user.is_authenticated else None
+
+def log_anon_activity(log_fn: LoggerCallable, message: str) -> None:
+    """
+    Wrapper function for a logging method that
+    signals an anonymous user's action.
+    """
+    log_fn(f'{get_ip()}: {message}')
+
+def log_user_activity(log_fn: LoggerCallable, message: str) -> None:
+    """
+    Wrapper function for a logging method that
+    signals a logged in user's action.
+    """
+    log_fn(f'{get_ip()} [{get_username()}]: {message}')

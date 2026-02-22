@@ -1,25 +1,15 @@
-{% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'view.css') }}">
-{% endblock %}
+<div id="comment-section">
+    {% block input_comment_section %}{% endblock %}
 
-{% block body %}
-    <div id="comment-section">
-        {% block input_comment_section %}{% endblock %}
+    {% for comment in comments %}
+        {% set author = comment.author %}
 
-        {% for comment in comments %}
-            {% set author = comment.author %}
-
-            <span class="comment" data-comment-id="{{ comment.id }}">
-                <img class="commenter-picture no-select" src="{{ author.avatar }}">
-                <div>
-                    <span><a href="{{ author.profile_url }}">{{ author.username }}</a> {{ gettext('at') }} {{ comment.created }} &gt; <a href="{{ url_for('Root.Post.view_page', post_id = comment.post_id) }}">#{{ comment.post_id }}</a> &lt;{{ comment.score }}&gt; <a class="com-upvote-btn" href="">^</a> <a class="com-downvote-btn" href="">⌄</a></span>
-                    <span class="comment-content">{{ comment.content }}</span>
-                </div>
-            </span>
-        {% endfor %}
-    </div>
-{% endblock %}
-
-{% block script %}
-    <script src="{{ url_for('static', filename = 'js/comment_voting.js') }}" type="module"></script>
-{% endblock %}
+        <span class="comment" data-comment-id="{{ comment.id }}">
+            <img class="commenter-picture no-select" src="{{ author.avatar }}">
+            <div>
+                <span><a href="{{ author.profile_url }}">{{ author.username }}</a> {{ gettext('at') }} {{ comment.created }} &gt; <a href="{{ url_for('Root.Post.view_page', post_id = comment.post_id) }}">#{{ comment.post_id }}</a> &lt;{{ comment.score }}&gt; <a class="com-upvote-btn" href="">^</a> <a class="com-downvote-btn" href="">⌄</a></span>
+                <span class="comment-content">{{ comment.content }}</span>
+            </div>
+        </span>
+    {% endfor %}
+</div>

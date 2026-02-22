@@ -1,13 +1,15 @@
+from logging import getLogger
 from typing import Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
 from sqlalchemy import Select, or_, select
-from sqlalchemy.exc import IntegrityError
 
 from db import db, User
 from .base import browse_element
 
 T = TypeVar('T')
+
+logger = getLogger('app_logger')
 
 def browse_user(*args, **kwargs) -> SelectPagination[User]:
     """
@@ -32,6 +34,7 @@ def browse_user(*args, **kwargs) -> SelectPagination[User]:
             conditions.add(User.name.icontains(word))
             conditions.add(User.mail == word)
             conditions.add(User.mail.icontains(word))
+            logger.debug(f'Searching users for username and e-mail of {word}')
 
         return stmt.where(or_(*conditions))
 
@@ -61,14 +64,8 @@ def create_user(
     user.avatar_name = avatar
 
     db.session.add(user)
-    try:
-        db.session.commit()
-    except IntegrityError as exception:
-        # User's name & e-mail can raise this.
-        db.session.rollback()
 
-        return None
-
+    logger.info(f'Created user: {user.id}')
     return user
 
 def get_user(user_id: int) -> Optional[User]:

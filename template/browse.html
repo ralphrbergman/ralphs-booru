@@ -1,16 +1,19 @@
 {% extends 'layout.html' %}
 
 {% set title = gettext('Page') ~ ': ' ~ current_page %}
+{% set can_manage = current_user.is_authenticated and current_user.has_permission('tag:edit') %}
 
 {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename = 'post.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'pagination.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'tag-editor.css') }}">
 {% endblock %}
 
 {% block body %}
     <div class="row-container">
         {% include 'frag/post_search_form.html' %}
-        {% if current_user.is_authenticated and current_user.has_permission('tag:edit') %}
+
+        {% if can_manage %}
             {% include 'frag/manage_post_form.html' %}
         {% endif %}
     </div>
@@ -20,5 +23,12 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{{ url_for('static', filename = 'js/manage_post.js') }}" type="module"></script>
+    {% if can_manage %}
+        <script src="{{ url_for('static', filename = 'js/manage_post.js') }}" type="module"></script>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename = 'js/search.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename = 'js/show_tags.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/suggestions.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename = 'js/tag_handler.js') }}" type="module"></script>
 {% endblock %}

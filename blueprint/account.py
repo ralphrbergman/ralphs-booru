@@ -1,3 +1,4 @@
+from logging import getLogger
 from os import getenv
 from pathlib import Path
 from typing import Optional
@@ -14,6 +15,7 @@ from flask import (
 )
 from flask_babel import gettext
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy.exc import IntegrityError
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
@@ -21,6 +23,7 @@ from api import create_user, get_user, get_user_by_username
 from api.decorators import anonymous_only, user_protect
 from db import db
 from form import LoginForm, PasswordForm, SignupForm, UserForm
+from .utils import flash_errors, log_anon_activity, log_user_activity
 
 AVATAR_PATH = Path(getenv('AVATAR_PATH'))
 
@@ -28,6 +31,7 @@ account_bp = Blueprint(
     name = 'Account',
     import_name = __name__
 )
+logger = getLogger('app_logger')
 
 @account_bp.route('/avatar/<filename>')
 def avatar_page(filename: str):
@@ -49,12 +53,21 @@ def edit_profile_page():
                 avatar.save(AVATAR_PATH / filename)
 
                 current_user.avatar_name = filename
+                log_user_activity(logger.debug, 'changed their avatar.')
+
+            # E-mail.
+            if current_user.mail != form.email.data:
+                log_user_activity(logger.debug, 'updated their e-mail address')
 
             current_user.mail = form.email.data
+
             db.session.commit()
+            log_anon_activity(logger.debug, 'updated their profile')
 
             flash(gettext('Updated profile successfully'))
         else:
+            log_user_activity(logger.warning, 'submitted an invalid password')
+
             flash(gettext('Invalid password provided'))
 
         return redirect(
@@ -64,9 +77,7 @@ def edit_profile_page():
                 )
             )
 
-    for field in form.errors.values():
-        for error in field:
-            flash(error)
+    flash_errors(form)
 
     return render_template(
         'edit_profile.html',
@@ -85,9 +96,13 @@ def edit_password_page():
             current_user.password = form.new_pw.data
             db.session.commit()
 
+            log_user_activity(logger.info, 'changed their password')
+
             flash(gettext('Successfully changed password'))
             return redirect(url_for('Root.Account.edit_profile_page'))
         else:
+            log_user_activity(logger.warning, 'submitted an invalid password')
+
             flash(gettext('Invalid password provided'))
             return redirect(
                 url_for(
@@ -96,9 +111,7 @@ def edit_password_page():
                 )
             )
 
-    for field in form.errors.values():
-        for error in field:
-            flash(error)
+    flash_errors(form)
 
     return render_template('edit_password.html', form = form)
 
@@ -113,7 +126,10 @@ def login_page():
         current_user = get_user_by_username(form.username.data)
 
         if not current_user:
+            log_anon_activity(logger.warning, 'inputted incorrect username.')
+
             flash(gettext('Incorrect username'))
+
             return redirect(
                 url_for(
                     'Root.Account.login_page',
@@ -124,7 +140,10 @@ def login_page():
         if current_user.check_password(form.pw.data):
             login_user(current_user, remember = form.remember.data)
 
+            log_user_activity(logger.debug, 'logged in successfully')
+
             flash(gettext('Welcome back, %(name)s', name = current_user.name))
+
             return redirect(
                 next_page or url_for(
                     'Root.Account.profile_page',
@@ -132,11 +151,11 @@ def login_page():
                 )
             )
         else:
+            log_user_activity(logger.warning, 'submitted an invalid password')
+
             flash(gettext('Incorrect password'))
 
-    for field in form.errors.values():
-        for error in field:
-            flash(error)
+    flash_errors(form)
 
     return render_template('login.html', form = form)
 
@@ -145,7 +164,10 @@ def login_page():
 def logout_page():
     logout_user()
 
+    log_user_activity(logger.debug, 'logged out successfully.')
+
     flash(gettext('Logged out'))
+
     return redirect(url_for('Root.Index.index_page'))
 
 @account_bp.route('/profile/<int:user_id>')
@@ -176,6 +198,8 @@ def signup_page():
             avatar_filename = secure_filename(avatar.filename)
             avatar.save(AVATAR_PATH / avatar_filename)
 
+            log_anon_activity(logger.debug, 'successfully uploaded their own avatar.')
+
         current_user = create_user(
             name = form.username.data,
             mail = form.email.data,
@@ -183,12 +207,27 @@ def signup_page():
             avatar = avatar_filename
         )
 
-        if not current_user:
-            flash(gettext('Failed to create your profile.'))
+        try:
+            db.session.commit()
+        except IntegrityError as exception:
+            logger.error(
+                f'failed to create user: {current_user.name=}'\
+                f'& {'*' * len(current_user.mail)}')
 
+            current_user = None
+
+        if not current_user:
+            log_anon_activity(
+                logger.error,
+                f'failed to create user {current_user.name}'
+            )
+
+            flash(gettext('Failed to create your profile.'))
             return redirect(url_for('Root.Account.signup_page'))
 
         login_user(current_user, remember = True)
+
+        log_user_activity(logger.debug, 'successfully made their account')
 
         flash(gettext('Welcome, %(name)s', name = current_user.name))
         return redirect(
@@ -198,8 +237,6 @@ def signup_page():
             )
         )
 
-    for field in form.errors.values():
-        for error in field:
-            flash(error)
+    flash_errors(form)
 
     return render_template('signup.html', form = form)

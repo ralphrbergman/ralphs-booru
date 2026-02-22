@@ -1,3 +1,4 @@
+from logging import getLogger
 from pathlib import Path
 from shutil import copy
 
@@ -39,7 +40,7 @@ from api.decorators import (
 )
 from db import Post, db
 from form import PostForm, PostRemovalForm, UploadForm
-from .utils import create_pagination_bar, flash_errors
+from .utils import create_pagination_bar, flash_errors, log_user_activity
 
 DEFAULT_BLUR = 'true'
 
@@ -47,6 +48,7 @@ post_bp = Blueprint(
     name = 'Post',
     import_name = __name__
 )
+logger = getLogger('app_logger')
 
 @post_bp.route('/browse')
 def browse_page():
@@ -106,7 +108,6 @@ def browse_paged(page: int):
 @owner_or_perm_required(Post, 'post:edit')
 def edit_page(post_id: int, post: Post):
     form = PostForm()
-    post = post or get_post(post_id)
 
     if not post:
         return abort(404)
@@ -116,10 +117,12 @@ def edit_page(post_id: int, post: Post):
         mod_paths: set[Path] = set()
 
         if form.deleted.data:
+            log_user_activity(logger.info, 'wants to delete post.')
             return redirect(
                 url_for('Root.Post.remove_page', post_id = post_id)
             )
         elif post.removed:
+            log_user_activity(logger.info, 'wants to revert deleted post.')
             return redirect(
                 url_for('Root.Post.revert_page', post_id = post_id)
             )
@@ -134,6 +137,7 @@ def edit_page(post_id: int, post: Post):
             mod_paths.add(old_path)
 
             if post:
+                log_user_activity(logger.info, f'exchanged post #{post.id}')
                 flash(
                     gettext(
                         'Successfully exchanged post #%(post_id)s'
@@ -142,6 +146,10 @@ def edit_page(post_id: int, post: Post):
                     )
                 )
             else:
+                log_user_activity(
+                    logger.error,
+                    f'wanted to but failed post exchange #{post.id}'
+                )
                 flash(gettext('Failed to exchange post.'))
 
                 return redirect(
@@ -154,7 +162,7 @@ def edit_page(post_id: int, post: Post):
             db.session.rollback()
             return
         except Exception as exception:
-            # TODO: Log unhandled exception.
+            log_user_activity(logger.error, f'exception: {exception}')
             db.session.rollback()
             return
 
@@ -182,6 +190,10 @@ def edit_page(post_id: int, post: Post):
 
         db.session.commit()
 
+        log_user_activity(
+            logger.info,
+            f'successfully modified post #{post.id}.'
+        )
         return redirect(url_for('Root.Post.view_page', post_id = post_id))
 
     flash_errors(form)
@@ -212,6 +224,7 @@ def view_file_resource(post_id: int):
         return abort(404)
 
 @post_bp.route('/remove/<int:post_id>', methods = ['GET', 'POST'])
+@login_required
 @owner_or_perm_required(Post, 'post:delete')
 def remove_page(post_id: int, post: Post):
     if not post:
@@ -222,8 +235,16 @@ def remove_page(post_id: int, post: Post):
     if form.validate_on_submit():
         if form.perma.data:
             perma_delete_post(post)
+            log_user_activity(
+                logger.info,
+                f'permanently deleted post #{post.id}.'
+            )
         else:
             delete_post(post, current_user, form.reason.data)
+            log_user_activity(
+                logger.info,
+                f'marked post #{post.id} as deleted.'
+            )
 
         db.session.commit()
 
@@ -244,12 +265,14 @@ def remove_page(post_id: int, post: Post):
     return render_template('delete_form.html', form = form)
 
 @post_bp.route('/revert/<int:post_id>', methods = ['GET', 'POST'])
+@login_required
 @owner_or_perm_required(Post, 'post:delete')
 def revert_page(post_id: int, post: Post):
     if post.removed:
         delete_log(post)
 
     db.session.commit()
+    log_user_activity(logger.info, f'restored post #{post.id}.')
     return redirect(url_for('Root.Post.view_page', post_id = post_id))
 
 @post_bp.route('/upload', methods = ['GET', 'POST'])
@@ -288,12 +311,21 @@ def upload_page():
                 copy(post.path, temp_path)
                 post.path.unlink(missing_ok = True)
 
+                log_user_activity(
+                    logger.error,
+                    f'failed upload, exception: {exception}'
+                )
+
             if posted:
                 flash(
                     gettext(
                         'Successfully uploaded post #%(post_id)s',
                         post_id = post.id
                     )
+                )
+                log_user_activity(
+                    logger.debug,
+                    f'successfully posted #{post.id}'
                 )
             else:
                 flash(

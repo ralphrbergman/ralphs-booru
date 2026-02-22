@@ -1,26 +1,15 @@
-{% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'tag-editor.css') }}">
-{% endblock %}
-
-{% block body %}
-    <div class="interactive-tags hidden" name="tags"
+<div class="interactive-tags hidden" name="tags"
     {%- if current_user.is_authenticated and not (current_user.has_permission('tag:edit') or current_user.owns(post)) -%}
         disabled
     {% endif %}>
-        {%- if post and post.tags is not none -%}
-            {%- for tag in post.tags -%}
-                <span class="tag" contenteditable="true">{{ tag.name }}</span>
-            {%- endfor -%}
-        {%- endif -%}
+    {%- if post and post.tags is not none -%}
+        {%- for tag in post.tags -%}
+            <span class="tag" contenteditable="true">{{ tag.name }}</span>
+        {%- endfor -%}
+    {%- endif -%}
 
-        <div class="tag-div">
-            <input class="tag" type="text">
-            <ul class="suggestions"></ul>
-        </div>
+    <div class="tag-div">
+        <input class="tag" type="text">
+        <ul class="suggestions"></ul>
     </div>
-{% endblock %}
-
-{% block script %}
-    <script src="{{ url_for('static', filename = 'js/tag_handler.js') }}" type="module"></script>
-    <script src="{{ url_for('static', filename = 'js/suggestions.js') }}" type="module"></script>
-{% endblock %}
+</div>

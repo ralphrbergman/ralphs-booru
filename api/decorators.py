@@ -1,6 +1,7 @@
 from functools import wraps
+from logging import getLogger
 from os import getenv
-from typing import Any, Callable
+from typing import Any, Callable, ParamSpec, TypeVar
 
 from apiflask import abort as api_abort
 from flask import request, abort
@@ -12,6 +13,12 @@ from db import db
 
 ALLOW_USERS = getenv('ALLOW_USERS') == 'true'
 ALLOW_POSTS = getenv('ALLOW_POSTS') == 'true'
+
+P = ParamSpec('P')
+R = TypeVar('R')
+View = Callable[P, R]
+
+logger = getLogger('app_logger')
 
 def _get_entity(model_class: Any):
     """
@@ -32,36 +39,57 @@ def _get_entity(model_class: Any):
 
     return entity, entity_name
 
-def _level_required(LEVEL: int, model_class: Any, abort_fn: Callable, *abort_args):
+def _level_required(LEVEL: int, model_class: Any, abort_fn: Callable[..., None], *abort_args):
     """
     Restricts callback from users below a given level or 
     who aren't moderators, or who aren't the author of a given entity.
     """
-    def decorator(callback):
+    def decorator(callback: View) -> View:
         @wraps(callback)
-        def wrapper(*args, **kwargs):
-            if (current_user.level >= LEVEL
-            or
-            current_user.is_moderator
-            or
-            _get_entity(model_class)):
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            view = callback.__name__
+
+            entity = _get_entity(model_class)
+            owner = getattr(entity, 'author', getattr(entity, 'user_id', None))
+            is_owner = owner in (current_user or current_user.id)
+
+            if (current_user.level >= LEVEL or
+            current_user.is_moderator or is_owner):
+                logger.debug(
+                    f'Allowing {current_user.name} to view: {view} '\
+                    f'(level required view: {LEVEL})'
+                )
                 return callback(*args, **kwargs)
-            
+
+            logger.debug(
+                f'Disallowing {current_user.name} from view: {view} '\
+                f'(level required view: {LEVEL})'
+            )
             return abort_fn(*abort_args)
 
         return wrapper
 
     return decorator
 
-def admin_only(callback):
+def admin_only(callback: View) -> View:
     """
     Restricts callback from users who aren't an admin.
     """
     @wraps(callback)
-    def wrapper(*args, **kwargs):
-        if current_user.is_authenticated and current_user.is_admin:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        view = callback.__name__
+
+        if current_user.is_admin:
+            logger.info(
+                f'Allowed {current_user.name} on admin restricted '\
+                f'view: {view}'
+            )
             return callback(*args, **kwargs)
         else:
+            logger.warning(
+                f'Disallowed {current_user.name} '\
+                f'access to admin restricted view: {view}'
+            )
             return abort(403)
 
     return wrapper
@@ -83,7 +111,7 @@ def api_level_required(LEVEL: int, model_class: Any):
         gettext('Can\'t access this party yet boss.')
     )
 
-def anonymous_only(callback):
+def anonymous_only(callback: View) -> View:
     """
     Restricts view for anonymous users only.
 
@@ -91,10 +119,16 @@ def anonymous_only(callback):
         callback: Route to restrict
     """
     @wraps(callback)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        view = callback.__name__
+
         if current_user.is_anonymous:
             return callback(*args, **kwargs)
         else:
+            logger.debug(
+                f'Disallowing {current_user.name} from accessing '\
+                f'an anonymous only view: {view}'
+            )
             return abort(403)
 
     return wrapper
@@ -110,7 +144,7 @@ def level_required(LEVEL: int, model_class: Any):
     """
     return _level_required(LEVEL, model_class, abort, 403)
 
-def moderator_only(callback):
+def moderator_only(callback: View) -> View:
     """
     Restricts view for users marked as moderator and up.
 
@@ -118,10 +152,19 @@ def moderator_only(callback):
         callback: Route to restrict
     """
     @wraps(callback)
-    def wrapper(*args, **kwargs):
-        if current_user.is_authenticated and current_user.is_moderator:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        view = callback.__name__
+
+        if current_user.is_moderator:
+            logger.info(
+                f'Allowing {current_user.name} to moderator only view: {view}'
+            )
             return callback(*args, **kwargs)
         else:
+            logger.warning(
+                f'Disallowing {current_user.name} from accessing'\
+                f'moderator only view: {view}'
+            )
             return abort(403)
 
     return wrapper
@@ -133,20 +176,28 @@ def owner_only(model_class: Any):
     Args:
         model_class: Model to query for ownership attainment
     """
-    def decorator(callback):
+    def decorator(callback: View) -> View:
         @wraps(callback)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            view = callback.__name__
+
             entity, entity_name = _get_entity(model_class)
             kwargs[entity_name] = entity
 
-            try:
-                if entity.author == current_user:
-                    return callback(*args, **kwargs)
-            except AttributeError as exception:
-                # "Entity" doesn't have 'author'.
-                if entity.user_id == current_user.id:
-                    return callback(*args, **kwargs)
+            owner = getattr(entity, 'author', getattr('user_id', None))
 
+            if (owner == current_user or
+            owner == current_user.id or
+            current_user.is_moderator):
+                logger.debug(
+                    f'Allowing {current_user.name} to owner-only view: {view}'
+                )
+                return callback(*args, **kwargs)
+
+            logger.debug(
+                f'Disallowing {current_user.name} from owner-only '\
+                f'view: {view}'
+            )
             return abort(403)
 
         return wrapper
@@ -161,35 +212,35 @@ def owner_or_perm_required(model_class: Any, slug: str):
         model_class: Model to query for ownership attainment
         slug: Permission name
     """
-    def decorator(callback):
+    def decorator(callback: View) -> View:
         @wraps(callback)
-        def wrapper(*args, **kwargs):
-            entity, entity_name = _get_entity(model_class)
-            if current_user.is_authenticated:
-                uid = current_user.id
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            view = callback.__name__
 
+            entity, entity_name = _get_entity(model_class)
+            owner = getattr(entity, 'author', getattr(entity, 'user_id', None))
             kwargs[entity_name] = entity
 
-            if (
-                hasattr(current_user, 'id')
-                and
-                (hasattr(entity, 'user_id') and entity.user_id == uid
-                or
-                hasattr(entity, 'author_id') and entity.author_id == uid
-                or
-                current_user.has_permission(slug)
-                or
-                current_user.is_moderator)
-                ):
+            if (owner == current_user or
+                owner == current_user.id or
+                current_user.has_permission(slug)):
+                logger.debug(
+                    f'Allowing {current_user.name} on owner-only/permission '\
+                    f'restricted view: {view}; Permission: {slug}'
+                )
                 return callback(*args, **kwargs)
 
+            logger.debug(
+                f'Disallowed {current_user.name} from owner-only/permission '\
+                f'restricted view: {view}; Permission: {slug}'
+            )
             return abort(403)
 
         return wrapper
 
     return decorator
 
-def post_protect(callback):
+def post_protect(callback: View) -> View:
     """
     Restricts view if post management is not possible at the moment.
 
@@ -197,11 +248,19 @@ def post_protect(callback):
         callback: Route to restrict
     """
     @wraps(callback)
-    def wrapper(*args, **kwargs):
-        if (ALLOW_POSTS or
-            current_user.is_authenticated and current_user.is_moderator):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        view = callback.__name__
+
+        if ALLOW_POSTS or current_user.is_moderator:
+            logger.debug(
+                f'Allowed {current_user.name} on post protected view: {view}'
+            )
             return callback(*args, **kwargs)
         else:
+            logger.debug(
+                f'Disallowed {current_user.name} from post protected '\
+                f'view: {view}'
+            )
             abort(403)
 
     return wrapper
@@ -213,20 +272,29 @@ def perm_required(slug: str):
     Args:
         slug: Permission name
     """
-    def decorator(callback):
+    def decorator(callback: View) -> View:
         @wraps(callback)
-        def wrapper(*args, **kwargs):
-            if (current_user.is_authenticated and
-            current_user.has_permission(slug)):
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            view = callback.__name__
+
+            if current_user.has_permission(slug):
+                logger.debug(
+                    f'Allowed {current_user.name} on permission restricted '\
+                    f'view: {view}; Permission: {slug}'
+                )
                 return callback(*args, **kwargs)
             else:
+                logger.debug(
+                    f'Disallowed {current_user.name} from permission '\
+                    f'restricted view: {view}; Permission {slug}'
+                )
                 return abort(403)
 
         return wrapper
 
     return decorator
 
-def user_protect(callback):
+def user_protect(callback: View) -> View:
     """
     Restricts view if user account management is not possible at the moment.
 
@@ -234,10 +302,18 @@ def user_protect(callback):
         callback: Route to restrict
     """
     @wraps(callback)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        view = callback.__name__
+
         if ALLOW_USERS:
+            logger.debug(
+                f'Allowing access to user protected view: {view}'
+            )
             return callback(*args, **kwargs)
         else:
+            logger.debug(
+                f'Disallowing access to user protected view: {view}'
+            )
             return abort(403)
 
     return wrapper

@@ -1,7 +1,8 @@
 from hashlib import md5 as _md5
+from logging import getLogger
 from os import getenv
 from pathlib import Path
-from re import findall, sub
+from re import findall, sub, search
 from shutil import copy
 from typing import Optional, TypeVar
 
@@ -45,6 +46,8 @@ TEMP = Path(getenv('TEMP_PATH'))
 
 T = TypeVar('T')
 
+logger = getLogger('app_logger')
+
 def browse_post(
     *args,
     **kwargs
@@ -66,14 +69,17 @@ def browse_post(
 
         try:
             # Capture caption text from terms.
-            caption = terms(CAPTION_PATTERN, terms)[1]
+            caption = search(CAPTION_PATTERN, terms)[1]
             terms = sub(CAPTION_PATTERN, '', terms)
-        except TypeError:
-            pass
+
+            logger.debug(f'Found caption: {repr(caption)}')
+        except (TypeError, IndexError):
+            logger.debug(f'Failed to obtain caption from: {repr(terms)}')
 
         # Capture attribute selectors.
         attrs: list[str] = findall(ATTR_PATTERN, terms)
         terms = sub(ATTR_PATTERN, '', terms)
+        logger.debug(f'Attributes: {attrs}')
 
         # Get tags.
         tags: list[str] = findall(TAG_PATTERN, terms)
@@ -84,7 +90,9 @@ def browse_post(
                 stmt = stmt.where(
                     Post.caption.like(f'%{word}%')
                 )
+                logger.debug(f'Searching for word {repr(word)} in caption.')
         except AttributeError:
+            # No caption, error is already messaged.
             pass
 
         # Apply attribute selectors.
@@ -100,14 +108,10 @@ def browse_post(
                 continue
 
             try:
-                value = int(value)
-            except ValueError as exception:
-                pass
-
-            try:
                 col = getattr(Post, name)
             # Skip attribute selector that doesn't exist.
             except AttributeError as exception:
+                logger.debug(f'Attribute: {name} doesn\'t exist')
                 continue
 
             try:
@@ -129,12 +133,17 @@ def browse_post(
                     where = col == value
 
             stmt = stmt.where(where)
+            logger.debug(
+                f'Searching attribute: {name}'\
+                f'{'=' if not sign else sign}{value}'
+            )
+
+        # Apply tag selection.
 
         # Apply non-NSFW tag if it's not explicitly specified by user.
         if f'-{NSFW_TAG}' not in tags and NSFW_TAG not in tags:
             tags.append(f'-{NSFW_TAG}')
-
-        # Apply tag selection.
+            logger.debug('Appending -NSFW tag by default.')
 
         # Handle showing/hiding removed posts.
         removed_value = Post.removed == False
@@ -142,10 +151,11 @@ def browse_post(
         if 'removed' in tags:
             removed_value = Post.removed == True
             tags.remove('removed')
+            logger.debug('Showing removed (deleted) posts.')
 
         stmt = stmt.where(removed_value)
 
-        # Handle where a user wants to terms for posts with no tags.
+        # Handle where a user wants to search for posts with no tags.
         if 'no_tags' in tags:
             stmt = stmt.where(~Post.tags.any())
         else:
@@ -156,6 +166,7 @@ def browse_post(
                     where = ~Post.tags.any(Tag.name == tag[1:])
 
                 stmt = stmt.where(where)
+                logger.debug(f'Searching tag: {tag} in posts.')
 
         return stmt
 
@@ -165,10 +176,13 @@ def count_all() -> int:
     """
     Returns count of all Posts who aren't marked removed.
     """
-    return db.session.scalar(
+    count = db.session.scalar(
         select(func.count(Post.id))
         .where(Post.removed == False)
     )
+
+    logger.debug(f'Post count: {count}')
+    return count
 
 def create_post(
     author: User,
@@ -254,6 +268,7 @@ def create_post(
         # No thumbnail was made.
         pass
 
+    logger.info(f'Created post #{post.id}')
     return post
 
 def delete_post(post: Post, moderator: User, reason: str) -> None:
@@ -264,6 +279,7 @@ def delete_post(post: Post, moderator: User, reason: str) -> None:
         post
     """
     log = create_log(post, moderator, reason)
+    logger.info(f'Marked post #{post.id} as deleted.')
 
 def perma_delete_post(post: Post | int) -> None:
     """
@@ -279,9 +295,10 @@ def perma_delete_post(post: Post | int) -> None:
         db.session.delete(post.thumbnail)
     except UnmappedInstanceError as exception:
         # Some posts may not have a thumbnail and it's alright.
-        pass
+        logger.debug(f'Post #{post.id} doesn\'t have a thumbnail to delete.')
 
     db.session.delete(post)
+    logger.info(f'Permanently deleted post #{post.id}')
 
 def get_dimensions(path: Path) -> tuple[int, int]:
     """
@@ -302,7 +319,9 @@ def get_dimensions(path: Path) -> tuple[int, int]:
     except (IndexError, KeyError):
         return
 
-    return (stream['width'], stream['height'])
+    x, y = stream['width'], stream['height']
+
+    return (x, y)
 
 def get_extension(path: Path) -> str:
     """
@@ -341,7 +360,9 @@ def get_mime(path: Path) -> Optional[str]:
     try:
         format_name = probe_output['format']['format_name']
     except KeyError as exception:
-        # Could the file be malformed?
+        logger.warning(
+            f'Path: {path} is possibly malformed or not a media file.'
+        )
         return
 
     # There can be multiple MIMEs involved with 'image2' demuxer.
@@ -411,7 +432,7 @@ def move_post(post: Post, directory: str) -> None:
         original_path.unlink(missing_ok = True)
 
     post.directory = directory
-    db.session.commit()
+    logger.info(f'Moved post #{post.id} from {original_path} to {new_path}')
 
 def process_filename(filename: str) -> str:
     """
@@ -420,7 +441,10 @@ def process_filename(filename: str) -> str:
     Args:
         filename: Filename
     """
-    return sub(NONALPHA, '', filename)
+    name = sub(NONALPHA, '', filename)
+
+    logger.debug(f'Processed filename "{filename}" to {name}')
+    return name
 
 def replace_post(post: Post, file: FileStorage) -> tuple[Post, Path, Path]:
     """
@@ -438,14 +462,18 @@ def replace_post(post: Post, file: FileStorage) -> tuple[Post, Path, Path]:
 
     # Ignore the same file being uploaded.
     if md5 == post.md5:
+        logger.warning(f'Can\'t replace post #{post.id} with same MD5.')
         return
 
+    prev_md5 = post.md5
     prev_path = post.path
+
     dimensions = get_dimensions(path)
     ext = get_extension(path)
     mime = get_mime(path)
 
     if not mime:
+        logger.warning(f'Can\'t replace post #{post.id} with invalid MIME.')
         return
 
     size = get_size(path)
@@ -474,6 +502,7 @@ def replace_post(post: Post, file: FileStorage) -> tuple[Post, Path, Path]:
         thumb.post_id = post.id
         thumb.post = post
 
+    logger.info(f'Replaced post #{post.id} from {prev_md5} to {post.md5}.')
     return post, path, prev_path
 
 def save_file(file: FileStorage) -> Path:

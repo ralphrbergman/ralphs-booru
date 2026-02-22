@@ -2,6 +2,10 @@
 
 {% set title = gettext('List Users') %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'pagination.css') }}">
+{% endblock %}
+
 {% block body %}
     <form>
         <input name="search" type="text" placeholder="username email ...">

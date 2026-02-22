@@ -43,6 +43,7 @@ def remove_tag(tag_id: int):
 
     delete_tag(tag)
 
+    db.session.commit()
     return {}
 
 @tag_bp.post('')

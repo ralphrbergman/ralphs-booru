@@ -28,6 +28,7 @@ def obtain_score(score_id: int):
 
 @score_bp.delete('/<int:score_id>')
 @score_bp.output({}, status_code = 204)
+@score_bp.auth_required(auth)
 @owner_only(ScoreAssociation)
 def remove_score(score_id: int, score: ScoreAssociation):
     """
@@ -45,8 +46,8 @@ def remove_score(score_id: int, score: ScoreAssociation):
 @score_bp.post('')
 @score_bp.input(ScoreIn, arg_name = 'data')
 @score_bp.output(ScoreOut)
-@post_protect
 @score_bp.auth_required(auth)
+@post_protect
 def upload_score(data: ScoreIn):
     """
     Upload a new score to the system.
@@ -55,5 +56,7 @@ def upload_score(data: ScoreIn):
 
     payload = (data['target_id'], current_user.id, data['target_type'])
     score = add_vote(*payload) if value == 1 else remove_vote(*payload)
+
+    db.session.commit()
 
     return score

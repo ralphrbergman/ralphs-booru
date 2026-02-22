@@ -1,3 +1,5 @@
+from logging import getLogger
+
 from flask import (
     Blueprint,
     request,
@@ -24,13 +26,14 @@ from api import (
 from api.decorators import post_protect, perm_required
 from db import db
 from form import SearchForm, SnapshotForm, TagForm
-from .utils import create_pagination_bar
+from .utils import create_pagination_bar, log_user_activity
 
 tag_bp = Blueprint(
     name = 'Tag',
     import_name = __name__,
     url_prefix = '/tag'
 )
+logger = getLogger('app_logger')
 
 TAG_TYPES = ('artist', 'character', 'copyright', 'general', 'meta')
 
@@ -53,11 +56,13 @@ def edit_page(tag_id: int):
             tag_types = TAG_TYPES
         )
     else:
-        if (form.deleted.data and
-            current_user.is_authenticated and
-            current_user.is_moderator):
+        if form.deleted.data and current_user.has_permission('tag:edit'):
             delete_tag(tag)
 
+            log_user_activity(
+                logger.debug,
+                f'successfully deleted tag {tag.name}'
+            )
             flash(
                 gettext(
                     'Permanently deleted tag #%(tag_name)s',
@@ -72,6 +77,10 @@ def edit_page(tag_id: int):
 
         db.session.commit()
 
+        log_user_activity(
+            logger.debug,
+            f'successfully modified tag {tag.name}'
+        )
         flash(
             gettext(
                 'Updated tag %(tag_name)s successfully!',
@@ -91,6 +100,7 @@ def history_page():
     return render_template('snapshot.html', form = form, snapshots = snapshots)
 
 @tag_bp.route('/revert/<int:snapshot_id>')
+@login_required
 @perm_required('tag:edit')
 def revert_page(snapshot_id: int):
     snapshot = get_snapshot(snapshot_id)
@@ -99,6 +109,10 @@ def revert_page(snapshot_id: int):
         return abort(404)
 
     snapshot = revert_snapshot(snapshot, current_user)
+    log_user_activity(
+        logger.debug,
+        f'successfully reverted snapshot {snapshot.id} of {snapshot.post_id}'
+    )
     db.session.commit()
 
     return redirect(

@@ -1,3 +1,4 @@
+from logging import getLogger
 from os import getenv
 from typing import Callable, Literal, Optional, TypeVar
 
@@ -12,6 +13,8 @@ DEFAULT_SORT_DIR = getenv('DEFAULT_SORT_DIR')
 LIMIT_THRESHOLD = int(getenv('LIMIT_THRESHOLD'))
 
 T = TypeVar('T')
+
+logger = getLogger('app_logger')
 
 def browse_element(
     element: T,
@@ -35,16 +38,24 @@ def browse_element(
         sort: What column to sort
         terms: Searching terms
     """
+    logger.debug(f'Creating select for element {element.__name__}')
+
     if limit and limit > LIMIT_THRESHOLD:
+        logger.warning(f'Select limit exceeded, received: {limit}')
         limit = LIMIT_THRESHOLD
 
     if direction not in ('asc', 'desc'):
+        logger.warning(f'Invalid select sort direction passed: {direction}')
         direction = DEFAULT_SORT_DIR
 
     stmt = element.apply_sort(select(element), sort, direction)
 
     if extra_fn:
         stmt = extra_fn(stmt)
+        logger.debug(
+            'Called passed callback for additional '\
+            f'selecting: {extra_fn.__name__}'
+        )
 
     elements = db.paginate(
         stmt,

@@ -1,9 +1,11 @@
+from logging import getLogger
 from typing import Optional
 
 from sqlalchemy import and_, select
-from sqlalchemy.exc import IntegrityError
 
 from db import ScoreAssociation, db
+
+logger = getLogger('app_logger')
 
 def _set_vote(
     target_id: int,
@@ -37,13 +39,6 @@ def _set_vote(
 
     score.value = value
 
-    try:
-        db.session.commit()
-    except IntegrityError as exception:
-        print(exception)
-        db.session.rollback()
-        return
-
     return score
 
 def add_vote(
@@ -59,6 +54,7 @@ def add_vote(
         user_id: Voter's ID
         score_type: (e.g post)
     """
+    logger.debug(f'{user_id} positively votes {score_type}={target_id}')
     return _set_vote(
         target_id = target_id,
         user_id = user_id,
@@ -70,6 +66,10 @@ def delete_score(score: ScoreAssociation) -> None:
     """
     Deletes score.
     """
+    logger.debug(
+        f'{score.user_id} removes vote for '\
+        f'{score.target_type}={score.target_id}'
+    )
     db.session.delete(score)
 
 def get_vote(
@@ -120,6 +120,7 @@ def remove_vote(
         user_id: Voter's ID
         score_type: (e.g comment)
     """
+    logger.debug(f'{user_id} negatively votes {score_type}={target_id}')
     return _set_vote(
         target_id = target_id,
         user_id = user_id,
