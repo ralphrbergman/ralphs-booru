@@ -220,7 +220,11 @@ def view_file_resource(post_id: int):
 
     try:
         return send_file(post.path)
-    except FileNotFoundError as exception:
+    except (AttributeError, FileNotFoundError) as exception:
+        log_user_activity(
+            logger.warning,
+            'tried to access post that doesn\'t exist.'
+        )
         return abort(404)
 
 @post_bp.route('/remove/<int:post_id>', methods = ['GET', 'POST'])

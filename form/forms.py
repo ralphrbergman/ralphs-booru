@@ -11,7 +11,7 @@ from wtforms import (
     SelectField,
     TextAreaField
 )
-from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
+from wtforms.validators import DataRequired, EqualTo, Length, Optional, ValidationError
 
 from api import get_user_by_username
 from .fields import StrongPasswordField
@@ -54,6 +54,7 @@ class PostRemovalForm(FlaskForm, SubmitMixin):
     reason = StringField(
         'reason',
         validators = [
+            Optional(),
             Length(
                 min = 15,
                 max = 150,
@@ -61,6 +62,14 @@ class PostRemovalForm(FlaskForm, SubmitMixin):
             )
         ]
     )
+
+    def validate_reason(self, field: StringField):
+        if not self.perma.data and not field.data:
+            raise ValidationError(
+                gettext(
+                    'Reason is required when marking post as deleted'
+                )
+            )
 
 class SearchForm(FlaskForm, SubmitMixin):
     search = StringField('search')
