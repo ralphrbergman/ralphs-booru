@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, Text, and_, desc, select
+from sqlalchemy import ForeignKey, and_, desc
 from sqlalchemy.orm import (
     Mapped,
     foreign,
@@ -26,7 +26,11 @@ class Snapshot(db.Model, CreatedMixin, IdMixin, SortableMixin):
             ondelete = 'set null'
         )
     )
-    tags: Mapped[str] = mapped_column(Text, nullable = False)
+    tags: Mapped[list['Tag']] = relationship(
+        'Tag',
+        secondary = 'tag_snapshot_association',
+        back_populates = 'snapshots'
+    )
 
     # Relationships.
     post: Mapped['Post'] = relationship(back_populates = 'snapshots')

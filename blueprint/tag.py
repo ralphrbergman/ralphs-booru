@@ -56,6 +56,8 @@ def edit_page(tag_id: int):
             tag_types = TAG_TYPES
         )
     else:
+        url = url_for('Root.Tag.edit_page', tag_id = tag_id)
+
         if form.deleted.data and current_user.has_permission('tag:edit'):
             delete_tag(tag)
 
@@ -69,7 +71,7 @@ def edit_page(tag_id: int):
                     tag_name = tag.name
                 )
             )
-            return redirect(url_for('Root.Tag.tag_page'))
+            url = url_for('Root.Tag.tag_page')
 
         tag.name = form.name.data
         tag.type = form.type.data
@@ -77,17 +79,19 @@ def edit_page(tag_id: int):
 
         db.session.commit()
 
-        log_user_activity(
-            logger.debug,
-            f'successfully modified tag {tag.name}'
-        )
+        if not form.deleted.data:
+            log_user_activity(
+                logger.debug,
+                f'successfully modified tag {tag.name}'
+            )
+
         flash(
             gettext(
                 'Updated tag %(tag_name)s successfully!',
                 tag_name = tag.name
             )
         )
-        return redirect(url_for('Root.Tag.edit_page', tag_id = tag_id))
+        return redirect(url)
 
 @tag_bp.route('/history')
 def history_page():

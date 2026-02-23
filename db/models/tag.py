@@ -2,7 +2,7 @@ from re import sub
 from typing import Optional
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from db import db
 from .mixins.created import CreatedMixin
@@ -28,9 +28,13 @@ class Tag(db.Model, CreatedMixin, IdMixin, SortableMixin, SerializerMixin):
     )
     desc: Mapped[str] = mapped_column(nullable = True)
 
-    posts: Mapped[list['Post']] = db.relationship(
+    posts: Mapped[list['Post']] = relationship(
         back_populates = 'tags',
         secondary = 'tag_association'
+    )
+    snapshots: Mapped[list['Snapshot']] = relationship(
+        back_populates = 'tags',
+        secondary = 'tag_snapshot_association'
     )
 
     @validates('name')

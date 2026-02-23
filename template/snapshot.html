@@ -23,7 +23,7 @@
                 </td>
                 <td>{{ snapshot.created }}</td>
                 <td><a href="{{ snapshot.user.profile_url }}">{{ snapshot.user.username }}</a></td>
-                <td>{{ snapshot.tags }}</td>
+                <td>{{ snapshot.tags | map(attribute='name') | join(', ') }}</td>
                 <td>
                     {% if snapshot.previous %}
                         <a

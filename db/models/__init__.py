@@ -6,6 +6,7 @@ from .role_perms import RolePerms
 from .removed import RemovedLog
 from .snapshot import Snapshot
 from .score_assoc import ScoreAssociation
+from .snapshot_assoc import TagSnapshotAssociation
 from .tag import Tag
 from .thumbnail import Thumbnail
 from .tag_assoc import TagAssociation

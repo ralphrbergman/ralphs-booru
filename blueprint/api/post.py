@@ -5,11 +5,25 @@ from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 from werkzeug.datastructures import FileStorage
 
-from api import browse_post, create_post, create_snapshot, delete_post, get_post, save_file
+from api import (
+    browse_post,
+    create_post,
+    create_snapshot,
+    delete_post,
+    get_post,
+    save_file
+)
 from api.decorators import owner_or_perm_required, post_protect, perm_required
 from api_auth import auth
 from db import Post, db
-from db.schemas import BrowseIn, PostBrowse, PostFormIn, PostIn, PostDeleteIn, PostOut
+from db.schemas import (
+    BrowseIn,
+    PostBrowse,
+    PostFormIn,
+    PostIn,
+    PostDeleteIn,
+    PostOut
+)
 
 post_bp = APIBlueprint(
     name = 'Post API',

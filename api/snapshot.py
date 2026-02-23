@@ -53,7 +53,7 @@ def create_snapshot(post: Post, user: User) -> Snapshot:
 
     snap.post = post
     snap.user = user
-    snap.tags = ' '.join(sorted(( tag.name for tag in post.tags )))
+    snap.tags = post.tags
 
     db.session.add(snap)
     logger.info(
@@ -79,18 +79,14 @@ def revert_snapshot(snapshot: Snapshot, user: User) -> Snapshot:
     prev = snapshot.previous
     post = snapshot.post
 
-    post.tags.clear()
-    db.session.flush()
-
-    for tag_name in prev.tags.split():
-        tag = get_tag(tag_name) or create_tag(tag_name)
-
-        if tag:
-            post.tags.append(tag)
-
+    post.tags = list(prev.tags) 
+    
     new_snapshot = create_snapshot(post, user)
 
+    tag_names = ", ".join((tag.name for tag in new_snapshot.tags))
     logger.info(
-        f'Reverting snapshot #{snapshot.post.id} to {new_snapshot.tags}'
+        f'Reverted post #{post.id} to state from snapshot #{prev.id}. '
+        f'New snapshot tags: {tag_names}'
     )
+
     return new_snapshot
