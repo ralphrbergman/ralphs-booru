@@ -22,7 +22,7 @@ def add_tags(tag_list: list[str]) -> list[Tag]:
     tag_names = set(tag_list)  # A set automatically removes duplicate tags.
 
     for tag_name in tag_names:
-        if not tag_name or tag_name in tag_names:
+        if not tag_name:
             continue
 
         tag = get_tag(tag_name) or create_tag(tag_name)
