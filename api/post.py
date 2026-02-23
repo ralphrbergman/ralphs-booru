@@ -265,8 +265,7 @@ def create_post(
     try:
         thumbnail.post_id = post.id
     except AttributeError as exception:
-        # No thumbnail was made.
-        pass
+        logger.warning(f'No thumbnail was made for post #{post.id}')
 
     logger.info(f'Created post #{post.id}')
     return post

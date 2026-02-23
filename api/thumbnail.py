@@ -120,13 +120,16 @@ def generate_thumbnail(
         ffmpeg.output(
             stream,
             str(out),
-            frames = '1',
-            loglevel = 'quiet'
+            frames = '1'
         ).run(
-            overwrite_output = True
+            overwrite_output = True,
+            capture_stderr = True
         )
     except ffmpeg.Error as exception:
-        logger.warning(f'Path: {post_path} isn\'t a visual file.')
+        logger.warning(
+            f'Path: {post_path} possibly isn\'t a visual file'\
+            f': {exception.stderr}'
+        )
         return
 
     logger.debug(f'Generated thumbnail: {out}')
