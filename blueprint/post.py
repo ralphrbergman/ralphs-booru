@@ -1,6 +1,5 @@
 from logging import getLogger
 from pathlib import Path
-from shutil import copy
 
 from flask import (
     Blueprint,
@@ -289,49 +288,40 @@ def upload_page():
     if form.validate_on_submit():
         for file in form.files.data:
             temp_path = save_file(file)
-
-            post = create_post(
-                author = current_user,
-                path = temp_path,
-                op = form.op.data.strip(),
-                src = form.src.data.strip(),
-                directory = form.directory.data.strip(),
-                caption = form.caption.data.strip(),
-                tags = form.tags.data
-            )
-
             posted = False
-            db.session.flush()
-            create_snapshot(post, current_user)
 
-            try:
-                db.session.commit()
-                posted = True
-            except IntegrityError as exception:
-                # Error likely of post that already exists.
-                db.session.rollback()
-
-                # Move back the file.
-                copy(post.path, temp_path)
-                post.path.unlink(missing_ok = True)
-
-                log_user_activity(
-                    logger.error,
-                    f'failed upload, exception: {exception}'
+            with db.session.begin_nested():
+                post = create_post(
+                    author = current_user,
+                    path = temp_path,
+                    op = form.op.data.strip(),
+                    src = form.src.data.strip(),
+                    directory = form.directory.data.strip(),
+                    caption = form.caption.data.strip(),
+                    tags = form.tags.data
                 )
+
+                try:
+                    db.session.flush()
+                    posted = True
+                except IntegrityError as exception:
+                    db.session.rollback()
+                    logger.error(
+                        f'Failed to upload {file.filename}, '
+                        f'exception: {exception}'
+                    )
 
             if posted:
                 flash(
                     gettext(
-                        'Successfully uploaded post #%(post_id)s',
+                        'Successfully uploaded post '\
+                        '#%(post_id)s',
                         post_id = post.id
                     )
                 )
-                log_user_activity(
-                    logger.debug,
-                    f'successfully posted #{post.id}'
-                )
             else:
+                temp_path.unlink(missing_ok = True)
+
                 flash(
                     gettext(
                         'Uploading file %(filename)s failed',
@@ -339,8 +329,8 @@ def upload_page():
                     )
                 )
 
+        db.session.commit()
         return redirect(url_for('Root.Post.browse_page'))
 
     flash_errors(form)
-
     return render_template('upload.html', form = form)

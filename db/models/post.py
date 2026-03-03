@@ -52,7 +52,9 @@ class Post(
     )
     thumbnail: Mapped[Thumbnail] = relationship(
         'Thumbnail',
-        back_populates = 'post'
+        back_populates = 'post',
+        cascade = 'all, delete-orphan',
+        uselist = False
     )
 
     # Filesystem attributes.

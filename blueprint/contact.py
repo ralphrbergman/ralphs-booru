@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, redirect, render_template
+from brand import brand
 
 contact_bp = Blueprint(
     name = 'Contact',
@@ -9,3 +10,7 @@ contact_bp = Blueprint(
 @contact_bp.route('')
 def contact_page():
     return render_template('contact.html')
+
+@contact_bp.route('/discord')
+def discord_page():
+    return redirect(brand['contact']['discord'])

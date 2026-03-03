@@ -59,3 +59,16 @@ def validate_extension(extensions: Sequence[str]) -> Validator:
                 )
 
     return callback
+
+def validate_file_count(max: int) -> Validator:
+    def callback(form: FlaskForm, field: Field) -> None:
+        if field.data and len(field.data) > max:
+            raise ValidationError(
+                gettext(
+                    'You can only upload a maximum of '
+                    '%(count)s files.',
+                    count = max
+                )
+            )
+
+    return callback

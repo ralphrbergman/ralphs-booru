@@ -8,6 +8,7 @@ from .forms import (
     SignupForm,
     SnapshotForm,
     TagForm,
+    TAG_TYPES,
     UserForm,
     UploadForm
 )

@@ -229,13 +229,14 @@ def create_app() -> APIFlask:
     @app.before_request
     def ensure_lang_prefix():
         """ Redirect users to /en URL prefix if there's no languages prefixed. """
-        if request.path.startswith('/static') or request.endpoint == 'static':
-            return
-
-        if request.path.startswith('/api'):
-            return
-
-        if request.path.startswith('/docs') or request.path.startswith('/openapi.json'):
+        if request.path.startswith(
+            (
+                '/static',
+                '/api',
+                '/docs',
+                '/openapi.json'
+            )
+        ):
             return
 
         path_parts = request.path.split('/')

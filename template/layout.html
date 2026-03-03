@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ g.lang_code }}">
     <head>
-        {% if current_user %}
-            <p hidden>
-                <b>{{ gettext('DO NOT SHARE THIS WITH ANYONE') }}:</b>
-                <span id="api-key">{{ current_user.api_key }}</span>
-            </p>
-        {% endif %}
-
         <meta charset="UTF-8">
         <meta name="description" content="{{ gettext('Ralph\'s kind of Booru') }}">
         <meta name="author" content="{{ brand['contact']['name'] }}">
@@ -31,6 +24,13 @@
         {% endblock %}
     </head>
     <body>
+        {% if current_user %}
+            <p hidden>
+                <b>{{ gettext('DO NOT SHARE THIS WITH ANYONE') }}:</b>
+                <span id="api-key">{{ current_user.api_key }}</span>
+            </p>
+        {% endif %}
+
         {% include 'frag/nav.html' %}
         {% include 'frag/message.html' %}
 

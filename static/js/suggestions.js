@@ -19,7 +19,8 @@ async function handleSuggesting(input, list) {
      * @param {HTMLInputElement} input - Input element to add suggestions to.
      * @param {HTMLUListElement} list - List element to hold suggestions.
     */
-    const query = input.value;
+    // Ignore dashes (for negative tags).
+    const query = input.value.replaceAll('-', '');
 
     if (controller) controller.abort();
     if (!query.length) return;
@@ -44,7 +45,7 @@ async function handleSuggesting(input, list) {
         });
 
         // Make the request for suggestions.
-        const response = await fetch(
+        await fetch(
             `/api/tags?${params.toString()}+${ignoreTags.join('+')}`,
             {
                 signal: controller.signal

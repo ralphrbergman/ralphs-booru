@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-17 02:05+0200\n"
+"POT-Creation-Date: 2026-03-01 22:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,109 +17,109 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: api/decorators.py:83
+#: api/decorators.py:111
 msgid "Can't access this party yet boss."
 msgstr ""
 
-#: blueprint/account.py:56
+#: blueprint/account.py:67
 msgid "Updated profile successfully"
 msgstr ""
 
-#: blueprint/account.py:58 blueprint/account.py:91
+#: blueprint/account.py:71 blueprint/account.py:106
 msgid "Invalid password provided"
 msgstr ""
 
-#: blueprint/account.py:88
+#: blueprint/account.py:101
 msgid "Successfully changed password"
 msgstr ""
 
-#: blueprint/account.py:116
+#: blueprint/account.py:131
 msgid "Incorrect username"
 msgstr ""
 
-#: blueprint/account.py:127
+#: blueprint/account.py:145
 #, python-format
 msgid "Welcome back, %(name)s"
 msgstr ""
 
-#: blueprint/account.py:135
+#: blueprint/account.py:156
 msgid "Incorrect password"
 msgstr ""
 
-#: blueprint/account.py:148
+#: blueprint/account.py:169
 msgid "Logged out"
 msgstr ""
 
-#: blueprint/account.py:187
+#: blueprint/account.py:225
 msgid "Failed to create your profile."
 msgstr ""
 
-#: blueprint/account.py:193
+#: blueprint/account.py:232
 #, python-format
 msgid "Welcome, %(name)s"
 msgstr ""
 
-#: blueprint/error.py:19
+#: blueprint/error.py:25
 msgid "You need to login"
 msgstr ""
 
-#: blueprint/error.py:23
+#: blueprint/error.py:30
 msgid "Unauthorized users prohibited"
 msgstr ""
 
-#: blueprint/error.py:29
+#: blueprint/error.py:37
 msgid "The resource you we're looking for does not exist."
 msgstr ""
 
-#: blueprint/manage_user.py:61
+#: blueprint/manage_user.py:73
 #, python-format
 msgid "Role with priority %(priority)s does not exist"
 msgstr ""
 
-#: blueprint/manage_user.py:78
+#: blueprint/manage_user.py:98
 msgid "Cannot manage the user on the same or above rank as you"
 msgstr ""
 
-#: blueprint/manage_user.py:91
+#: blueprint/manage_user.py:119
 #, python-format
 msgid "Updated user %(name)s successfully!"
 msgstr ""
 
-#: blueprint/post.py:139
+#: blueprint/post.py:143
 #, python-format
 msgid "Successfully exchanged post #%(post_id)s for a new file!"
 msgstr ""
 
-#: blueprint/post.py:145
+#: blueprint/post.py:153
 msgid "Failed to exchange post."
 msgstr ""
 
-#: blueprint/post.py:231
+#: blueprint/post.py:256
 #, python-format
 msgid "Permanently deleted post #%(post_id)s."
 msgstr ""
 
-#: blueprint/post.py:235
+#: blueprint/post.py:260
 #, python-format
 msgid "Marked post #%(post_id)s as deleted."
 msgstr ""
 
-#: blueprint/post.py:294
+#: blueprint/post.py:313
 #, python-format
 msgid "Successfully uploaded post #%(post_id)s"
 msgstr ""
 
-#: blueprint/post.py:301
+#: blueprint/post.py:328
 #, python-format
 msgid "Uploading file %(filename)s failed"
 msgstr ""
 
-#: blueprint/tag.py:63
+#: blueprint/tag.py:70
 #, python-format
 msgid "Permanently deleted tag #%(tag_name)s"
 msgstr ""
 
-#: blueprint/tag.py:77
+#: blueprint/tag.py:90
 #, python-format
 msgid "Updated tag %(tag_name)s successfully!"
 msgstr ""
@@ -132,19 +132,23 @@ msgstr ""
 msgid "Passwords must be from 8 to 128 characters in length"
 msgstr ""
 
-#: form/forms.py:77
+#: form/forms.py:70
+msgid "Reason is required when marking post as deleted"
+msgstr ""
+
+#: form/forms.py:86
 msgid "You need to confirm your password"
 msgstr ""
 
-#: form/forms.py:81
+#: form/forms.py:90
 msgid "Mismatch between password and confirmation password"
 msgstr ""
 
-#: form/forms.py:89
+#: form/forms.py:98
 msgid "Username is already taken."
 msgstr ""
 
-#: form/forms.py:96
+#: form/forms.py:105
 msgid "Please specify which post to search."
 msgstr ""
 
@@ -197,17 +201,17 @@ msgstr ""
 msgid "Page"
 msgstr ""
 
-#: template/comment.html:3 template/frag/nav.html:12
+#: template/comment.html:3 template/frag/nav.html:7
 msgid "Comments"
 msgstr ""
 
-#: template/comment.html:8 template/frag/post_search_form.html:42
-#: template/index.html:23 template/list_user.html:8 template/snapshot.html:46
-#: template/tag.html:12
+#: template/comment.html:13 template/frag/post_search_form.html:41
+#: template/index.html:23 template/list_user.html:12 template/snapshot.html:46
+#: template/tag.html:13
 msgid "Search"
 msgstr ""
 
-#: template/comment.html:11
+#: template/comment.html:16
 #, python-format
 msgid "This page displays comments site-wide across all %(post_count)s posts."
 msgstr ""
@@ -229,7 +233,7 @@ msgid "Value"
 msgstr ""
 
 #: template/contact.html:16 template/edit_profile.html:21
-#: template/list_user.html:18 template/manage_user.html:27
+#: template/list_user.html:22 template/manage_user.html:27
 msgid "E-mail"
 msgstr ""
 
@@ -237,7 +241,7 @@ msgstr ""
 msgid "Your reason for removal goes here..."
 msgstr ""
 
-#: template/delete_form.html:14 template/frag/manage_post_form.html:9
+#: template/delete_form.html:14 template/frag/manage_post_form.html:8
 msgid "Remove"
 msgstr ""
 
@@ -273,7 +277,7 @@ msgstr ""
 msgid "Caption"
 msgstr ""
 
-#: template/edit.html:82 template/frag/nav.html:11 template/snapshot.html:11
+#: template/edit.html:82 template/frag/nav.html:6 template/snapshot.html:11
 #: template/upload.html:47 template/view.html:76
 msgid "Tags"
 msgstr ""
@@ -318,7 +322,7 @@ msgstr ""
 msgid "Avatar"
 msgstr ""
 
-#: template/edit_profile.html:16 template/list_user.html:15
+#: template/edit_profile.html:16 template/list_user.html:19
 #: template/login.html:10 template/manage_user.html:11 template/signup.html:13
 msgid "Username"
 msgstr ""
@@ -338,16 +342,16 @@ msgstr ""
 msgid "Edit Tag"
 msgstr ""
 
-#: template/edit_tag.html:11 template/help.html:51 template/tag.html:19
+#: template/edit_tag.html:11 template/help.html:51 template/tag.html:20
 #: template/view.html:137
 msgid "Name"
 msgstr ""
 
-#: template/edit_tag.html:16 template/tag.html:22 template/view.html:138
+#: template/edit_tag.html:16 template/tag.html:23 template/view.html:138
 msgid "Type"
 msgstr ""
 
-#: template/edit_tag.html:31 template/tag.html:23
+#: template/edit_tag.html:31 template/tag.html:24
 msgid "Description"
 msgstr ""
 
@@ -364,7 +368,7 @@ msgstr ""
 msgid "Oops! You encountered HTTP %(code)s error!"
 msgstr ""
 
-#: template/frag/footer.html:10 template/help.html:3
+#: template/frag/footer.html:5 template/help.html:3
 msgid "Help"
 msgstr ""
 
@@ -569,7 +573,7 @@ msgid ""
 "aware of consequences that come with viewing NSFW posts"
 msgstr ""
 
-#: template/frag/nav.html:9 template/index.html:3
+#: template/frag/nav.html:4 template/index.html:3
 msgid "Index"
 msgstr ""
 
@@ -577,37 +581,37 @@ msgstr ""
 msgid "Website logo"
 msgstr ""
 
-#: template/frag/post_search_form.html:12 template/index.html:37
-#: template/profile.html:37
+#: template/frag/post_search_form.html:11 template/index.html:37
+#: template/profile.html:38
 msgid "Posts"
 msgstr ""
 
-#: template/layout.html:6
-msgid "DO NOT SHARE THIS WITH ANYONE"
+#: template/layout.html:5
+msgid "Ralph's kind of Booru"
 msgstr ""
 
-#: template/layout.html:12
-msgid "Ralph's kind of Booru"
+#: template/layout.html:29
+msgid "DO NOT SHARE THIS WITH ANYONE"
 msgstr ""
 
 #: template/list_user.html:3
 msgid "List Users"
 msgstr ""
 
-#: template/list_user.html:17 template/manage_user.html:16
+#: template/list_user.html:21 template/manage_user.html:16
 msgid "Role"
 msgstr ""
 
-#: template/frag/post_search_form.html:24 template/list_user.html:19
+#: template/frag/post_search_form.html:23 template/list_user.html:23
 msgid "Created"
 msgstr ""
 
-#: template/list_user.html:31 template/profile.html:29 template/tag.html:42
+#: template/list_user.html:35 template/profile.html:30 template/tag.html:43
 #: template/view.html:64
 msgid "Edit"
 msgstr ""
 
-#: template/frag/nav.html:15 template/login.html:3 template/login.html:21
+#: template/frag/nav.html:10 template/login.html:3 template/login.html:21
 msgid "Login"
 msgstr ""
 
@@ -619,15 +623,15 @@ msgstr ""
 msgid "Manage User"
 msgstr ""
 
-#: template/profile.html:22
+#: template/profile.html:23
 msgid "Level"
 msgstr ""
 
-#: template/profile.html:44
+#: template/profile.html:45
 msgid "Join Date"
 msgstr ""
 
-#: template/profile.html:48
+#: template/profile.html:49
 msgid "'s latest posts"
 msgstr ""
 
@@ -643,7 +647,7 @@ msgstr ""
 msgid "E-mail (Not Required) "
 msgstr ""
 
-#: template/frag/nav.html:16 template/signup.html:25
+#: template/frag/nav.html:11 template/signup.html:25
 msgid "Sign-Up"
 msgstr ""
 
@@ -667,15 +671,15 @@ msgstr ""
 msgid "Tags Page"
 msgstr ""
 
-#: template/tag.html:20
+#: template/tag.html:21
 msgid "Count"
 msgstr ""
 
-#: template/tag.html:54 template/view.html:96
+#: template/tag.html:55 template/view.html:96
 msgid "Tag History"
 msgstr ""
 
-#: template/frag/nav.html:24 template/upload.html:3 template/upload.html:57
+#: template/frag/nav.html:19 template/upload.html:3 template/upload.html:57
 msgid "Upload"
 msgstr ""
 
@@ -723,128 +727,132 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
-#: template/frag/comment-section.html:15
+#: template/frag/comment-section.html:10
 msgid "at"
 msgstr ""
 
-#: template/frag/footer.html:9
+#: template/frag/footer.html:4
 msgid "Links"
 msgstr ""
 
-#: template/frag/footer.html:11
+#: template/frag/footer.html:6
 msgid "Contact Me"
 msgstr ""
 
-#: template/frag/footer.html:12
+#: template/frag/footer.html:7
+msgid "Discord server"
+msgstr ""
+
+#: template/frag/footer.html:8
 msgid "Source Code"
 msgstr ""
 
-#: template/frag/footer.html:15
+#: template/frag/footer.html:11
 msgid "For Developers"
 msgstr ""
 
-#: template/frag/manage_post_form.html:3
+#: template/frag/manage_post_form.html:2
 msgid "Toggle"
 msgstr ""
 
-#: template/frag/manage_post_form.html:8
+#: template/frag/manage_post_form.html:7
 msgid "Add"
 msgstr ""
 
-#: template/frag/nav.html:10
+#: template/frag/nav.html:5
 msgid "Browse"
 msgstr ""
 
-#: template/frag/nav.html:20
+#: template/frag/nav.html:15
 msgid "Users"
 msgstr ""
 
-#: template/frag/nav.html:25
+#: template/frag/nav.html:20
 msgid "My Profile"
 msgstr ""
 
-#: template/frag/nav.html:26
+#: template/frag/nav.html:21
 msgid "Logout"
 msgstr ""
 
-#: template/frag/post_search_form.html:9
+#: template/frag/post_search_form.html:8
 msgid "Blur"
 msgstr ""
 
-#: template/frag/post_search_form.html:21
+#: template/frag/post_search_form.html:20
 msgid "Sort By"
 msgstr ""
 
-#: template/frag/post_search_form.html:25
+#: template/frag/post_search_form.html:24
 msgid "Modified"
 msgstr ""
 
-#: template/frag/post_search_form.html:26
+#: template/frag/post_search_form.html:25
 msgid "Hash"
 msgstr ""
 
-#: template/frag/post_search_form.html:27
+#: template/frag/post_search_form.html:26
 msgid "File Extension"
 msgstr ""
 
-#: template/frag/post_search_form.html:28
+#: template/frag/post_search_form.html:27
 msgid "Disk Space"
 msgstr ""
 
-#: template/frag/post_search_form.html:29
+#: template/frag/post_search_form.html:28
 msgid "Height"
 msgstr ""
 
-#: template/frag/post_search_form.html:30
+#: template/frag/post_search_form.html:29
 msgid "Width"
 msgstr ""
 
-#: template/frag/post_search_form.html:31
+#: template/frag/post_search_form.html:30
 msgid "Category"
 msgstr ""
 
-#: template/frag/post_search_form.html:34
+#: template/frag/post_search_form.html:33
 msgid "Sort"
 msgstr ""
 
-#: template/frag/post_search_form.html:36
+#: template/frag/post_search_form.html:35
 msgid "Ascending"
 msgstr ""
 
-#: template/frag/post_search_form.html:37
+#: template/frag/post_search_form.html:36
 msgid "Descending"
 msgstr ""
 
-#: template/frag/posts.html:13
+#: template/frag/posts.html:8
 #, python-format
 msgid "%(post_id)s Thumbnail"
 msgstr ""
 
-#: template/frag/posts.html:18
+#: template/frag/posts.html:13
 msgid "Caption flair"
 msgstr ""
 
-#: template/frag/posts.html:23
+#: template/frag/posts.html:18
 msgid "Original Poster flair"
 msgstr ""
 
-#: template/frag/posts.html:27
+#: template/frag/posts.html:22
 msgid "Source flair"
 msgstr ""
 
-#: template/frag/posts.html:30
+#: template/frag/posts.html:25
 msgid "Original Poster & Source flair"
 msgstr ""
 
-#: template/frag/posts.html:34
+#: template/frag/posts.html:29
 msgid "Audio flair"
 msgstr ""
 
-#: template/frag/posts.html:36
+#: template/frag/posts.html:31
 msgid "Image flair"
 msgstr ""
 
-#: template/frag/posts.html:38
+#: template/frag/posts.html:33
 msgid "Video flair"
 msgstr ""
 

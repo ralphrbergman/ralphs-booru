@@ -27,7 +27,15 @@ from .mixins import (
     UsernameMixin,
     WeakPasswordMixin
 )
-from .validators import validate_extension
+from .validators import validate_extension, validate_file_count
+
+TAG_TYPES = (
+    ('artist', gettext('Artist')),
+    ('character', gettext('Character')),
+    ('copyright', gettext('Copyright')),
+    ('general', gettext('General')),
+    ('meta', gettext('Meta'))
+)
 
 class LoginForm(FlaskForm, UsernameMixin, WeakPasswordMixin):
     remember = BooleanField('remember')
@@ -112,7 +120,7 @@ class SnapshotForm(FlaskForm, SubmitMixin):
 
 class TagForm(FlaskForm, DeletedMixin, SubmitMixin):
     name = StringField('name', validators = [DataRequired()])
-    type = SelectField('type')
+    type = SelectField('type', choices = TAG_TYPES)
     desc = TextAreaField('desc')
 
 class UserForm(
@@ -140,6 +148,7 @@ class UploadForm(FlaskForm, PostMixin, SubmitMixin):
                     'webm',
                     'webp'
                 ]
-            )
+            ),
+            validate_file_count(10)
         ]
     )

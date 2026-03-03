@@ -10,7 +10,6 @@ import ffmpeg
 from flask_sqlalchemy.pagination import SelectPagination
 from magic import from_file
 from sqlalchemy import Select, func, or_, select
-from sqlalchemy.orm.exc import UnmappedInstanceError
 from werkzeug.datastructures import FileStorage
 
 from db import Post, Tag, User, db
@@ -289,12 +288,6 @@ def perma_delete_post(post: Post | int) -> None:
     """
     if isinstance(post, int):
         post = get_post(post)
-    
-    try:
-        db.session.delete(post.thumbnail)
-    except UnmappedInstanceError as exception:
-        # Some posts may not have a thumbnail and it's alright.
-        logger.debug(f'Post #{post.id} doesn\'t have a thumbnail to delete.')
 
     db.session.delete(post)
     logger.info(f'Permanently deleted post #{post.id}')

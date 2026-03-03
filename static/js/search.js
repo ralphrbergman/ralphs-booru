@@ -30,7 +30,7 @@ searchForm.addEventListener('submit', function(event) {
 
     const params = new URLSearchParams(formData);
 
-    fetch(`?${params.toString()}`).then(function(response) {
+    fetch(`/browse/1?${params.toString()}`).then(function(response) {
         if (response.ok) {
             window.location.href = response.url;
         }

@@ -25,7 +25,7 @@ from api import (
 )
 from api.decorators import post_protect, perm_required
 from db import db
-from form import SearchForm, SnapshotForm, TagForm
+from form import SnapshotForm, TagForm, TAG_TYPES
 from .utils import create_pagination_bar, log_user_activity
 
 tag_bp = Blueprint(
@@ -34,8 +34,6 @@ tag_bp = Blueprint(
     url_prefix = '/tag'
 )
 logger = getLogger('app_logger')
-
-TAG_TYPES = ('artist', 'character', 'copyright', 'general', 'meta')
 
 @tag_bp.route('/edit/<int:tag_id>', methods = ['GET', 'POST'])
 @login_required
@@ -48,29 +46,15 @@ def edit_page(tag_id: int):
     if not tag:
         return abort(404)
 
-    if request.method == 'GET':
-        return render_template(
-            'edit_tag.html',
-            form = form,
-            tag = tag,
-            tag_types = TAG_TYPES
-        )
-    else:
+    if form.validate_on_submit():
         url = url_for('Root.Tag.edit_page', tag_id = tag_id)
 
-        if form.deleted.data and current_user.has_permission('tag:edit'):
-            delete_tag(tag)
+        deleted = False
 
-            log_user_activity(
-                logger.debug,
-                f'successfully deleted tag {tag.name}'
-            )
-            flash(
-                gettext(
-                    'Permanently deleted tag #%(tag_name)s',
-                    tag_name = tag.name
-                )
-            )
+        if form.deleted.data and current_user.has_permission('tag:edit'):
+            deleted = True
+
+            delete_tag(tag)
             url = url_for('Root.Tag.tag_page')
 
         tag.name = form.name.data
@@ -79,19 +63,36 @@ def edit_page(tag_id: int):
 
         db.session.commit()
 
-        if not form.deleted.data:
+        if deleted:
+            log_user_activity(logger.info, f'successfully deleted tag {tag.name}')
+
+            flash(
+                gettext(
+                    'Permanently deleted tag #%(tag_name)s',
+                    tag_name = tag.name
+                )
+            )
+        else:
             log_user_activity(
                 logger.debug,
                 f'successfully modified tag {tag.name}'
             )
 
-        flash(
-            gettext(
-                'Updated tag %(tag_name)s successfully!',
-                tag_name = tag.name
+            flash(
+                gettext(
+                    'Updated tag %(tag_name)s successfully!',
+                    tag_name = tag.name
+                )
             )
-        )
+
         return redirect(url)
+
+    return render_template(
+        'edit_tag.html',
+        form = form,
+        tag = tag,
+        tag_types = ( typ[0] for typ in TAG_TYPES )
+    )
 
 @tag_bp.route('/history')
 def history_page():
