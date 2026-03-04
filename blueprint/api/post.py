@@ -17,7 +17,7 @@ from api.decorators import owner_or_perm_required, post_protect, perm_required
 from api_auth import auth
 from db import Post, db
 from db.schemas import (
-    BrowseIn,
+    BrowsePostIn,
     PostBrowse,
     PostFormIn,
     PostIn,
@@ -31,9 +31,9 @@ post_bp = APIBlueprint(
 )
 
 @post_bp.get('/posts')
-@post_bp.input(BrowseIn, arg_name = 'data', location = 'query')
+@post_bp.input(BrowsePostIn, arg_name = 'data', location = 'query')
 @post_bp.output(PostBrowse)
-def get_posts(data: BrowseIn):
+def get_posts(data: BrowsePostIn):
     """
     Browse multiple posts.
     """

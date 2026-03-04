@@ -35,3 +35,4 @@ class PostOut(AuthorSchema, PostIn):
     name = String(required = True)
     nsfw = Boolean(required = True)
     url = String(attribute = 'uri', required = True)
+    view_url = String(attribute = 'view_uri', required = True)

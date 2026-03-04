@@ -1,4 +1,10 @@
-from .browse import BrowseIn, CommentBrowse, PostBrowse, TagBrowse
+from .browse import (
+    BrowseIn,
+    BrowsePostIn,
+    CommentBrowse,
+    PostBrowse,
+    TagBrowse
+)
 from .comment import CommentIn, CommentOut
 from .file import FileIn
 from .post import PostFormIn, PostIn, PostDeleteIn, PostOut
