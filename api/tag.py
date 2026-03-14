@@ -105,6 +105,23 @@ def delete_tag(tag: Tag) -> None:
     db.session.delete(tag)
     logger.info(f'Deleting tag: {tag.name}')
 
+def decode_tags(tags_str: str) -> list[Tag]:
+    tags = []
+
+    for tag_name in tags_str.split():
+        tag = Tag()
+        tag.name = tag_name
+
+        tags.append(tag)
+
+    return tags
+
+def encode_tags(tags: list[Tag]) -> str:
+    tags.sort(key = lambda tag: tag.name)
+    tags_str = ' '.join([ tag.name for tag in tags ])
+
+    return tags_str
+
 def get_tag(id: str | int) -> Optional[Tag]:
     """
     Queries for a tag and returns.

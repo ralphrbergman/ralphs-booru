@@ -444,10 +444,13 @@ def replace_post(post: Post, file: FileStorage) -> tuple[Post, Path, Path]:
 
     Args:
         post: Post to replace
-        path: New file's Path object
+        file: File to replace post
 
     Returns:
-        Post
+        tuple[Post, Path, Path]: tuple containing:
+        - Updated post object
+        - Uploaded file's Path object
+        - Previous post's Path object
     """
     path = save_file(file)
     md5 = get_hash(path)
@@ -455,7 +458,7 @@ def replace_post(post: Post, file: FileStorage) -> tuple[Post, Path, Path]:
     # Ignore the same file being uploaded.
     if md5 == post.md5:
         logger.warning(f'Can\'t replace post #{post.id} with same MD5.')
-        return
+        return post, path, None
 
     prev_md5 = post.md5
     prev_path = post.path
@@ -466,7 +469,7 @@ def replace_post(post: Post, file: FileStorage) -> tuple[Post, Path, Path]:
 
     if not mime:
         logger.warning(f'Can\'t replace post #{post.id} with invalid MIME.')
-        return
+        return post, path, None
 
     size = get_size(path)
 

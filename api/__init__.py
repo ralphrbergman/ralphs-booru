@@ -32,7 +32,15 @@ from .post import (
 from .role import get_role_by_priority
 from .removed import create_log, delete_log
 from .score import add_vote, delete_score, get_vote, get_score, remove_vote
-from .tag import add_tags, browse_tag, create_tag, delete_tag, get_tag
+from .tag import (
+    add_tags,
+    browse_tag,
+    create_tag,
+    delete_tag,
+    decode_tags,
+    encode_tags,
+    get_tag
+)
 from .thumbnail import (
     ThumbnailType,
     create_thumbnail,

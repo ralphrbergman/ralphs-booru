@@ -26,6 +26,7 @@ from api import (
     create_snapshot,
     delete_log,
     delete_post,
+    encode_tags,
     get_post,
     move_post,
     perma_delete_post,
@@ -113,6 +114,7 @@ def edit_page(post_id: int, post: Post):
 
     if form.validate_on_submit() and current_user.is_authenticated and\
     (current_user == post.author or current_user.is_moderator):
+        url = url_for('Root.Post.view_page', post_id = post_id)
         mod_paths: set[Path] = set()
 
         if form.deleted.data:
@@ -132,10 +134,11 @@ def edit_page(post_id: int, post: Post):
             # new_path refers to the uploaded file.
             # whilst old_path refers to the post file before exchange.
             post, new_path, old_path = replace_post(post, file)
+
             mod_paths.add(new_path)
             mod_paths.add(old_path)
 
-            if post:
+            if old_path:
                 log_user_activity(logger.info, f'exchanged post #{post.id}')
                 flash(
                     gettext(
@@ -151,25 +154,22 @@ def edit_page(post_id: int, post: Post):
                 )
                 flash(gettext('Failed to exchange post.'))
 
-                return redirect(
-                    url_for('Root.Post.edit_page', post_id = post_id)
-                )
+                url = url_for('Root.Post.edit_page', post_id = post_id)
 
         try:
             db.session.commit()
         except IntegrityError as exception:
             db.session.rollback()
-            return
         except Exception as exception:
             log_user_activity(logger.error, f'exception: {exception}')
-            db.session.rollback()
-            return
 
         # Take care of temporary files.
         for path in mod_paths:
+            if not path: continue
+
             path.unlink(missing_ok = True)
 
-        original_tags = post.tags
+        original_tags = encode_tags(post.tags)
 
         post.op = form.op.data.strip()
         post.src = form.src.data.strip()
@@ -177,11 +177,11 @@ def edit_page(post_id: int, post: Post):
 
         try:
             post.tags = add_tags(form.tags.data.split())
-        except AttributeError as exception:
+        except AttributeError:
             # Form tags is None, likely because the user can't manage tags.
             pass
 
-        if post.tags != original_tags:
+        if encode_tags(post.tags) != original_tags:
             db.session.flush()
             create_snapshot(post, current_user)
 
@@ -193,7 +193,7 @@ def edit_page(post_id: int, post: Post):
             logger.info,
             f'successfully modified post #{post.id}.'
         )
-        return redirect(url_for('Root.Post.view_page', post_id = post_id))
+        return redirect(url)
 
     flash_errors(form)
 
