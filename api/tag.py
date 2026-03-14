@@ -11,27 +11,10 @@ T = TypeVar('T')
 
 logger = getLogger('app_logger')
 
-def add_tags(tag_list: list[str]) -> list[Tag]:
-    """
-    Creates a list of tags and returns created instances.
+def add_tags(tags_str: str) -> list[Tag]:
+    tags = decode_tags(tags_str)
 
-    Args:
-        tag_list: List of tag names
-    """
-    new_tags = list()
-    tag_names = set(tag_list)  # A set automatically removes duplicate tags.
-
-    for tag_name in tag_names:
-        if not tag_name:
-            continue
-
-        tag = get_tag(tag_name) or create_tag(tag_name)
-
-        if tag:
-            new_tags.append(tag)
-
-    logger.debug(f'Added tags: {', '.join(tag_names)}')
-    return new_tags
+    return tags
 
 def browse_tag(*args, **kwargs) -> SelectPagination[Tag]:
     """
@@ -106,18 +89,23 @@ def delete_tag(tag: Tag) -> None:
     logger.info(f'Deleting tag: {tag.name}')
 
 def decode_tags(tags_str: str) -> list[Tag]:
+    tags_str = tags_str.lower()
+
     tags = []
+    tag_names = set()
 
     for tag_name in tags_str.split():
-        tag = Tag()
-        tag.name = tag_name
+        if tag_name in tag_names: continue
+
+        tag = get_tag(tag_name) or create_tag(tag_name)
 
         tags.append(tag)
+        tag_names.add(tag_name)
 
     return tags
 
 def encode_tags(tags: list[Tag]) -> str:
-    tags.sort(key = lambda tag: tag.name)
+    tags.sort(key = lambda tag: tag.name.lower())
     tags_str = ' '.join([ tag.name for tag in tags ])
 
     return tags_str

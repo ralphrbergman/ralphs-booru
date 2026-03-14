@@ -19,7 +19,7 @@ class TagIn(Schema):
 class TagsIn(Schema):
     """ Represents an inbound multiple tag object. """
     post_id = Integer(required = True)
-    tags = List(String(), required = True)
+    tags = String(required = True)
 
 class TagOut(BaseSchema, TagIn):
     """ Represents an outbound tag object. """

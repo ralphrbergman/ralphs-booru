@@ -176,7 +176,7 @@ def edit_page(post_id: int, post: Post):
         post.caption = form.caption.data.strip()
 
         try:
-            post.tags = add_tags(form.tags.data.split())
+            post.tags = add_tags(form.tags.data.strip())
         except AttributeError:
             # Form tags is None, likely because the user can't manage tags.
             pass

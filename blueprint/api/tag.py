@@ -2,7 +2,14 @@ from apiflask import APIBlueprint, abort
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
-from api import create_snapshot, create_tag, delete_tag, get_tag, get_post
+from api import (
+    create_snapshot,
+    create_tag,
+    delete_tag,
+    decode_tags,
+    get_tag,
+    get_post
+)
 from api.decorators import post_protect, perm_required
 from api_auth import auth
 from db import db
@@ -125,12 +132,10 @@ def add_tags(data: TagsIn):
     You need tag:edit permission for this API call.
     """
     post = get_post(data['post_id'])
+    tags = decode_tags(data['tags'])
 
-    for tag_name in data['tags']:
-        tag = get_tag(tag_name) or create_tag(tag_name)
-
-        if tag and tag not in post.tags:
-            post.tags.append(tag)
+    for tag in tags:
+        post.tags.append(tag)
 
     db.session.flush()
     create_snapshot(post, current_user)
@@ -153,12 +158,10 @@ def remove_tags(data: TagsIn):
     You need tag:edit permission for this API call.
     """
     post = get_post(data['post_id'])
+    tags = decode_tags(data['tags'])
 
-    for tag_name in data['tags']:
-        tag = get_tag(tag_name)
-
-        if tag and tag in post.tags:
-            post.tags.remove(tag)
+    for tag in tags:
+        post.tags.remove(tag)
 
     db.session.flush()
     create_snapshot(post, current_user)
@@ -166,5 +169,5 @@ def remove_tags(data: TagsIn):
 
     return {
         'post_id': post.id,
-        'tags': post.tags
+        'tags': tags
     }
