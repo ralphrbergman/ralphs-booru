@@ -2,6 +2,7 @@
 
 .caption {
     max-width: 50vw;
+    overflow-wrap: anywhere;
     white-space: pre-wrap;
 }
 
