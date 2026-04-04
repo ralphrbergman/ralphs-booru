@@ -1,6 +1,7 @@
 brand = {
     'contact': {
         'address': 'www.esmuralfs.lv',
+        'discord': 'https://discord.gg/X6AEKNCmWD',
         'mail': 'ralfs@esmuralfs.lv',
         'media': {
             'Discord': 'ralphwuu',
@@ -14,7 +15,7 @@ brand = {
     'full_brand': 'EsmuRalfs.lv',
     'copyright': '(c) 2025 - present',
     'version': '0.1.0',
-    'url': 'https://www.esmuralfs.lv',
+    'url': None,
     'source-url': 'https://github.com/ralphrbergman/ralphs-booru'
 }
 

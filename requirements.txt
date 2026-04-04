@@ -13,4 +13,5 @@ Pillow
 pyopenssl
 python-dotenv
 python-magic
-python-magic-bin
+
+waitress
