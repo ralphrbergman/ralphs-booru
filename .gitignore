@@ -6,6 +6,7 @@ app.log.*
 brand.py
 avatars
 instance
+migrations
 run
 temp
 translations/*/LC_MESSAGES/*.mo
