@@ -9,7 +9,7 @@ from flask_migrate import Migrate
 from api import get_user
 from brand import brand
 from blueprint import api_bp, root_bp
-from db import db, Permission, Role, User
+from db import db, User
 from encryption import bcrypt
 from login import login_manager
 from logger import setup_logging
@@ -45,6 +45,8 @@ def create_app() -> APIFlask:
     @app.cli.command('setup-roles')
     @with_appcontext
     def setup_roles_command():
+        from db import Permission, Role
+
         perms = {
             'comment': Permission(slug='post:comment'),
             'upload': Permission(slug='post:upload'),
@@ -63,10 +65,22 @@ def create_app() -> APIFlask:
         admin.permissions = list(perms.values())
 
         # Moderators get most things
-        mod.permissions = [perms['comment'], perms['edit'], perms['upload'], perms['delete'], perms['tag_edit'], perms['user_ban']]
+        mod.permissions = [
+            perms['comment'],
+            perms['edit'],
+            perms['upload'],
+            perms['delete'],
+            perms['tag_edit'],
+            perms['user_ban']
+        ]
 
         # Janitors only help with content
-        janitor.permissions = [perms['comment'], perms['edit'], perms['delete'], perms['tag_edit']]
+        janitor.permissions = [
+            perms['comment'],
+            perms['edit'],
+            perms['delete'],
+            perms['tag_edit']
+        ]
 
         # Normal users can only upload
         user.permissions = [perms['comment'], perms['upload']]
