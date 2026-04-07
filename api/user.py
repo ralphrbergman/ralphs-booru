@@ -1,7 +1,7 @@
 from logging import getLogger
 from typing import Optional, TypeVar
 
-from flask_sqlalchemy.pagination import SelectPagination
+from flask_sqlalchemy.pagination import Pagination
 from sqlalchemy import Select, or_, select
 
 from db import db, User
@@ -11,7 +11,7 @@ T = TypeVar('T')
 
 logger = getLogger('app_logger')
 
-def browse_user(*args, **kwargs) -> SelectPagination[User]:
+def browse_user(*args, **kwargs) -> 'Pagination[User]':
     """
     Paginates users by criteria.
 

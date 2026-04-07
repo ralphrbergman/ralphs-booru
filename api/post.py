@@ -7,7 +7,7 @@ from shutil import copy
 from typing import Optional, TypeVar
 
 import ffmpeg
-from flask_sqlalchemy.pagination import SelectPagination
+from flask_sqlalchemy.pagination import Pagination
 from magic import from_file
 from sqlalchemy import Select, func, or_, select
 from werkzeug.datastructures import FileStorage
@@ -50,7 +50,7 @@ logger = getLogger('app_logger')
 def browse_post(
     *args,
     **kwargs
-) -> SelectPagination[Post]:
+) -> 'Pagination[Post]':
     """
     Paginates posts by criteria.
 

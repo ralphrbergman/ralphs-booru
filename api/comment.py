@@ -1,7 +1,7 @@
 from logging import getLogger
 from typing import Optional, TypeVar
 
-from flask_sqlalchemy.pagination import SelectPagination
+from flask_sqlalchemy.pagination import Pagination
 from sqlalchemy import Select, and_, or_, select
 
 from db import Comment, Post, User, db
@@ -11,7 +11,7 @@ T = TypeVar('T')
 
 logger = getLogger('app_logger')
 
-def browse_comment(*args, **kwargs) -> SelectPagination[Comment]:
+def browse_comment(*args, **kwargs) -> 'Pagination[Comment]':
     """
     Paginates comments by criteria.
 

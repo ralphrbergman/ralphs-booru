@@ -1,7 +1,7 @@
 from logging import getLogger
 from typing import Optional, TypeVar
 
-from flask_sqlalchemy.pagination import SelectPagination
+from flask_sqlalchemy.pagination import Pagination
 from sqlalchemy import Select, and_, or_, select
 
 from db import db, Post, Tag
@@ -16,7 +16,7 @@ def add_tags(tags_str: str) -> list[Tag]:
 
     return tags
 
-def browse_tag(*args, **kwargs) -> SelectPagination[Tag]:
+def browse_tag(*args, **kwargs) -> 'Pagination[Tag]':
     """
     Paginates tags by criteria.
 

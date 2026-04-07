@@ -25,16 +25,6 @@ from .mixins.sortable import SortableMixin
 from .mixins.serializer import SerializerMixin
 from .post import Post
 
-def find_user_by_key(key: str) -> Optional[User]:
-    """
-    Function that returns any user with the provided API key.
-    This function is intended to be used in avoiding having
-    two or more users to have the same API key.
-    """
-    return db.session.scalars(
-        select(User).where(User._key == key)
-    ).first()
-
 class User(
     db.Model,
     CreatedMixin,
@@ -221,3 +211,13 @@ class User(
             return False
 
         return post.author_id == self.id
+
+def find_user_by_key(key: str) -> Optional[User]:
+    """
+    Function that returns any user with the provided API key.
+    This function is intended to be used in avoiding having
+    two or more users to have the same API key.
+    """
+    return db.session.scalars(
+        select(User).where(User._key == key)
+    ).first()
