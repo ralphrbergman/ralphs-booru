@@ -57,6 +57,7 @@ TEMP_PATH=<path/to/temp>
 # Secret key for authentication salting.
 SECRET_KEY=abc
 ```
+- Rename `brand_example.py` to `brand.py` and change configuration accordingly
 - Ensure all the mentioned directories exist before running!
 - Symlink avatar.png in your avatars directory, or create your own, and make sure it's a PNG
 - Create virtual environment & activate it

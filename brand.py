@@ -1,6 +1,7 @@
+from flask_babel import gettext
+
 brand = {
     'contact': {
-        'address': 'www.esmuralfs.lv',
         'discord': 'https://discord.gg/X6AEKNCmWD',
         'mail': 'ralfs@esmuralfs.lv',
         'media': {
@@ -11,7 +12,7 @@ brand = {
         },
         'name': 'Ralph Rainer Bergman',
     },
-    'description': 'Ralph\'s kind of Booru.',
+    'description': gettext('Ralph\'s kind of Booru'),
     'full_brand': 'EsmuRalfs.lv',
     'copyright': '(c) 2025 - present',
     'version': '0.1.0',
