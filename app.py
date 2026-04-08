@@ -1,7 +1,4 @@
-from os import getenv
-
 from apiflask import APIFlask
-from dotenv import load_dotenv
 from flask import g, request, redirect
 from flask.cli import with_appcontext
 from flask_migrate import Migrate
@@ -9,16 +6,18 @@ from flask_migrate import Migrate
 from api import get_user
 from brand import brand
 from blueprint import api_bp, root_bp
+from config import (
+    DATABASE_URI,
+    SECRET_KEY,
+    SSL_ENABLED,
+    SUPPORTED_TRANSLATIONS
+)
 from commands import reindex_command, setup_roles_command
 from db import db, User
 from encryption import bcrypt
 from login import login_manager
 from logger import setup_logging
-from translation import SUPPORTED_TRANSLATIONS, babel
-
-load_dotenv()
-
-SSL_ENABLED = getenv('SSL_ENABLED') == 'true'
+from translation import babel
 
 def create_app() -> APIFlask:
     url = brand['url']
@@ -37,9 +36,9 @@ def create_app() -> APIFlask:
         ]
 
     app.jinja_env.globals['brand'] = brand
-    app.config['SECRET_KEY'] = getenv('SECRET_KEY')
+    app.config['SECRET_KEY'] = SECRET_KEY
     # Initialize database
-    app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URI')
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 
     db.init_app(app)
 

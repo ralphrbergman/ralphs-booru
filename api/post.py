@@ -1,6 +1,5 @@
 from hashlib import md5 as _md5
 from logging import getLogger
-from os import getenv
 from pathlib import Path
 from re import findall, sub, search
 from shutil import copy
@@ -12,6 +11,7 @@ from magic import from_file
 from sqlalchemy import Select, func, or_, select
 from werkzeug.datastructures import FileStorage
 
+from config import CONTENT_PATH, NSFW_TAG, TEMP_PATH
 from db import Post, Tag, User, db
 from db.models.tag import TAG_PATTERN
 from .base import browse_element
@@ -37,11 +37,8 @@ MIME_MAP = {
     'webp_pipe': 'image/webp'
 }
 
-CONTENT_PATH = Path(getenv('CONTENT_PATH'))
-NSFW_TAG = getenv('NSFW_TAG')
 # What default term(s) shall be used when none are provided?
 DEFAULT_TERMS = f'-{NSFW_TAG}'
-TEMP = Path(getenv('TEMP_PATH'))
 
 T = TypeVar('T')
 
@@ -512,7 +509,7 @@ def save_file(file: FileStorage) -> Path:
     """
     filename = process_filename(file.filename)
 
-    temp_path = TEMP / filename
+    temp_path = TEMP_PATH / filename
     file.save(temp_path)
 
     return temp_path

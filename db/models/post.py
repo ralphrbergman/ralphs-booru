@@ -1,6 +1,5 @@
 from datetime import datetime
 from math import floor, log, pow
-from os import getenv
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -11,6 +10,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from sqlalchemy.sql import ColumnElement
 
+from config import CONTENT_PATH, NSFW_TAG, SENSITIVE_DIRS
 from db import db
 from .thumbnail import Thumbnail
 from .mixins.author import AuthorMixin
@@ -21,9 +21,6 @@ from .mixins.score import ScoreMixin
 from .mixins.sortable import SortableMixin
 from .mixins.serializer import SerializerMixin
 
-CONTENT_PATH = Path(getenv('CONTENT_PATH'))
-NSFW_TAG_NAME = getenv('NSFW_TAG', 'nsfw')
-SENSITIVE_DIRS = getenv('SENSITIVE_DIRS', '').split(',')
 DISK_SIZES = ('B', 'KB', 'MB', 'GB')
 
 class Post(
@@ -166,7 +163,7 @@ class Post(
         """
         first_part = self.directory.split('/')[0] if self.directory else None
         in_sensitive_dir = first_part in SENSITIVE_DIRS
-        nsfw_tag_applied = any(tag.name == NSFW_TAG_NAME for tag in self.tags)
+        nsfw_tag_applied = any(tag.name == NSFW_TAG for tag in self.tags)
 
         return in_sensitive_dir or nsfw_tag_applied
 

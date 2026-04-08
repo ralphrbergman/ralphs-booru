@@ -1,16 +1,16 @@
 from logging import getLogger
-from os import getenv
 from typing import Callable, Literal, Optional, TypeVar
 
 from flask_sqlalchemy.pagination import SelectPagination
 from sqlalchemy import Select, select
 
+from config import (
+    DEFAULT_LIMIT,
+    DEFAULT_SORT,
+    DEFAULT_SORT_DIR,
+    LIMIT_THRESHOLD
+)
 from db import db
-
-DEFAULT_LIMIT = int(getenv('DEFAULT_LIMIT'))
-DEFAULT_SORT = getenv('DEFAULT_SORT')
-DEFAULT_SORT_DIR = getenv('DEFAULT_SORT_DIR')
-LIMIT_THRESHOLD = int(getenv('LIMIT_THRESHOLD'))
 
 T = TypeVar('T')
 

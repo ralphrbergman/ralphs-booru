@@ -1,21 +1,17 @@
 from enum import Enum
 from logging import getLogger
-from os import getenv
 from pathlib import Path
 from typing import Optional
 
 import ffmpeg
 from PIL import Image
 
+from config import TEMP_PATH, TARGET_SIZE
 from db import db, Post, Thumbnail
 
-TEMP = Path(getenv('TEMP_PATH'))
-
-# Define how large thumbnails should be in pixels.
-TARGET = getenv('TARGET_SIZE')
 # Use the largest axis for target.
-HEIGHT_EXPR = f'if(gt(iw, ih), {TARGET}, -1)'
-WIDTH_EXPR = f'if(gt(iw, ih), -1, {TARGET})'
+HEIGHT_EXPR = f'if(gt(iw, ih), {TARGET_SIZE}, -1)'
+WIDTH_EXPR = f'if(gt(iw, ih), -1, {TARGET_SIZE})'
 
 logger = getLogger('app_logger')
 
@@ -77,7 +73,7 @@ def generate_thumbnail(
         post
         ext
     """
-    out = TEMP / (post.md5 + f'.{ext.value}')
+    out = TEMP_PATH / (post.md5 + f'.{ext.value}')
     post_path = str(post.path)
 
     # Find out which video stream has an embedded thumbnail.

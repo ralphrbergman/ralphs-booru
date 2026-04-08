@@ -1,4 +1,3 @@
-from os import getenv
 from typing import Optional
 
 from flask import url_for
@@ -16,6 +15,7 @@ from sqlalchemy.orm import (
 from sqlalchemy.sql import ColumnElement
 from sqlalchemy.ext.hybrid import hybrid_property
 
+from config import HARDNESS
 from db import db
 from encryption import bcrypt
 from .comment import Comment
@@ -33,7 +33,7 @@ class User(
     SerializerMixin,
     UserMixin
 ):
-    LEVEL_HARDNESS = int(getenv('HARDNESS'))
+    LEVEL_HARDNESS = HARDNESS
 
     @classmethod
     def generate_key(cls, candidate: Optional[str] = None) -> str:

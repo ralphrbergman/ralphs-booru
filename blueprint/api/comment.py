@@ -1,15 +1,12 @@
-from os import getenv
-
 from apiflask import APIBlueprint, abort
 from flask_login import current_user
 
 from api import browse_comment, create_comment, delete_comment, get_comment, get_post
 from api.decorators import owner_only, post_protect, perm_required
 from api_auth import auth
+from config import COMMENT_LEVEL
 from db import Comment, db
 from db.schemas import BrowseIn, CommentBrowse, CommentIn, CommentOut
-
-COMMENT_LEVEL = int(getenv('COMMENT_LEVEL'))
 
 comment_bp = APIBlueprint(
     name = 'Comment API',

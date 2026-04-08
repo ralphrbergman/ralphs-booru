@@ -1,6 +1,5 @@
 from functools import wraps
 from logging import getLogger
-from os import getenv
 from typing import Any, Callable, ParamSpec, TypeVar
 
 from apiflask import abort as api_abort
@@ -9,10 +8,8 @@ from flask_babel import gettext
 from flask_login import current_user
 from sqlalchemy import select
 
+from config import ALLOW_POSTS, ALLOW_USERS
 from db import db
-
-ALLOW_USERS = getenv('ALLOW_USERS') == 'true'
-ALLOW_POSTS = getenv('ALLOW_POSTS') == 'true'
 
 P = ParamSpec('P')
 R = TypeVar('R')

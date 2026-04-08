@@ -1,5 +1,4 @@
 from logging import getLogger
-from os import getenv
 from pathlib import Path
 from typing import Optional
 
@@ -21,11 +20,10 @@ from werkzeug.utils import secure_filename
 
 from api import create_user, get_user, get_user_by_username
 from api.decorators import anonymous_only, user_protect
+from config import AVATAR_PATH
 from db import db
 from form import LoginForm, PasswordForm, SignupForm, UserForm
 from .utils import flash_errors, log_anon_activity, log_user_activity
-
-AVATAR_PATH = Path(getenv('AVATAR_PATH'))
 
 account_bp = Blueprint(
     name = 'Account',
