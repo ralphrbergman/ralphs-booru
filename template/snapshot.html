@@ -16,7 +16,7 @@
             <tr>
                 <td>
                     <a
-                        href="{{ url_for('Root.Post.view_page', post_id = snapshot.post.id) }}"
+                        href="{{ url_for('Root.Post.view_page', md5 = snapshot.post.md5) }}"
                     >
                         {{ snapshot.post.id }}
                     </a>
@@ -40,8 +40,8 @@
     <form class="form">
         {{ form.hidden_tag() }}
 
-        <label for="post_id">ID:</label>
-        <input type="text" name="post_id">
+        <label for="md5">MD5:</label>
+        <input type="text" name="md5">
 
         <input type="submit" value="{{ gettext('Search') }}">
     </form>

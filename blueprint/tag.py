@@ -98,9 +98,9 @@ def edit_page(tag_id: int):
 def history_page():
     form = SnapshotForm()
 
-    post_id = form.post_id.data or request.args.get('post_id')
+    md5 = form.md5.data or request.args.get('md5')
 
-    snapshots = browse_snapshots(post_id = post_id)
+    snapshots = browse_snapshots(md5 = md5)
 
     return render_template('snapshot.html', form = form, snapshots = snapshots)
 

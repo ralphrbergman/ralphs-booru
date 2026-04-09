@@ -59,7 +59,7 @@
                 current_user.owns(post)))
             -%}
                 <a
-                    href="{{ url_for('Root.Post.edit_page', post_id = post.id) }}"
+                    href="{{ url_for('Root.Post.edit_page', md5 = post.md5) }}"
                 >
                     {{ gettext('Edit') }}
                 </a>
@@ -91,7 +91,7 @@
             </div>
 
             <a
-                href="{{ url_for('Root.Tag.history_page', post_id = post.id) }}"
+                href="{{ url_for('Root.Tag.history_page', md5 = post.md5) }}"
             >
                 {{ gettext('Tag History') }}
             </a>

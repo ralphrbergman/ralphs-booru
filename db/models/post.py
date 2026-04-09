@@ -175,7 +175,7 @@ class Post(
     def uri(self) -> str:
         return url_for(
             'Root.Post.view_page',
-            post_id = self.id,
+            md5 = self.md5,
             v = self.modified,
             _external = True
         )

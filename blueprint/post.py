@@ -102,30 +102,27 @@ def browse_paged(page: int):
         search = search
     )
 
-@post_bp.route('/edit/<int:post_id>', methods = ['GET', 'POST'])
+@post_bp.route('/edit/<md5>', methods = ['GET', 'POST'])
 @login_required
 @post_protect
 @owner_or_perm_required(Post, 'post:edit')
-def edit_page(post_id: int, post: Post):
+def edit_page(md5: str, post: Post):
     form = PostForm()
-
-    if not post:
-        return abort(404)
 
     if form.validate_on_submit() and current_user.is_authenticated and\
     (current_user == post.author or current_user.is_moderator):
-        url = url_for('Root.Post.view_page', post_id = post_id)
+        url = url_for('Root.Post.view_page', md5 = md5)
         mod_paths: set[Path] = set()
 
         if form.deleted.data:
             log_user_activity(logger.info, 'wants to delete post.')
             return redirect(
-                url_for('Root.Post.remove_page', post_id = post_id)
+                url_for('Root.Post.remove_page', md5 = md5)
             )
         elif post.removed:
             log_user_activity(logger.info, 'wants to revert deleted post.')
             return redirect(
-                url_for('Root.Post.revert_page', post_id = post_id)
+                url_for('Root.Post.revert_page', md5 = md5)
             )
 
         file = form.new_file.data
@@ -154,7 +151,7 @@ def edit_page(post_id: int, post: Post):
                 )
                 flash(gettext('Failed to exchange post.'))
 
-                url = url_for('Root.Post.edit_page', post_id = post_id)
+                url = url_for('Root.Post.edit_page', post_id = md5)
 
         try:
             db.session.commit()
@@ -199,9 +196,9 @@ def edit_page(post_id: int, post: Post):
 
     return render_template('edit.html', form = form, post = post)
 
-@post_bp.route('/view/<int:post_id>')
-def view_page(post_id: int):
-    post = get_post(post_id)
+@post_bp.route('/view/<md5>')
+def view_page(md5: str):
+    post = get_post(md5)
 
     if not post:
         return abort(404)
@@ -226,10 +223,10 @@ def view_file_resource(post_id: int):
         )
         return abort(404)
 
-@post_bp.route('/remove/<int:post_id>', methods = ['GET', 'POST'])
+@post_bp.route('/remove/<md5>', methods = ['GET', 'POST'])
 @login_required
 @owner_or_perm_required(Post, 'post:delete')
-def remove_page(post_id: int, post: Post):
+def remove_page(md5: str, post: Post):
     if not post:
         return abort(404)
 
@@ -267,16 +264,16 @@ def remove_page(post_id: int, post: Post):
 
     return render_template('delete_form.html', form = form)
 
-@post_bp.route('/revert/<int:post_id>', methods = ['GET', 'POST'])
+@post_bp.route('/revert/<md5>', methods = ['GET', 'POST'])
 @login_required
 @owner_or_perm_required(Post, 'post:delete')
-def revert_page(post_id: int, post: Post):
+def revert_page(md5: str, post: Post):
     if post.removed:
         delete_log(post)
 
     db.session.commit()
     log_user_activity(logger.info, f'restored post #{post.id}.')
-    return redirect(url_for('Root.Post.view_page', post_id = post_id))
+    return redirect(url_for('Root.Post.view_page', md5 = md5))
 
 @post_bp.route('/upload', methods = ['GET', 'POST'])
 @login_required

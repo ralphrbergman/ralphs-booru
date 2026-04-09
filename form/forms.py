@@ -106,8 +106,8 @@ class SignupForm(
             raise ValidationError(gettext('Username is already taken.'))
 
 class SnapshotForm(FlaskForm, SubmitMixin):
-    post_id = IntegerField(
-        'post_id',
+    md5 = IntegerField(
+        'md5',
         validators = (
             DataRequired(
                 message = gettext('Please specify which post to search.')

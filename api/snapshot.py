@@ -12,7 +12,7 @@ logger = getLogger('app_logger')
 
 def browse_snapshots(
     *args,
-    post_id: Optional[int] = None,
+    md5: Optional[int] = None,
     **kwargs
 ) -> SelectPagination:
     """
@@ -27,10 +27,10 @@ def browse_snapshots(
         sort (str): Snapshot's column to sort by
     """
     def snapshot_select(stmt: Select) -> None:
-        nonlocal post_id
+        nonlocal md5
 
-        stmt = stmt.where(Snapshot.post_id == post_id)
-        logger.debug(f'Searching for post #{post_id} snapshots.')
+        stmt = stmt.join(Snapshot.post).where(Post.md5 == md5)
+        logger.debug(f'Searching for post #{md5} snapshots.')
 
         return stmt
 

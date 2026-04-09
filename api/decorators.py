@@ -6,7 +6,7 @@ from apiflask import abort as api_abort
 from flask import request, abort
 from flask_babel import gettext
 from flask_login import current_user
-from sqlalchemy import select
+from sqlalchemy import or_, select
 
 from config import ALLOW_POSTS, ALLOW_USERS
 from db import db
@@ -25,13 +25,20 @@ def _get_entity(model_class: Any):
 
     try:
         entity_id = list(v_args.values())[-1]
-        entity_name = list(v_args.keys())[-1].strip('_id')
+        entity_name = model_class.__table__.name
     except IndexError as exception:
         return
 
+    filters = {
+        model_class.id == entity_id
+    }
+
+    if hasattr(model_class, 'md5'):
+        filters.add(model_class.md5 == entity_id)
+
     entity = db.session.scalars(
         select(model_class)
-        .where(model_class.id == entity_id)
+        .where(or_(*filters))
     ).first()
 
     return entity, entity_name

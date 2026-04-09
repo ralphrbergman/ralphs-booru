@@ -7,7 +7,7 @@
         <span class="comment" data-comment-id="{{ comment.id }}">
             <img class="commenter-picture no-select" src="{{ author.avatar }}">
             <div>
-                <span><a href="{{ author.profile_url }}">{{ author.username }}</a> {{ gettext('at') }} {{ comment.created }} &gt; <a href="{{ url_for('Root.Post.view_page', post_id = comment.post_id) }}">#{{ comment.post_id }}</a> &lt;{{ comment.score }}&gt; <a class="com-upvote-btn" href="">^</a> <a class="com-downvote-btn" href="">⌄</a></span>
+                <span><a href="{{ author.profile_url }}">{{ author.username }}</a> {{ gettext('at') }} {{ comment.created }} &gt; <a href="{{ url_for('Root.Post.view_page', md5 = comment.post.md5) }}">#{{ comment.post.md5 }}</a> &lt;{{ comment.score }}&gt; <a class="com-upvote-btn" href="">^</a> <a class="com-downvote-btn" href="">⌄</a></span>
                 <span class="comment-content">{{ comment.content }}</span>
             </div>
         </span>
