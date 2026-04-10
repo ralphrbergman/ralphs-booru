@@ -46,7 +46,7 @@ def create_thumbnail(post: Post) -> Thumbnail:
             'cause it doesn\'t require transparency.'
         )
 
-    thumb = Thumbnail(post = post)
+    thumb = Thumbnail()
 
     try:
         with temp_f.open('rb') as stream:
@@ -57,6 +57,7 @@ def create_thumbnail(post: Post) -> Thumbnail:
 
     temp_f.unlink(missing_ok = True)
     db.session.add(thumb)
+    thumb.post = post
 
     logger.info(f'Created thumbnail for post #{post.id}')
     return thumb

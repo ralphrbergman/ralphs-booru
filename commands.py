@@ -1,3 +1,43 @@
+def add_command():
+    from api import create_post, get_hash, get_post, get_user_by_username
+    from config import CONTENT_PATH
+    from db import db
+
+    print('Please select user that will possess created posts.')
+    user, username = None, None
+
+    while not user:
+        username = input('Enter username: ')
+
+        user = get_user_by_username(username)
+
+        if not user:
+            print(f'Username "{username}" is not a valid user!')
+
+    print(f'Selected user: {user.username} - ID: {user.id}')
+
+    for path in CONTENT_PATH.rglob('*'):
+        if path.is_dir():   continue
+
+        post = get_post(get_hash(path))
+
+        if post:
+            print(f'Skipping {path}, it already exists in the database.')
+            continue
+
+        post = create_post(
+            author = user,
+            path = path,
+            directory = str(path.relative_to(CONTENT_PATH).parent)
+        )
+
+        try:
+            db.session.commit()
+            print(f'Added: {path} - Post ID: {post.id}')
+        except Exception as exception:
+            db.session.rollback()
+            print(f'Failed to add: {path} - Error: {exception}')
+
 def reindex_command():
     from sqlalchemy import delete, inspect, select
 

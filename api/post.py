@@ -2,7 +2,7 @@ from hashlib import md5 as _md5
 from logging import getLogger
 from pathlib import Path
 from re import findall, sub, search
-from shutil import copy
+from shutil import SameFileError, copy
 from typing import Optional, TypeVar
 
 import ffmpeg
@@ -248,19 +248,23 @@ def create_post(
         pass
 
     post.path.parent.mkdir(parents = True, exist_ok = True)
-    copy(path, post.path)
-    path.unlink(missing_ok = True)
+
+    try:
+        copy(path, post.path)
+        path.unlink(missing_ok = True)
+    except SameFileError as exception:
+        # This is likely caused by 'add' Flask command.
+        logger.debug(f'Post {path} already is in {CONTENT_PATH}.')
 
     for tag in tag_objs:
         db.session.add(tag)
 
     db.session.add(post)
+    db.session.flush()
 
     thumbnail = create_thumbnail(post)
 
-    try:
-        thumbnail.post_id = post.id
-    except AttributeError as exception:
+    if not thumbnail:
         logger.warning(f'No thumbnail was made for post #{post.id}')
 
     logger.info(f'Created post #{post.id}')
@@ -287,6 +291,8 @@ def perma_delete_post(post: Post | int) -> None:
         post = get_post(post)
 
     db.session.delete(post)
+    post.path.unlink(missing_ok = True)
+
     logger.info(f'Permanently deleted post #{post.id}')
 
 def get_dimensions(path: Path) -> tuple[int, int]:

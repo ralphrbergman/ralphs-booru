@@ -12,7 +12,7 @@ from config import (
     SSL_ENABLED,
     SUPPORTED_TRANSLATIONS
 )
-from commands import reindex_command, setup_roles_command
+from commands import add_command, reindex_command, setup_roles_command
 from db import db, User
 from encryption import bcrypt
 from login import login_manager
@@ -43,6 +43,7 @@ def create_app() -> APIFlask:
     db.init_app(app)
 
     # Register command-line commands.
+    app.cli.command('add')(with_appcontext(add_command))
     app.cli.command('reindex')(with_appcontext(reindex_command))
     app.cli.command('setup-roles')(with_appcontext(setup_roles_command))
 
