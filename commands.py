@@ -16,7 +16,7 @@ def add_command():
 
     print(f'Selected user: {user.username} - ID: {user.id}')
 
-    for path in CONTENT_PATH.rglob('*'):
+    for path in sorted(CONTENT_PATH.rglob('*')):
         if path.is_dir():   continue
 
         post = get_post(get_hash(path))
