@@ -1,4 +1,5 @@
 from flask_babel import gettext
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
 from wtforms import (
@@ -134,7 +135,12 @@ class UserForm(
 
 class UploadForm(FlaskForm, PostMixin, SubmitMixin):
     files = MultipleFileField(
-        'files',
+        'files'
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         validators = [
             FileRequired(),
             validate_extension(
@@ -148,7 +154,15 @@ class UploadForm(FlaskForm, PostMixin, SubmitMixin):
                     'webm',
                     'webp'
                 ]
-            ),
-            validate_file_count(10)
+            )
         ]
-    )
+
+        is_mod = getattr(current_user, 'is_moderator', False)
+
+        if is_mod:
+            count = 100
+        else:
+            count = 10
+
+        validators.append(validate_file_count(count))
+        self.files.validators = validators
